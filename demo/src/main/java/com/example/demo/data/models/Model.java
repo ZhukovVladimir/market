@@ -1,4 +1,4 @@
-package com.example.demo.models;
+package com.example.demo.data.models;
 
 import lombok.Data;
 
@@ -7,8 +7,8 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "category")
-public class Category {
+@Table(name = "model")
+public class Model {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -17,6 +17,6 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "model")
     private List<Product> products;
 }
