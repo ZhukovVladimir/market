@@ -6,10 +6,21 @@ PRIMARY KEY(id));
 
 
 
-CREATE TABLE model (
+CREATE TABLE category (
   id SERIAL  NOT NULL ,
   name TEXT      ,
 PRIMARY KEY(id));
+
+
+
+
+CREATE TABLE model (
+  id SERIAL  NOT NULL ,
+  category_id INTEGER NOT NULL,
+  name TEXT      ,
+PRIMARY KEY(id),
+  FOREIGN KEY(category_id)
+    REFERENCES category(id));
 
 
 
@@ -30,21 +41,14 @@ PRIMARY KEY(id));
 
 
 
-CREATE TABLE category (
-  id SERIAL  NOT NULL ,
-  name TEXT      ,
-PRIMARY KEY(id));
-
-
-
-
 CREATE TABLE account (
   id SERIAL  NOT NULL ,
+  password TEXT NOT NULL,
   role_id INTEGER   NOT NULL ,
   email TEXT   NOT NULL ,
   first_name TEXT    ,
   last_name TEXT    ,
-  phone INTEGER   NOT NULL ,
+  phone BIGINT   NOT NULL ,
   address TEXT    ,
   phone_country_code INTEGER      ,
 PRIMARY KEY(id)  ,
@@ -63,6 +67,9 @@ CREATE TABLE cart (
   account_id INTEGER   NOT NULL ,
   delivery_address TEXT    ,
   delivery_status TEXT      ,
+  bill DOUBLE PRECISION ,
+  creation_time TIMESTAMP,
+  payment_time TIMESTAMP,
 PRIMARY KEY(id)  ,
   FOREIGN KEY(account_id)
     REFERENCES account(id));
@@ -76,7 +83,6 @@ CREATE INDEX IFK_Rel_05 ON cart (account_id);
 
 CREATE TABLE product (
   id SERIAL  NOT NULL ,
-  model_id INTEGER   NOT NULL ,
   color_id INTEGER   NOT NULL ,
   memory_id INTEGER   NOT NULL ,
   category_id INTEGER   NOT NULL ,
@@ -90,21 +96,17 @@ PRIMARY KEY(id)        ,
   FOREIGN KEY(memory_id)
     REFERENCES memory(id),
   FOREIGN KEY(color_id)
-    REFERENCES color(id),
-  FOREIGN KEY(model_id)
-    REFERENCES model(id));
+    REFERENCES color(id));
 
 
 CREATE INDEX product_FKIndex1 ON product (category_id);
 CREATE INDEX product_FKIndex2 ON product (memory_id);
 CREATE INDEX product_FKIndex3 ON product (color_id);
-CREATE INDEX product_FKIndex4 ON product (model_id);
 
 
 CREATE INDEX IFK_Rel_12 ON product (category_id);
 CREATE INDEX IFK_Rel_13 ON product (memory_id);
 CREATE INDEX IFK_Rel_14 ON product (color_id);
-CREATE INDEX IFK_Rel_08 ON product (model_id);
 
 
 CREATE TABLE product_cart (

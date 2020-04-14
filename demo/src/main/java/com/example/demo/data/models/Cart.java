@@ -3,6 +3,7 @@ package com.example.demo.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,15 @@ public class Cart {
 
     @Column(name = "delivery_status", nullable = false)
     private String deliveryStatus;
+
+    @Column(name = "creation_time")
+    private LocalDateTime creationTime;
+
+    @Column(name = "payment_time")
+    private LocalDateTime paymentTime;
+
+    @Column(name = "bill")
+    private Double bill;
 
     @ManyToOne
     @JoinColumn(name = "account_id")

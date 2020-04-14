@@ -27,10 +27,6 @@ public class Product {
     private String image;
 
     @ManyToOne
-    @JoinColumn(name = "model_id", nullable = false)
-    private Model model;
-
-    @ManyToOne
     @JoinColumn(name = "color_id", nullable = false)
     private Color color;
 

@@ -14,6 +14,9 @@ public class Account {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -24,7 +27,7 @@ public class Account {
     private String lastName;
 
     @Column(name = "phone", nullable = false)
-    private Integer phone;
+    private Long phone;
 
     @Column(name = "address")
     private String address;
