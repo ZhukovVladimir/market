@@ -26,6 +26,9 @@ public class Product {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "color_id", nullable = false)
     private Color color;

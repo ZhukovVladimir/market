@@ -87,6 +87,7 @@ CREATE TABLE product (
   memory_id INTEGER   NOT NULL ,
   category_id INTEGER   NOT NULL ,
   name TEXT    ,
+  description TEXT    ,
   price DOUBLE PRECISION    ,
   count INTEGER    ,
   image TEXT      ,

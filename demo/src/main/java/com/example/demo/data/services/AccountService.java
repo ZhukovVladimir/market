@@ -21,7 +21,7 @@ public class AccountService {
 
     public AccountDto findOne(Integer id) {
         return modelMapper.map(
-                accountRepository.findById(id),
+                accountRepository.findById(id).get(),
                 AccountDto.class);
     }
 }
