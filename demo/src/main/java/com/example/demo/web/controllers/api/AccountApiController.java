@@ -1,5 +1,6 @@
 package com.example.demo.web.controllers.api;
 
+import com.example.demo.data.dto.AccountDto;
 import com.example.demo.data.models.Account;
 import com.example.demo.data.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class AccountApiController {
     }
 
     @GetMapping("/{id}")
-    public Account one(@PathVariable Integer id) {
+    public AccountDto one(@PathVariable Integer id) {
         return accountService.findOne(id);
     }
 }
