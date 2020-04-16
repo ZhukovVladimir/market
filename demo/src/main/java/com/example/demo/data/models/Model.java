@@ -21,4 +21,7 @@ public class Model {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "model")
+    private List<Product> products;
+
 }

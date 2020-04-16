@@ -18,8 +18,5 @@ public class Category {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-    private List<Product> products;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private List<Model> models;
 }

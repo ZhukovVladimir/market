@@ -19,10 +19,9 @@
     <#list products as product>
         <div class="row">
             <div class="col">${product}</div>
-            <div class="col">${product}</div>
-            <div class="col">${product}</div>
         </div>
     </#list>
 </div>
+
 </body>
 </html>

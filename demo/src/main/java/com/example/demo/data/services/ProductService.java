@@ -2,7 +2,10 @@ package com.example.demo.data.services;
 
 import com.example.demo.data.dto.ProductDTO;
 import com.example.demo.data.repositories.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +26,11 @@ public class ProductService {
     }
 
     public List<ProductDTO> findAll() {
-        return productRepository.findAll()
+        List<ProductDTO> allProducts = productRepository.findAll()
                 .stream()
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
+
+        return allProducts;
     }
 }

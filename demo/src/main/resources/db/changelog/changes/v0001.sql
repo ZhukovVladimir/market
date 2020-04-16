@@ -85,27 +85,26 @@ CREATE TABLE product (
   id SERIAL  NOT NULL ,
   color_id INTEGER   NOT NULL ,
   memory_id INTEGER   NOT NULL ,
-  category_id INTEGER   NOT NULL ,
+  model_id INTEGER    ,
   name TEXT    ,
   description TEXT    ,
   price DOUBLE PRECISION    ,
   count INTEGER    ,
   image TEXT      ,
 PRIMARY KEY(id)        ,
-  FOREIGN KEY(category_id)
-    REFERENCES category(id),
   FOREIGN KEY(memory_id)
     REFERENCES memory(id),
   FOREIGN KEY(color_id)
-    REFERENCES color(id));
+    REFERENCES color(id),
+  FOREIGN KEY(model_id)
+    REFERENCES model(id));
 
 
-CREATE INDEX product_FKIndex1 ON product (category_id);
 CREATE INDEX product_FKIndex2 ON product (memory_id);
 CREATE INDEX product_FKIndex3 ON product (color_id);
+CREATE INDEX product_FKIndex4 ON product (model_id);
 
 
-CREATE INDEX IFK_Rel_12 ON product (category_id);
 CREATE INDEX IFK_Rel_13 ON product (memory_id);
 CREATE INDEX IFK_Rel_14 ON product (color_id);
 

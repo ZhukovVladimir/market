@@ -38,9 +38,13 @@ public class Product {
     private Memory memory;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToMany(mappedBy = "products")
     private List<Cart> carts;
+
+    @ManyToOne
+    @JoinColumn(name = "model_id")
+    private Model model;
 }
