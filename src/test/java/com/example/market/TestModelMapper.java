@@ -7,18 +7,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
+@ContextConfiguration(classes = AppleMarketApplication.class)
 public class TestModelMapper {
     //@mockito runner + @injectMocks + @Mock для сервиса, в нем сделать мок маппера
     @Autowired
     private ModelMapper modelMapper;
 
     @Test
-    public void map( ) {
+    public void map() {
         Product product = new Product();
         product.setId(1);
         product.setCarts(new ArrayList<Cart>());
