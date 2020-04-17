@@ -12,7 +12,7 @@ public class Memory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "volume", nullable = false)
     private String volume;

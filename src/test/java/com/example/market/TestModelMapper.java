@@ -13,16 +13,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = AppleMarketApplication.class)
 public class TestModelMapper {
     //@mockito runner + @injectMocks + @Mock для сервиса, в нем сделать мок маппера
-    @Autowired
-    private ModelMapper modelMapper;
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Test
     public void map() {
         Product product = new Product();
-        product.setId(1);
+        product.setId(1L);
         product.setCarts(new ArrayList<Cart>());
         product.setCategory(new Category());
         product.setColor(new Color());
@@ -41,7 +40,7 @@ public class TestModelMapper {
         resultProductDTO.setCount(product.getCount());
         resultProductDTO.setDescription(product.getDescription());
         resultProductDTO.setImage(product.getImage());
-        resultProductDTO.setMemoryName(product.getMemory().getVolume());
+        resultProductDTO.setMemoryVolume(product.getMemory().getVolume());
         resultProductDTO.setModelName(product.getModel().getName());
         resultProductDTO.setName(product.getName());
         resultProductDTO.setPrice(product.getPrice());

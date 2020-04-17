@@ -12,7 +12,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "password")
     private String password;

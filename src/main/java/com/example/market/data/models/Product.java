@@ -1,18 +1,22 @@
 package com.example.market.data.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
+@Accessors(chain = true)
 @Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;

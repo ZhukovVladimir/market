@@ -13,7 +13,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "delivery_address", nullable = false)
     private String deliveryAddress;
