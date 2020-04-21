@@ -20,7 +20,7 @@ public class AccountApiController {
     }
 
     @GetMapping("/{id}")
-    public AccountDto one(@PathVariable Integer id) {
+    public AccountDto one(@PathVariable Long id) {
         return accountService.findOne(id);
     }
 }

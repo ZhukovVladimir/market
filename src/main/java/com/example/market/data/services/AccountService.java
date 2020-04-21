@@ -2,6 +2,7 @@ package com.example.market.data.services;
 
 import com.example.market.data.dto.AccountDto;
 import com.example.market.data.repositories.AccountRepository;
+import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,9 @@ public class AccountService {
         this.modelMapper = modelMapper;
     }
 
-    public AccountDto findOne(Integer id) {
+    public AccountDto findOne(Long id) {
         return modelMapper.map(
-                accountRepository.findById(id).get(),
+                accountRepository.findById(id).orElseThrow(ResourceNotFoundException::new),
                 AccountDto.class);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.market.web.controllers;
 
-import com.example.market.data.dto.ProductDTO;
+import com.example.market.data.dto.ProductDto;
 import com.example.market.data.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +21,8 @@ public class ViewController {
 
     @GetMapping("/")
     public String hello(Model model) {
-        List<ProductDTO> products = productService.findAll();
+        List<ProductDto> products = productService.findAll();
         model.addAttribute("products", products);
-        return "hello";
+        return "index";
     }
 }

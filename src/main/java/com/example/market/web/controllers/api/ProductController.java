@@ -1,6 +1,6 @@
 package com.example.market.web.controllers.api;
 
-import com.example.market.data.dto.ProductDTO;
+import com.example.market.data.dto.ProductDto;
 import com.example.market.data.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,8 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return productService.findAll();
     }
+
 }

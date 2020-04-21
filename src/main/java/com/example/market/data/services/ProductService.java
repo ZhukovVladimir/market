@@ -1,6 +1,6 @@
 package com.example.market.data.services;
 
-import com.example.market.data.dto.ProductDTO;
+import com.example.market.data.dto.ProductDto;
 import com.example.market.data.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ public class ProductService {
         this.modelMapper = modelMapper;
     }
 
-    public List<ProductDTO> findAll() {
-        List<ProductDTO> allProducts = productRepository.findAll()
+    public List<ProductDto> findAll() {
+        List<ProductDto> allProducts = productRepository.findAll()
                 .stream()
-                .map(product -> modelMapper.map(product, ProductDTO.class))
+                .map(product -> modelMapper.map(product, ProductDto.class))
                 .collect(Collectors.toList());
 
         return allProducts;

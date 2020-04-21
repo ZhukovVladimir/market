@@ -1,6 +1,6 @@
 package com.example.market;
 
-import com.example.market.data.dto.ProductDTO;
+import com.example.market.data.dto.ProductDto;
 import com.example.market.data.models.*;
 import com.example.market.data.repositories.ProductRepository;
 import com.example.market.data.services.ProductService;
@@ -34,25 +34,21 @@ public class TestProductService {
                 .setName(name)
                 .setPrice(price)
                 .setCount(count)
-                .setImage(img)
                 .setDescription(desc)
                 .setColor(color)
                 .setMemory(memory)
-                .setCategory(category)
                 .setCarts(carts)
                 .setModel(model);
     }
 
-    private ProductDTO productToDTO(Product product) {
-        return new ProductDTO().setId(product.getId())
+    private ProductDto productToDTO(Product product) {
+        return new ProductDto().setId(product.getId())
                 .setName(product.getName())
                 .setPrice(product.getPrice())
                 .setCount(product.getCount())
-                .setImage(product.getImage())
                 .setDescription(product.getDescription())
                 .setColorName(product.getColor().getName())
                 .setMemoryVolume(product.getMemory().getVolume())
-                .setCategoryName(product.getCategory().getName())
                 .setModelName(product.getModel().getName());
     }
 
@@ -71,18 +67,18 @@ public class TestProductService {
         productsFromRepository.add(productTwo);
         productsFromRepository.add(productThree);
 
-        List<ProductDTO> productsDTOFromMapper = new ArrayList<>();
+        List<ProductDto> productsDTOFromMapper = new ArrayList<>();
 
         productsDTOFromMapper.add(productToDTO(productOne));
         productsDTOFromMapper.add(productToDTO(productTwo));
         productsDTOFromMapper.add(productToDTO(productThree));
 
         when(productRepository.findAll()).thenReturn(productsFromRepository);
-        when(modelMapper.map(productOne, ProductDTO.class)).thenReturn(productToDTO(productOne));
-        when(modelMapper.map(productTwo, ProductDTO.class)).thenReturn(productToDTO(productTwo));
-        when(modelMapper.map(productThree, ProductDTO.class)).thenReturn(productToDTO(productThree));
+        when(modelMapper.map(productOne, ProductDto.class)).thenReturn(productToDTO(productOne));
+        when(modelMapper.map(productTwo, ProductDto.class)).thenReturn(productToDTO(productTwo));
+        when(modelMapper.map(productThree, ProductDto.class)).thenReturn(productToDTO(productThree));
 
-        List<ProductDTO> productsDTOFromService = productService.findAll();
+        List<ProductDto> productsDTOFromService = productService.findAll();
 
         Assert.assertEquals(productsDTOFromMapper, productsDTOFromService);
     }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Apple Market</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- Дополнительные стили -->
@@ -16,11 +17,31 @@
 </head>
 <body>
 <div class="container">
-    <#list products as product>
         <div class="row">
-            <div class="col">${product}</div>
+            <#list products as product>
+                <div class="col-4 d-flex align-items-center">
+                    <div class="image">
+                        <img class="img-fluid" src="http://localhost:8080/api/image/${product.imageId}"/>
+                    </div>
+                    <div class="info">
+                        <div class="name"> ${product.name} </div>
+                        <#if product.count gt 0>
+                            <div class="price"> ${product.price} </div>
+                        <#else>
+                            <div class="not_available"> <b>Not available</b> </div>
+                        </#if>
+                        <div class="desc">
+                            ${product.description}
+                            Color: ${product.colorName}
+                            Storage: ${product.memoryVolume}
+                        </div>
+                        <div class="buy">
+                            <button type="button" id="buy_button" class="btn btn-primary btn-sm">Buy</button>
+                        </div>
+                    </div>
+                </div>
+        </#list>
         </div>
-    </#list>
 </div>
 
 </body>
