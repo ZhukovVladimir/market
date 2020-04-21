@@ -17,9 +17,9 @@
 </head>
 <body>
 <div class="container">
-        <div class="row">
+        <div class="row row-cols-3 align-items-end">
             <#list products as product>
-                <div class="col-4 d-flex align-items-center">
+                <div class="col">
                     <div class="image">
                         <img class="img-fluid" src="http://localhost:8080/api/image/${product.imageId}"/>
                     </div>
