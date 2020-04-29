@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 public class TestModelMapper {
-    //@mockito runner + @injectMocks + @Mock для сервиса, в нем сделать мок маппера
 
     private ModelMapper modelMapper = new ModelMapper();
 
