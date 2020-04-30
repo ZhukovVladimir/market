@@ -1,4 +1,5 @@
 let json = null;
+
 async function searchFetch(searchDto) {
     let response = await fetch("http://localhost:8080/api/product/search", {
         method: "POST",
@@ -48,19 +49,18 @@ function renderProducts(products) {
     }
 }
 
-$(document).ready( () => {
+$(document).ready(() => {
 
     //showing search bar
-    let categoryButtons = document.getElementsByClassName("nav-item")
+    let categoryButtons = document.getElementsByClassName("btn-light")
 
     //events for all category buttons
     for (let i = 0; i < categoryButtons.length; i++) {
 
         categoryButtons.item(i).onclick = function () {
-            categoryButtons.item(i).removeAttribute("href");
             $("#searchPanel").removeClass("invisible");
             let searchDto = {
-                "categoryName": categoryButtons.item(i).text,
+                "categoryName": categoryButtons.item(i).value,
             }
             searchFetch(searchDto).then(() => {
                 renderProducts(json);

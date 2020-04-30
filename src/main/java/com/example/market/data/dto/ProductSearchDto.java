@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Data
 public class ProductSearchDto {
-
     private String name;
     private Double price;
     private String colorName;
     private String memoryVolume;
     private String categoryName;
     private String modelName;
+    private boolean isAvailable;
 }

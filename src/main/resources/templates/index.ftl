@@ -28,7 +28,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <#list categories as category>
-                <a class="nav-item nav-link" href="">${category.name}</a>
+                <button type="button" class="btn btn-light" value=${category.name}> ${category.name}</button>
             </#list>
         </div>
     </div>
