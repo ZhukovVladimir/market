@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,7 +35,13 @@ public class ImageController {
 
         ImageDto image = imageService.findOne(id);
 
-        FileInputStream in = new FileInputStream(dirRoot + image.getPath());
+        FileInputStream in = new FileInputStream(dirRoot + image.getName());
         return IOUtils.toByteArray(in);
+    }
+
+    @PostMapping
+    public @ResponseBody
+    ImageDto saveImage(@RequestParam("image") MultipartFile image) {
+        return imageService.saveImage(image);
     }
 }

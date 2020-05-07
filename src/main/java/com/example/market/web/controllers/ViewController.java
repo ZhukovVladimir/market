@@ -2,7 +2,6 @@ package com.example.market.web.controllers;
 
 import com.example.market.data.dto.CategoryDto;
 import com.example.market.data.dto.ProductDto;
-import com.example.market.data.models.Category;
 import com.example.market.data.services.CategoryService;
 import com.example.market.data.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -15,7 +15,7 @@ public class Memory {
     private Long id;
 
     @Column(name = "volume", nullable = false)
-    private String volume;
+    private Integer volume;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "memory")
     private List<Product> products;

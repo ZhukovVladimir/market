@@ -3,7 +3,7 @@ package com.example.market.data.dto;
 import lombok.Data;
 
 @Data
-public class ImageDto {
+public class MemoryDto {
     private Long id;
-    private String name;
+    private Integer volume;
 }

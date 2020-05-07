@@ -1,7 +1,9 @@
 package com.example.market.data.services;
 
 import com.example.market.data.dto.ModelDto;
+import com.example.market.data.models.Model;
 import com.example.market.data.repositories.ModelRepository;
+import com.example.market.exceptions.ForbiddenException;
 import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +29,15 @@ public class ModelService {
                 .stream()
                 .map(model -> modelMapper.map(model, ModelDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public ModelDto saveModel(ModelDto modelDto) {
+        if (modelDto.getId() != null && modelRepository.existsById(modelDto.getId())) {
+            throw new ForbiddenException("Model is already exist");
+        } else {
+            Model model = modelMapper.map(modelDto, Model.class);
+            model = modelRepository.save(model);
+            return modelMapper.map(model, ModelDto.class);
+        }
     }
 }

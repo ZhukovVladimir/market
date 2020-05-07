@@ -12,5 +12,5 @@ public class ProductSearchDto {
     private String memoryVolume;
     private String categoryName;
     private String modelName;
-    private boolean isAvailable;
+    private Boolean available;
 }

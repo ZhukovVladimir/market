@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//todo: add and edit products
+
 @RestController
 @RequestMapping(value = "/api/product")
 public class ProductController {
@@ -33,4 +35,8 @@ public class ProductController {
         return productService.findAll(productSearchDto);
     }
 
+    @PostMapping
+    public ProductDto saveProduct(@RequestBody ProductDto product) {
+        return productService.saveProduct(product);
+    }
 }

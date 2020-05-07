@@ -11,9 +11,13 @@ public class ProductDto {
     private Double price;
     private Integer count;
     private String description;
+    private Long colorId;
     private String colorName;
-    private String memoryVolume;
-    private String categoryName;
+    private Long memoryId;
+    private Integer memoryVolume;
+    private Long modelCategoryId;
+    private String modelCategoryName;
+    private Long modelId;
     private String modelName;
-    private String imageId;
+    private Long imageId;
 }

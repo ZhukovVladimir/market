@@ -7,9 +7,8 @@ import com.example.market.data.models.Product;
 import com.example.market.data.models.Product_;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.Join;
 
-//models, price, checkBox for available
 public class ProductSpecification {
 
     public static Specification<Product> hasModel(ProductSearchDto referenceProduct) {
@@ -23,6 +22,18 @@ public class ProductSpecification {
         return (root, criteriaQuery, criteriaBuilder) -> {
             Join<Product_, Category_> productCategoryJoin = root.join(Product_.MODEL).join(Model_.CATEGORY);
             return criteriaBuilder.equal(productCategoryJoin.get(Category_.NAME), referenceProduct.getCategoryName());
+        };
+    }
+
+    public static Specification<Product> priceLessThen(ProductSearchDto referenceProduct) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.le(root.get(Product_.PRICE), referenceProduct.getPrice());
+        };
+    }
+
+    public static Specification<Product> isAvailable() {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.greaterThan(root.get(Product_.COUNT), 0);
         };
     }
 
