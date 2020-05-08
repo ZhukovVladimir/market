@@ -1,15 +1,15 @@
-package com.example.market.web.controllers.api;
+package com.example.market.controllers.api;
 
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.dto.ProductSearchDto;
-import com.example.market.data.services.CategoryService;
-import com.example.market.data.services.ProductService;
+import com.example.market.services.CategoryService;
+import com.example.market.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-//todo: add and edit products
 
 @RestController
 @RequestMapping(value = "/api/product")
@@ -30,13 +30,29 @@ public class ProductController {
         return productService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ProductDto getProduct(@PathVariable Long id) {
+        return productService.findById(id);
+    }
+
     @PostMapping("/search")
     public List<ProductDto> getProducts(@RequestBody ProductSearchDto productSearchDto) {
         return productService.findAll(productSearchDto);
     }
 
     @PostMapping
-    public ProductDto saveProduct(@RequestBody ProductDto product) {
-        return productService.saveProduct(product);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductDto createProduct(@Validated @RequestBody ProductDto product) {
+        return productService.createProduct(product);
+    }
+
+    @PutMapping("/{id}")
+    public ProductDto updateProduct(@PathVariable Long id, @Validated @RequestBody ProductDto product) {
+        return productService.updateProduct(id, product);
+    }
+
+    @DeleteMapping("/{id}")
+    public ProductDto deleteProduct(@PathVariable Long id) {
+        return productService.deleteProduct(id);
     }
 }

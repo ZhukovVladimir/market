@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+//this is order too
 @Entity
 @Data
 @Table(name = "cart")

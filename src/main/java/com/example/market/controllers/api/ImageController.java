@@ -1,17 +1,14 @@
-package com.example.market.web.controllers.api;
+package com.example.market.controllers.api;
 
 import com.example.market.data.dto.ImageDto;
-import com.example.market.data.services.ImageService;
-import org.apache.commons.io.IOUtils;
+import com.example.market.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.FileInputStream;
-import java.io.IOException;
 
 @Controller
 @PropertySource("classpath:application.properties")
@@ -30,18 +27,15 @@ public class ImageController {
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody
-    byte[] getImage(@PathVariable Long id) throws IOException {
-
-        ImageDto image = imageService.findOne(id);
-
-        FileInputStream in = new FileInputStream(dirRoot + image.getName());
-        return IOUtils.toByteArray(in);
+    @ResponseBody
+    public byte[] getImage(@PathVariable Long id) {
+        return imageService.getImageById(id);
     }
 
     @PostMapping
-    public @ResponseBody
-    ImageDto saveImage(@RequestParam("image") MultipartFile image) {
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public ImageDto saveImage(@RequestParam("image") MultipartFile image) {
         return imageService.saveImage(image);
     }
 }

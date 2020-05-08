@@ -1,11 +1,13 @@
 package com.example.market.data.models;
 
 import lombok.Data;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Where(clause = "deleted=false")
 @Data
 @Table(name = "account")
 public class Account {
@@ -34,6 +36,9 @@ public class Account {
 
     @Column(name = "phone_country_code", nullable = false)
     private Integer phoneCountryCode;
+
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

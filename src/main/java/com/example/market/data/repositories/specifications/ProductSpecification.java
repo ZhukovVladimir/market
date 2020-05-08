@@ -14,14 +14,14 @@ public class ProductSpecification {
     public static Specification<Product> hasModel(ProductSearchDto referenceProduct) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             Join<Product_, Model_> productModelJoin = root.join(Product_.MODEL);
-            return criteriaBuilder.equal(productModelJoin.get(Product_.NAME), referenceProduct.getModelName());
+            return criteriaBuilder.equal(productModelJoin.get(Product_.NAME), referenceProduct.getModel().getName());
         };
     }
 
     public static Specification<Product> hasCategory(ProductSearchDto referenceProduct) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             Join<Product_, Category_> productCategoryJoin = root.join(Product_.MODEL).join(Model_.CATEGORY);
-            return criteriaBuilder.equal(productCategoryJoin.get(Category_.NAME), referenceProduct.getCategoryName());
+            return criteriaBuilder.equal(productCategoryJoin.get(Category_.NAME), referenceProduct.getModel().getCategory().getName());
         };
     }
 

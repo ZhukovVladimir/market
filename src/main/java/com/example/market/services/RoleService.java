@@ -1,4 +1,4 @@
-package com.example.market.data.services;
+package com.example.market.services;
 
 import com.example.market.data.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

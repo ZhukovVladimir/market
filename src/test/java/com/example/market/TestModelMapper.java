@@ -1,8 +1,12 @@
 package com.example.market;
 
+import com.example.market.data.dto.ColorDto;
+import com.example.market.data.dto.MemoryDto;
+import com.example.market.data.dto.ModelDto;
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.models.*;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -30,11 +34,11 @@ public class TestModelMapper {
 
         ProductDto resultProductDTO = new ProductDto();
         resultProductDTO.setId(product.getId());
-        resultProductDTO.setColorName(product.getColor().getName());
+        resultProductDTO.setColor(modelMapper.map(product.getColor(), ColorDto.class));
         resultProductDTO.setCount(product.getCount());
         resultProductDTO.setDescription(product.getDescription());
-        resultProductDTO.setMemoryVolume(product.getMemory().getVolume());
-        resultProductDTO.setModelName(product.getModel().getName());
+        resultProductDTO.setMemory(modelMapper.map(product.getMemory(), MemoryDto.class));
+        resultProductDTO.setModel(modelMapper.map(product.getModel(), ModelDto.class));
         resultProductDTO.setName(product.getName());
         resultProductDTO.setPrice(product.getPrice());
 

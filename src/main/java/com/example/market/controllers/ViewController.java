@@ -1,9 +1,9 @@
-package com.example.market.web.controllers;
+package com.example.market.controllers;
 
 import com.example.market.data.dto.CategoryDto;
 import com.example.market.data.dto.ProductDto;
-import com.example.market.data.services.CategoryService;
-import com.example.market.data.services.ProductService;
+import com.example.market.services.CategoryService;
+import com.example.market.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

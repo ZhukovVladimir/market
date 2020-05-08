@@ -1,7 +1,7 @@
-package com.example.market.web.controllers.api;
+package com.example.market.controllers.api;
 
 import com.example.market.data.dto.AccountDto;
-import com.example.market.data.services.AccountService;
+import com.example.market.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

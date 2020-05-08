@@ -1,9 +1,12 @@
 package com.example.market;
 
+import com.example.market.data.dto.ColorDto;
+import com.example.market.data.dto.MemoryDto;
+import com.example.market.data.dto.ModelDto;
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.models.*;
 import com.example.market.data.repositories.ProductRepository;
-import com.example.market.data.services.ProductService;
+import com.example.market.services.ProductService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,9 +50,9 @@ public class TestProductService {
                 .setPrice(product.getPrice())
                 .setCount(product.getCount())
                 .setDescription(product.getDescription())
-                .setColorName(product.getColor().getName())
-                .setMemoryVolume(product.getMemory().getVolume())
-                .setModelName(product.getModel().getName());
+                .setColor(modelMapper.map(product.getColor(), ColorDto.class))
+                .setMemory(modelMapper.map(product.getMemory(), MemoryDto.class))
+                .setModel(modelMapper.map(product.getModel(), ModelDto.class));
     }
 
     @Test

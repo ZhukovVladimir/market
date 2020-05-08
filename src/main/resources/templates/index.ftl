@@ -58,7 +58,7 @@
             <#list products as product>
                 <div class="col">
                     <div class="image">
-                        <img class="img-fluid" src="http://localhost:8080/api/image/${product.imageId}"/>
+                        <img class="img-fluid" src="http://localhost:8080/api/image/${product.image.id}"/>
                     </div>
                     <div class="info">
                         <div class="name"> ${product.name} </div>
@@ -69,8 +69,8 @@
                         </#if>
                         <div class="desc">
                             ${product.description}
-                            Color: ${product.colorName}
-                            Storage: ${product.memoryVolume}
+                            Color: ${product.color.name}
+                            Storage: ${product.memory.volume}
                         </div>
                         <div class="buy">
                             <button type="button" id="buy_button" class="btn btn-primary btn-sm">Buy</button>

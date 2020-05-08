@@ -1,14 +1,14 @@
 package com.example.market.data.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Where(clause = "deleted=false")
 @Data
 @Accessors(chain = true)
 @Table(name = "product")
@@ -24,25 +24,28 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "count")
+    @Column(name = "count", nullable = false)
     private Integer count;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
 
     @ManyToOne
     @JoinColumn(name = "color_id", nullable = false)
     private Color color;
 
     @ManyToOne
-    @JoinColumn(name = "memory_id")
+    @JoinColumn(name = "memory_id", nullable = false)
     private Memory memory;
 
     @ManyToMany(mappedBy = "products")
     private List<Cart> carts;
 
     @ManyToOne
-    @JoinColumn(name = "model_id")
+    @JoinColumn(name = "model_id", nullable = false)
     private Model model;
 
     @ManyToOne

@@ -1,9 +1,11 @@
-package com.example.market.data.services;
+package com.example.market.services;
 
 import com.example.market.data.dto.CategoryDto;
+import com.example.market.data.dto.ProductDto;
 import com.example.market.data.models.Category;
 import com.example.market.data.repositories.CategoryRepository;
-import com.example.market.exceptions.ForbiddenException;
+import com.example.market.exceptions.ConflictException;
+import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,13 +32,28 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto saveCategory(CategoryDto categoryDto) {
-        if (categoryDto.getId() != null && categoryRepository.existsById(categoryDto.getId())){
-            throw new ForbiddenException("Category is already exist");
+    public CategoryDto createCategory(CategoryDto categoryDto) {
+        if (categoryDto.getId() != null && categoryRepository.existsById(categoryDto.getId())) {
+            throw new ConflictException("Category is already exist");
         } else {
             Category category = modelMapper.map(categoryDto, Category.class);
             category = categoryRepository.save(category);
             return modelMapper.map(category, CategoryDto.class);
         }
+    }
+
+    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
+        if (categoryRepository.existsById(id)) {
+            Category category = modelMapper.map(categoryDto, Category.class).setId(id);
+            category = categoryRepository.save(category);
+            return modelMapper.map(category, CategoryDto.class);
+        }
+        throw new ResourceNotFoundException(id, "Category");
+    }
+
+    public CategoryDto deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        category = categoryRepository.save(category.setDeleted(true));
+        return modelMapper.map(category, CategoryDto.class);
     }
 }

@@ -1,10 +1,12 @@
-package com.example.market.data.services;
+package com.example.market.services;
 
+import com.example.market.data.dto.CategoryDto;
 import com.example.market.data.dto.MemoryDto;
+import com.example.market.data.models.Category;
 import com.example.market.data.models.Memory;
 import com.example.market.data.repositories.MemoryRepository;
-import com.example.market.exceptions.ForbiddenException;
-import org.apache.catalina.mapper.Mapper;
+import com.example.market.exceptions.ConflictException;
+import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +33,28 @@ public class MemoryService {
                 .collect(Collectors.toList());
     }
 
-    public MemoryDto saveMemory(MemoryDto memoryDto) {
+    public MemoryDto createMemory(MemoryDto memoryDto) {
         if (memoryDto.getId() != null && memoryRepository.existsById(memoryDto.getId())) {
-            throw new ForbiddenException("Memory is already exist");
+            throw new ConflictException("Memory is already exist");
         } else {
             Memory memory = modelMapper.map(memoryDto, Memory.class);
             memory = memoryRepository.save(memory);
             return modelMapper.map(memory, MemoryDto.class);
         }
+    }
+
+    public MemoryDto updateMemory(Long id, MemoryDto memoryDto) {
+        if (memoryRepository.existsById(id)) {
+            Memory memory = modelMapper.map(memoryDto, Memory.class).setId(id);
+            memory = memoryRepository.save(memory);
+            return modelMapper.map(memory, MemoryDto.class);
+        }
+        throw new ResourceNotFoundException(id, "Memory");
+    }
+
+    public MemoryDto deleteMemory(Long id) {
+        Memory memory = memoryRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        memory = memoryRepository.save(memory.setDeleted(true));
+        return modelMapper.map(memory, MemoryDto.class);
     }
 }

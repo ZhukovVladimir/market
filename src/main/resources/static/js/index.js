@@ -24,14 +24,14 @@ function createDivWithProduct(product) {
         price = "<b>Not available</b>"
     }
     div.insertAdjacentHTML("afterbegin", "<div class=\"image\">\n" +
-        "                        <img class=\"img-fluid\" src=\"http://localhost:8080/api/image/" + product.id + "\"></div>\n" +
+        "                        <img class=\"img-fluid\" src=\"http://localhost:8080/api/image/" + product.image.id + "\"></div>\n" +
         "                        <div class=\"info\">\n" +
         "                        <div class=\"name\">" + product.name + "</div>\n" +
         "                        <div class=\"price\">" + price + "</div>\n" +
         "                        <div class=\"desc\">\n" +
         "                            " + product.description + "\n" +
-        "                            Color: " + product.colorName + "\n" +
-        "                            Storage: " + product.memoryVolume + "\n" +
+        "                            Color: " + product.color.name + "\n" +
+        "                            Storage: " + product.memory.volume + "\n" +
         "                        </div>\n" +
         "                        <div class=\"buy\">\n" +
         "                            <button type=\"button\" id=\"buy_button\" class=\"btn btn-primary btn-sm\">Buy</button>\n" +
@@ -60,7 +60,11 @@ $(document).ready(() => {
         categoryButtons.item(i).onclick = function () {
             $("#searchPanel").removeClass("invisible");
             let searchDto = {
-                "categoryName": categoryButtons.item(i).value,
+                "model": {
+                    "category": {
+                        "name": categoryButtons.item(i).value
+                    }
+                }
             }
             searchFetch(searchDto).then(() => {
                 renderProducts(json);
