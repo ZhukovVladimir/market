@@ -1,10 +1,7 @@
 package com.example.market.data.repositories.specifications;
 
 import com.example.market.data.dto.ProductSearchDto;
-import com.example.market.data.models.Category_;
-import com.example.market.data.models.Model_;
-import com.example.market.data.models.Product;
-import com.example.market.data.models.Product_;
+import com.example.market.data.models.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Join;
@@ -14,7 +11,7 @@ public class ProductSpecification {
     public static Specification<Product> hasModel(ProductSearchDto referenceProduct) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             Join<Product_, Model_> productModelJoin = root.join(Product_.MODEL);
-            return criteriaBuilder.equal(productModelJoin.get(Product_.NAME), referenceProduct.getModel().getName());
+            return criteriaBuilder.equal(productModelJoin.get(Model_.NAME), referenceProduct.getModel().getName());
         };
     }
 
@@ -22,6 +19,13 @@ public class ProductSpecification {
         return (root, criteriaQuery, criteriaBuilder) -> {
             Join<Product_, Category_> productCategoryJoin = root.join(Product_.MODEL).join(Model_.CATEGORY);
             return criteriaBuilder.equal(productCategoryJoin.get(Category_.NAME), referenceProduct.getModel().getCategory().getName());
+        };
+    }
+
+    public static Specification<Product> hasColor(ProductSearchDto referenceProduct) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            Join<Product_, Color_> productColorJoin = root.join(Product_.COLOR);
+            return criteriaBuilder.equal(productColorJoin.get(Color_.NAME), referenceProduct.getColor().getName());
         };
     }
 
@@ -37,7 +41,15 @@ public class ProductSpecification {
         };
     }
 
+    public static Specification<Product> hasId(Long id) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get(Product_.ID), id);
+        };
+    }
+
     public static Specification<Product> defaultSpecification() {
-        return (root, criteriaQuery, criteriaBuilder) -> null;
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get(Product_.DELETED), false);
+        };
     }
 }

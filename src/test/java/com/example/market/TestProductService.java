@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class TestProductService {
     ProductService productService;
     @Mock
     ProductRepository productRepository;
+    @Mock
+    Pageable pageable;
     @Mock
     ModelMapper modelMapper = new ModelMapper();
 
@@ -45,14 +48,7 @@ public class TestProductService {
     }
 
     private ProductDto productToDTO(Product product) {
-        return new ProductDto().setId(product.getId())
-                .setName(product.getName())
-                .setPrice(product.getPrice())
-                .setCount(product.getCount())
-                .setDescription(product.getDescription())
-                .setColor(modelMapper.map(product.getColor(), ColorDto.class))
-                .setMemory(modelMapper.map(product.getMemory(), MemoryDto.class))
-                .setModel(modelMapper.map(product.getModel(), ModelDto.class));
+        return new ProductDto(product);
     }
 
     @Test
@@ -81,7 +77,7 @@ public class TestProductService {
         when(modelMapper.map(productTwo, ProductDto.class)).thenReturn(productToDTO(productTwo));
         when(modelMapper.map(productThree, ProductDto.class)).thenReturn(productToDTO(productThree));
 
-        List<ProductDto> productsDTOFromService = productService.findAll();
+        List<ProductDto> productsDTOFromService = productService.findAll(pageable).toList();
 
         Assert.assertEquals(productsDTOFromMapper, productsDTOFromService);
     }

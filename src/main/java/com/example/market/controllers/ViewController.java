@@ -5,6 +5,7 @@ import com.example.market.data.dto.ProductDto;
 import com.example.market.services.CategoryService;
 import com.example.market.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,8 @@ public class ViewController {
     }
 
     @GetMapping("/")
-    public String hello(Model model) {
-        List<ProductDto> products = productService.findAll();
+    public String hello(Model model, Pageable pageable) {
+        List<ProductDto> products = productService.findAll(pageable).toList();
         List<CategoryDto> categories = categoryService.findAll();
 
         model.addAttribute("products", products);

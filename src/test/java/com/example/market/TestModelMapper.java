@@ -32,15 +32,7 @@ public class TestModelMapper {
         product.setName("firstProduct");
         product.setPrice(1000d);
 
-        ProductDto resultProductDTO = new ProductDto();
-        resultProductDTO.setId(product.getId());
-        resultProductDTO.setColor(modelMapper.map(product.getColor(), ColorDto.class));
-        resultProductDTO.setCount(product.getCount());
-        resultProductDTO.setDescription(product.getDescription());
-        resultProductDTO.setMemory(modelMapper.map(product.getMemory(), MemoryDto.class));
-        resultProductDTO.setModel(modelMapper.map(product.getModel(), ModelDto.class));
-        resultProductDTO.setName(product.getName());
-        resultProductDTO.setPrice(product.getPrice());
+        ProductDto resultProductDTO = new ProductDto(product);
 
         ProductDto mappedProductDTO = modelMapper.map(product, ProductDto.class);
         Assert.assertEquals(resultProductDTO, mappedProductDTO);

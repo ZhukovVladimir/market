@@ -1,5 +1,6 @@
 package com.example.market.data.dto;
 
+import com.example.market.data.models.Category;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -10,4 +11,13 @@ public class CategoryDto {
 
     @NotEmpty
     private String name;
+
+    public CategoryDto(Category category) {
+        this.id = category.getId();
+        this.name = category.getName();
+    }
+
+    public CategoryDto() {
+
+    }
 }

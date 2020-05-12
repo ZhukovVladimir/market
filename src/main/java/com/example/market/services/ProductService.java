@@ -8,6 +8,10 @@ import com.example.market.exceptions.ConflictException;
 import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +45,12 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public List<ProductDto> findAll() {
-        return productsToProductsDto(productRepository.findAll(defaultSpecification()));
+    public Page<ProductDto> findAll(Pageable pageable) {
+               return productRepository.findAll(defaultSpecification(), pageable).map(ProductDto::new);
     }
 
-    public List<ProductDto> findAll(ProductSearchDto productSearchDto) {
+    public Page<ProductDto> findAll(ProductSearchDto productSearchDto, Pageable pageable) {
         Specification<Product> specification = defaultSpecification();
-
         if (productSearchDto.getModel() != null && productSearchDto.getModel().getCategory() != null
                 && productSearchDto.getModel().getCategory().getName() != null) {
             specification = specification.and(hasCategory(productSearchDto));
@@ -61,7 +64,7 @@ public class ProductService {
         if (productSearchDto.getAvailable() != null && productSearchDto.getAvailable()) {
             specification = specification.and(isAvailable());
         }
-        return productsToProductsDto(productRepository.findAll(specification));
+        return productRepository.findAll(specification, pageable).map(ProductDto::new);
     }
 
     public ProductDto createProduct(ProductDto productDto) {
@@ -74,6 +77,7 @@ public class ProductService {
         }
     }
 
+    //todo: should use to specifications, orders by (default, name, price), filters ()
     public ProductDto updateProduct(Long id, ProductDto productDto) {
         if (productRepository.existsById(id)) {
             Product product = modelMapper.map(productDto, Product.class).setId(id);
@@ -84,12 +88,17 @@ public class ProductService {
     }
 
     public ProductDto findById(Long id) {
-        return modelMapper.map(productRepository.findById(id).orElseThrow(ResourceNotFoundException::new),
+        Specification<Product> specification = defaultSpecification().and(hasId(id));
+        return modelMapper.map(productRepository.findOne(specification)
+                        .orElseThrow(ResourceNotFoundException::new),
                 ProductDto.class);
     }
 
     public ProductDto deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Specification<Product> specification = defaultSpecification().and(hasId(id));
+        Product product = productRepository.findOne(specification)
+                .orElseThrow(ResourceNotFoundException::new);
+
         product = productRepository.save(product.setDeleted(true));
         return modelMapper.map(product, ProductDto.class);
     }

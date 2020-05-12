@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Where(clause = "deleted=false")
 @Data
 @Accessors(chain = true)
 @Table(name = "product")

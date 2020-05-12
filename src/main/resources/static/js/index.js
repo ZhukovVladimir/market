@@ -41,7 +41,8 @@ function createDivWithProduct(product) {
 }
 
 //insert products into container
-function renderProducts(products) {
+function renderProducts(resp) {
+    let products = resp.content;
     document.getElementById("products").innerHTML = "";
     for (let i = 0; i < products.length; i++) {
         let product = products[i];

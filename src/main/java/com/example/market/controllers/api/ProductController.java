@@ -1,15 +1,19 @@
 package com.example.market.controllers.api;
 
+import com.example.market.controllers.api.CustomAnnotations.ApiPageable;
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.dto.ProductSearchDto;
 import com.example.market.services.CategoryService;
 import com.example.market.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = "/api/product")
@@ -26,8 +30,15 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public List<ProductDto> getAllProducts() {
-        return productService.findAll();
+    @ApiPageable
+    public Page<ProductDto> getAllProducts(
+            @ApiIgnore(
+                    "Ignored because swagger ui shows the wrong params, " +
+                            "instead they are explained in the implicit params"
+            )
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+                    Pageable pageable) {
+        return productService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -36,8 +47,15 @@ public class ProductController {
     }
 
     @PostMapping("/search")
-    public List<ProductDto> getProducts(@RequestBody ProductSearchDto productSearchDto) {
-        return productService.findAll(productSearchDto);
+    @ApiPageable
+    public Page<ProductDto> getProducts(@RequestBody ProductSearchDto productSearchDto,
+                                        @ApiIgnore(
+                                                "Ignored because swagger ui shows the wrong params, " +
+                                                        "instead they are explained in the implicit params"
+                                        )
+                                        @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+                                                Pageable pageable) {
+        return productService.findAll(productSearchDto, pageable);
     }
 
     @PostMapping
