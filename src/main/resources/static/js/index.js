@@ -1,7 +1,7 @@
 let json = null;
 
 async function searchFetch(searchDto) {
-    let response = await fetch("http://localhost:8080/api/product/search", {
+    let response = await fetch("http://localhost:8080/api/products/search", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json;charset=utf-8'

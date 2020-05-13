@@ -26,7 +26,7 @@ public class ViewController {
 
     @GetMapping("/")
     public String hello(Model model, Pageable pageable) {
-        List<ProductDto> products = productService.findAll(pageable).toList();
+        List<ProductDto> products = productService.search(pageable).toList();
         List<CategoryDto> categories = categoryService.findAll();
 
         model.addAttribute("products", products);

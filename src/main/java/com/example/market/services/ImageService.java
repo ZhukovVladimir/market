@@ -54,9 +54,12 @@ public class ImageService {
         try {
             byte[] bytes = image.getBytes();
             Path path = Paths.get(rootDir + image.getOriginalFilename());
+            Image imageEntity = new Image()
+                    .setName(image.getOriginalFilename());
             Files.write(path, bytes);
-            Image imageEntity = new Image().setName(image.getOriginalFilename());
-            imageDto = modelMapper.map(imageRepository.save(imageEntity), ImageDto.class);
+            imageDto = modelMapper.map(
+                    imageRepository.save(imageEntity),
+                    ImageDto.class);
         } catch (IOException e) {
             e.printStackTrace();
             throw new InternalServerErrorException("IOException into server");

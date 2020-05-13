@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping(value = "/api/product")
+@RequestMapping(value = "/api/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -29,7 +29,7 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     @ApiPageable
     public Page<ProductDto> getAllProducts(
             @ApiIgnore(
@@ -38,7 +38,7 @@ public class ProductController {
             )
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
                     Pageable pageable) {
-        return productService.findAll(pageable);
+        return productService.search(pageable);
     }
 
     @GetMapping("/{id}")
@@ -55,7 +55,7 @@ public class ProductController {
                                         )
                                         @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
                                                 Pageable pageable) {
-        return productService.findAll(productSearchDto, pageable);
+        return productService.search(productSearchDto, pageable);
     }
 
     @PostMapping

@@ -49,7 +49,9 @@ public class ProductSpecification {
 
     public static Specification<Product> defaultSpecification() {
         return (root, criteriaQuery, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get(Product_.DELETED), false);
+            return criteriaBuilder.or(
+                    criteriaBuilder.equal(root.get(Product_.DELETED), false),
+                    criteriaBuilder.isNull(root.get(Product_.DELETED)));
         };
     }
 }

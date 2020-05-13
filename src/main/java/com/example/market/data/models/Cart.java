@@ -22,6 +22,7 @@ public class Cart {
     @Column(name = "delivery_status", nullable = false)
     private String deliveryStatus;
 
+    //todo rename to timeshtamp
     @Column(name = "creation_time")
     private LocalDateTime creationTime;
 

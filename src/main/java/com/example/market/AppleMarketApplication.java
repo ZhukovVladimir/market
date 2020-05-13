@@ -32,3 +32,5 @@ public class AppleMarketApplication {
 				.build();
 	}
 }
+
+//todo migration scripts for the dictionary (should to be added)

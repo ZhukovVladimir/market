@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Where(clause = "deleted=false")
+@Where(clause = "deleted is distinct from true")
 @Data
 @Table(name = "color")
 @Accessors(chain = true)
@@ -21,7 +21,7 @@ public class Color {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "deleted", nullable = false)
+    @Column(name = "deleted")
     private Boolean deleted;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "color")

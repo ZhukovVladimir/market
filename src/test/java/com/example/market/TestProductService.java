@@ -1,8 +1,5 @@
 package com.example.market;
 
-import com.example.market.data.dto.ColorDto;
-import com.example.market.data.dto.MemoryDto;
-import com.example.market.data.dto.ModelDto;
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.models.*;
 import com.example.market.data.repositories.ProductRepository;
@@ -77,7 +74,7 @@ public class TestProductService {
         when(modelMapper.map(productTwo, ProductDto.class)).thenReturn(productToDTO(productTwo));
         when(modelMapper.map(productThree, ProductDto.class)).thenReturn(productToDTO(productThree));
 
-        List<ProductDto> productsDTOFromService = productService.findAll(pageable).toList();
+        List<ProductDto> productsDTOFromService = productService.search(pageable).toList();
 
         Assert.assertEquals(productsDTOFromMapper, productsDTOFromService);
     }

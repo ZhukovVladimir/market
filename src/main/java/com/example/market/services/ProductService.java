@@ -45,11 +45,11 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public Page<ProductDto> findAll(Pageable pageable) {
+    public Page<ProductDto> search(Pageable pageable) {
                return productRepository.findAll(defaultSpecification(), pageable).map(ProductDto::new);
     }
 
-    public Page<ProductDto> findAll(ProductSearchDto productSearchDto, Pageable pageable) {
+    public Page<ProductDto> search(ProductSearchDto productSearchDto, Pageable pageable) {
         Specification<Product> specification = defaultSpecification();
         if (productSearchDto.getModel() != null && productSearchDto.getModel().getCategory() != null
                 && productSearchDto.getModel().getCategory().getName() != null) {

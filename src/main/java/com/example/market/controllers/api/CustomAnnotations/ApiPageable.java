@@ -8,6 +8,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation for Swagger UI and Pageable interface
+ * (Swagger UI unwrapping Spring Data Pageable with wrong field names)
+ */
+
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @ApiImplicitParams({
