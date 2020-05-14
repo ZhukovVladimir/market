@@ -16,19 +16,21 @@ public class Cart {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "delivery_address", nullable = false)
+    @Column(name = "delivery_address")
     private String deliveryAddress;
 
-    @Column(name = "delivery_status", nullable = false)
+    //todo should to be enum
+    @Column(name = "delivery_status")
     private String deliveryStatus;
 
-    //todo rename to timeshtamp
+    //todo rename to timestamp
     @Column(name = "creation_time")
     private LocalDateTime creationTime;
 
     @Column(name = "payment_time")
     private LocalDateTime paymentTime;
 
+    //todo change the type
     @Column(name = "bill")
     private Double bill;
 

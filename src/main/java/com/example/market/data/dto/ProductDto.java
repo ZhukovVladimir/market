@@ -15,7 +15,7 @@ public class ProductDto {
     @NotEmpty
     private String name;
 
-    @NotEmpty
+    @NotNull
     private Double price;
 
     @NotNull
@@ -35,19 +35,4 @@ public class ProductDto {
     @NotNull
     private ImageDto image;
 
-    public ProductDto(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.count = product.getCount();
-        this.description = product.getDescription();
-        this.color = new ColorDto(product.getColor());
-        this.memory = new MemoryDto(product.getMemory());
-        this.model = new ModelDto(product.getModel());
-        this.image = new ImageDto(product.getImage());
-    }
-
-    public ProductDto() {
-
-    }
 }

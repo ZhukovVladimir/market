@@ -1,40 +1,64 @@
 package com.example.market;
 
-import com.example.market.data.dto.ColorDto;
-import com.example.market.data.dto.MemoryDto;
-import com.example.market.data.dto.ModelDto;
-import com.example.market.data.dto.ProductDto;
+import com.example.market.data.dto.*;
 import com.example.market.data.models.*;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-
 @RunWith(SpringRunner.class)
 public class TestModelMapper {
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Test
     public void map() {
         Product product = new Product();
         product.setId(1L);
-        product.setCarts(new ArrayList<Cart>());
-        product.setColor(new Color());
+        product.setColor(new Color().setId(1L));
         product.setCount(10);
         product.setDescription("desc");
-        product.setMemory(new Memory());
-        product.setModel(new Model());
+        product.setMemory(new Memory().setId(1L));
+        product.setModel(new Model().setId(1L));
         product.setName("firstProduct");
         product.setPrice(1000d);
 
-        ProductDto resultProductDTO = new ProductDto(product);
+        ProductDto resultProductDto = new ProductDto().setId(product.getId())
+                .setColor(colorToColorDto(product.getColor()))
+                .setCount(product.getCount())
+                .setDescription(product.getDescription())
+                .setMemory(memoryToMemoryDto(product.getMemory()))
+                .setModel(modelToModelDto(product.getModel()))
+                .setName(product.getName())
+                .setPrice(product.getPrice());
 
-        ProductDto mappedProductDTO = modelMapper.map(product, ProductDto.class);
-        Assert.assertEquals(resultProductDTO, mappedProductDTO);
+        ProductDto mappedProductDto = modelMapper.map(product, ProductDto.class);
+        Assert.assertEquals(resultProductDto, mappedProductDto);
+    }
+
+    private ColorDto colorToColorDto(Color color) {
+        ColorDto colorDto = new ColorDto()
+                .setId(color.getId())
+                .setName(color.getName());
+        return colorDto;
+    }
+
+    private MemoryDto memoryToMemoryDto(Memory memory) {
+        MemoryDto memoryDto = new MemoryDto()
+                .setId(memory.getId())
+                .setVolume(memory.getVolume());
+        return memoryDto;
+    }
+
+    private ModelDto modelToModelDto(Model model) {
+        ModelDto modelDto = new ModelDto()
+                .setId(model.getId())
+                .setName(model.getName());
+        return modelDto;
     }
 }
+//todo remove constructor from dto, fix npe, cart, page with desc product
+//todo cart -> добавление кнопки корзины, функционал кнопки buy (добавление в корзину endpoint), страница корзины,
+//todo удалить из корзины, поменять количество в корзине (put endpoint),

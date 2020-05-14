@@ -19,6 +19,7 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
 
+    //todo change the type
     @Column(name = "price", nullable = false)
     private Double price;
 

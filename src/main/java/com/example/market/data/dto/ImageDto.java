@@ -8,12 +8,4 @@ public class ImageDto {
     private Long id;
     private String name;
 
-    public ImageDto(Image image) {
-        this.id = image.getId();
-        this.name = image.getName();
-    }
-
-    public ImageDto() {
-
-    }
 }

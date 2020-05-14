@@ -9,9 +9,7 @@ import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +44,8 @@ public class ProductService {
     }
 
     public Page<ProductDto> search(Pageable pageable) {
-               return productRepository.findAll(defaultSpecification(), pageable).map(ProductDto::new);
+        return productRepository.findAll(defaultSpecification(), pageable).
+                map(product -> modelMapper.map(product, ProductDto.class));
     }
 
     public Page<ProductDto> search(ProductSearchDto productSearchDto, Pageable pageable) {
@@ -64,7 +63,8 @@ public class ProductService {
         if (productSearchDto.getAvailable() != null && productSearchDto.getAvailable()) {
             specification = specification.and(isAvailable());
         }
-        return productRepository.findAll(specification, pageable).map(ProductDto::new);
+        return productRepository.findAll(specification, pageable)
+                .map(product -> modelMapper.map(product, ProductDto.class));
     }
 
     public ProductDto createProduct(ProductDto productDto) {
@@ -77,7 +77,6 @@ public class ProductService {
         }
     }
 
-    //todo: should use to specifications, orders by (default, name, price), filters ()
     public ProductDto updateProduct(Long id, ProductDto productDto) {
         if (productRepository.existsById(id)) {
             Product product = modelMapper.map(productDto, Product.class).setId(id);
