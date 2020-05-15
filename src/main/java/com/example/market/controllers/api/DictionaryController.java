@@ -193,7 +193,7 @@ public class DictionaryController {
      * @return updated memory
      */
     @PutMapping("/storage/{id}")
-    public MemoryDto updateMemory(@RequestParam Long id, @Validated @RequestBody MemoryDto memoryDto) {
+    public MemoryDto updateMemory(@PathVariable Long id, @Validated @RequestBody MemoryDto memoryDto) {
         return memoryService.updateMemory(id, memoryDto);
     }
 

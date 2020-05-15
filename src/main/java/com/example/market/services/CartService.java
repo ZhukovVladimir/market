@@ -1,5 +1,6 @@
 package com.example.market.services;
 
+import com.example.market.data.dto.CartDto;
 import com.example.market.data.repositories.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,5 +13,9 @@ public class CartService {
     @Autowired
     public CartService(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
+    }
+
+    public CartDto addProduct(Long idCart, Long idProduct) {
+        return null;
     }
 }

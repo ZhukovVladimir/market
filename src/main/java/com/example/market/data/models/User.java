@@ -10,9 +10,9 @@ import java.util.List;
 @Where(clause = "deleted is distinct from true")
 @Data
 @Table(name = "account")
-public class Account {
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -44,6 +44,6 @@ public class Account {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Cart> carts;
 }

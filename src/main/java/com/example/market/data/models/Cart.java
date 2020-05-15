@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "cart")
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -36,7 +36,7 @@ public class Cart {
 
     @ManyToOne
     @JoinColumn(name = "account_id")
-    private Account account;
+    private User user;
 
     @ManyToMany
     @JoinTable(

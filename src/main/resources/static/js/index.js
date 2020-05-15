@@ -52,6 +52,11 @@ function renderProducts(resp) {
 
 $(document).ready(() => {
 
+    //show cart
+    // document.getElementById("productContainer").innerHTML = "";
+    // $("#cart").removeClass("invisible");
+
+
     //showing search bar
     let categoryButtons = document.getElementsByClassName("btn-light")
 

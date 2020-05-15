@@ -46,14 +46,14 @@
     <div class="collapse navbar-collapse">
         <div class="navbar-nav">
             <#list categories as category>
-                <a class="nav-item nav-link" href="">${category.name}</a>
+                <a class="nav-item nav-link" href="">здесь должны быть штуки для поиска</a>
             </#list>
         </div>
     </div>
 </nav>
 
         <!--products-->
-<div class="container">
+<div id="productContainer" class="container">
         <div id="products" class="row row-cols-3 align-items-end">
             <#list products as product>
                 <div class="col">
@@ -79,6 +79,29 @@
                 </div>
         </#list>
         </div>
+</div>
+
+
+        <!-- cart -->
+<div id="cart" class="container invisible">
+    <div class="row row-cols-5">
+        <div class="col" >
+            <img class="img-fluid" src="ссылка на фото"/>
+        </div>
+        <div  class="col" >
+            Название
+        </div>
+        <div class="col" >
+            Цена
+        </div>
+        <div class="col" >
+            Количество
+        </div>
+        <div class="col" >
+            Удалить
+        </div>
+
+    </div>
 </div>
 
 </body>

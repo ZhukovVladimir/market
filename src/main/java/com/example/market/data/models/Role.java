@@ -1,7 +1,6 @@
 package com.example.market.data.models;
 
 import lombok.Data;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,7 +10,7 @@ import java.util.Set;
 @Table(name = "role")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -19,5 +18,5 @@ public class Role {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
-    private Set<Account> accounts;
+    private Set<User> users;
 }

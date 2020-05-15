@@ -1,0 +1,1 @@
+ALTER TABLE account ALTER COLUMN role_id SET DEFAULT 2;
