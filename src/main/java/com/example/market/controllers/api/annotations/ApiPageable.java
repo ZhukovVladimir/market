@@ -1,4 +1,4 @@
-package com.example.market.controllers.api.CustomAnnotations;
+package com.example.market.controllers.api.annotations;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

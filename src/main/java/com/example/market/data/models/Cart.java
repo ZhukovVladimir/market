@@ -3,6 +3,7 @@ package com.example.market.data.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Table(name = "cart")
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
@@ -35,7 +36,7 @@ public class Cart {
     private Double bill;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany

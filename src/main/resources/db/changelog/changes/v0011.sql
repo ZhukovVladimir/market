@@ -1,0 +1,2 @@
+ALTER TABLE account_authority
+RENAME TO account_authorities;

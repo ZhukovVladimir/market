@@ -2,17 +2,23 @@ package com.example.market.data.models;
 
 import lombok.Data;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Where(clause = "deleted is distinct from true")
 @Data
-@Table(name = "account")
-public class User {
+@Table(name = "\"user\"")
+public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
@@ -20,7 +26,7 @@ public class User {
     private String password;
 
     @Column(name = "email", nullable = false)
-    private String email;
+    private String username;
 
     @Column(name = "first_name")
     private String firstName;
@@ -40,10 +46,38 @@ public class User {
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Cart> carts;
+
+    public String getEmail() {
+        return username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

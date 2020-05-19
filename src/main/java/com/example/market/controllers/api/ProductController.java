@@ -1,6 +1,6 @@
 package com.example.market.controllers.api;
 
-import com.example.market.controllers.api.CustomAnnotations.ApiPageable;
+import com.example.market.controllers.api.annotations.ApiPageable;
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.dto.ProductSearchDto;
 import com.example.market.services.CategoryService;
