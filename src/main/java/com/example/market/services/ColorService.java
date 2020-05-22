@@ -1,10 +1,9 @@
 package com.example.market.services;
 
-import com.example.market.data.dto.CategoryDto;
 import com.example.market.data.dto.ColorDto;
-import com.example.market.data.models.Category;
 import com.example.market.data.models.Color;
 import com.example.market.data.repositories.ColorRepository;
+import com.example.market.exceptions.BadRequestException;
 import com.example.market.exceptions.ConflictException;
 import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -34,8 +33,8 @@ public class ColorService {
     }
 
     public ColorDto createColor(ColorDto colorDto) {
-        if (colorDto.getId() != null && colorRepository.existsById(colorDto.getId())){
-            throw new ConflictException("Color is already exist");
+        if (colorDto.getId() != null) {
+            throw new BadRequestException("Id should be null");
         } else {
             Color color = modelMapper.map(colorDto, Color.class);
             color = colorRepository.save(color);

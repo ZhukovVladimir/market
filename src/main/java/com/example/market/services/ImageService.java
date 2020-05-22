@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Slf4j
-@PropertySource("classpath:application.properties")
 @Service
 public class ImageService {
 

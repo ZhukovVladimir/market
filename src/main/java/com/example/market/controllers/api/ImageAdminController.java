@@ -1,20 +1,17 @@
 package com.example.market.controllers.api;
 
+import com.example.market.data.dto.ImageDto;
 import com.example.market.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Controller for working with images
- */
 @Controller
-@RequestMapping(value = "/api/images")
-public class ImageController {
+@RequestMapping(value = "/api/admin/images")
+public class ImageAdminController {
 
     private final ImageService imageService;
 
@@ -28,22 +25,22 @@ public class ImageController {
      * @param dirRoot      - setting up in the property file (image.upload.dir = value)
      */
     @Autowired
-    public ImageController(ImageService imageService,
+    public ImageAdminController(ImageService imageService,
                            @Value("${image.upload.dir}") String dirRoot) {
         this.imageService = imageService;
         this.dirRoot = dirRoot;
     }
 
     /**
-     * GET method for the image
+     * POST method for saving the image
      *
-     * @param id - id of the image you want to get
-     * @return image as byte array
+     * @param image - image as multipart/form-data should be saved
+     * @return ImageDto with id and name of the saved image
      */
-    @GetMapping("/{id}")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public byte[] getImage(@PathVariable Long id) {
-        return imageService.getImageById(id);
+    public ImageDto saveImage(@RequestParam("image") MultipartFile image) {
+        return imageService.saveImage(image);
     }
-
 }

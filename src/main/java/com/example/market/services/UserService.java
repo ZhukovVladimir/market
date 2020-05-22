@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-
-    private final String defaultRole = "user";
+//todo добавить генерацию админа
+    private final String defaultRole = "ROLE_USER";
 
     private final UserRepository userRepository;
 
@@ -46,6 +46,7 @@ public class UserService {
         } else {
             User user = modelMapper.map(userDto, User.class);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setAuthorities(authorityRepository.findAuthoritiesByAuthority(defaultRole));
             user = userRepository.save(user);
             return modelMapper.map(user, UserDto.class);
         }

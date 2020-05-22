@@ -4,6 +4,7 @@ import com.example.market.data.dto.ProductDto;
 import com.example.market.data.dto.ProductSearchDto;
 import com.example.market.data.models.Product;
 import com.example.market.data.repositories.ProductRepository;
+import com.example.market.exceptions.BadRequestException;
 import com.example.market.exceptions.ConflictException;
 import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -68,8 +69,8 @@ public class ProductService {
     }
 
     public ProductDto createProduct(ProductDto productDto) {
-        if (productDto.getId() != null && productRepository.existsById(productDto.getId())) {
-            throw new ConflictException("Product is already exist");
+        if (productDto.getId() != null) {
+            throw new BadRequestException("Id should be null");
         } else {
             Product product = modelMapper.map(productDto, Product.class);
             product = productRepository.save(product);

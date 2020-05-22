@@ -4,6 +4,7 @@ import com.example.market.data.dto.CategoryDto;
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.models.Category;
 import com.example.market.data.repositories.CategoryRepository;
+import com.example.market.exceptions.BadRequestException;
 import com.example.market.exceptions.ConflictException;
 import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -33,8 +34,8 @@ public class CategoryService {
     }
 
     public CategoryDto createCategory(CategoryDto categoryDto) {
-        if (categoryDto.getId() != null && categoryRepository.existsById(categoryDto.getId())) {
-            throw new ConflictException("Category is already exist");
+        if (categoryDto.getId() != null) {
+            throw new BadRequestException("Id should be null");
         } else {
             Category category = modelMapper.map(categoryDto, Category.class);
             category = categoryRepository.save(category);

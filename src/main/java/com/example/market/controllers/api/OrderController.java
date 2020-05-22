@@ -1,13 +1,13 @@
 package com.example.market.controllers.api;
 
-import com.example.market.data.dto.CartDto;
-import com.example.market.data.dto.ProductDto;
 import com.example.market.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/order")
+@RequestMapping(value = "/api/orders")
 public class OrderController {
 
     private final CartService cartService;
@@ -17,9 +17,8 @@ public class OrderController {
         this.cartService = cartService;
     }
 
-    @PutMapping("/add/{id}")
-    public CartDto sddProduct(@PathVariable Long id, @RequestParam Long idProduct) {
-        CartDto cartDto = cartService.addProduct(id, idProduct);
-        return cartDto;
+    @GetMapping
+    public String getOrder() {
+        return "order page";
     }
 }

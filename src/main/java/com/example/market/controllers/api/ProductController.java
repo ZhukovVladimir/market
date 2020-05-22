@@ -3,15 +3,12 @@ package com.example.market.controllers.api;
 import com.example.market.controllers.api.annotations.ApiPageable;
 import com.example.market.data.dto.ProductDto;
 import com.example.market.data.dto.ProductSearchDto;
-import com.example.market.services.CategoryService;
 import com.example.market.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -21,15 +18,12 @@ public class ProductController {
 
     private final ProductService productService;
 
-    private final CategoryService categoryService;
-
     @Autowired
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.categoryService = categoryService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     @ApiPageable
     public Page<ProductDto> getAllProducts(
             @ApiIgnore(
@@ -58,19 +52,4 @@ public class ProductController {
         return productService.search(productSearchDto, pageable);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto createProduct(@Validated @RequestBody ProductDto product) {
-        return productService.createProduct(product);
-    }
-
-    @PutMapping("/{id}")
-    public ProductDto updateProduct(@PathVariable Long id, @Validated @RequestBody ProductDto product) {
-        return productService.updateProduct(id, product);
-    }
-
-    @DeleteMapping("/{id}")
-    public ProductDto deleteProduct(@PathVariable Long id) {
-        return productService.deleteProduct(id);
-    }
 }

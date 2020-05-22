@@ -5,6 +5,7 @@ import com.example.market.data.dto.MemoryDto;
 import com.example.market.data.models.Category;
 import com.example.market.data.models.Memory;
 import com.example.market.data.repositories.MemoryRepository;
+import com.example.market.exceptions.BadRequestException;
 import com.example.market.exceptions.ConflictException;
 import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -34,8 +35,8 @@ public class MemoryService {
     }
 
     public MemoryDto createMemory(MemoryDto memoryDto) {
-        if (memoryDto.getId() != null && memoryRepository.existsById(memoryDto.getId())) {
-            throw new ConflictException("Memory is already exist");
+        if (memoryDto.getId() != null) {
+            throw new BadRequestException("Id should be null");
         } else {
             Memory memory = modelMapper.map(memoryDto, Memory.class);
             memory = memoryRepository.save(memory);

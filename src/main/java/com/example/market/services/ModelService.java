@@ -5,6 +5,7 @@ import com.example.market.data.dto.ModelDto;
 import com.example.market.data.models.Category;
 import com.example.market.data.models.Model;
 import com.example.market.data.repositories.ModelRepository;
+import com.example.market.exceptions.BadRequestException;
 import com.example.market.exceptions.ConflictException;
 import com.example.market.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -34,8 +35,8 @@ public class ModelService {
     }
 
     public ModelDto createModel(ModelDto modelDto) {
-        if (modelDto.getId() != null && modelRepository.existsById(modelDto.getId())) {
-            throw new ConflictException("Model is already exist");
+        if (modelDto.getId() != null) {
+            throw new BadRequestException("Id should be null");
         } else {
             Model model = modelMapper.map(modelDto, Model.class);
             model = modelRepository.save(model);
