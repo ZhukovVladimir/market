@@ -1,8 +1,11 @@
 package com.example.market.services;
 
 import com.example.market.data.dto.UserDto;
+import com.example.market.data.models.Cart;
+import com.example.market.data.models.DeliveryStatus;
 import com.example.market.data.models.User;
 import com.example.market.data.repositories.AuthorityRepository;
+import com.example.market.data.repositories.CartRepository;
 import com.example.market.data.repositories.UserRepository;
 import com.example.market.exceptions.ConflictException;
 import com.example.market.exceptions.ResourceNotFoundException;
@@ -20,13 +23,25 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final CartRepository cartRepository;
+
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, CartRepository cartRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.cartRepository = cartRepository;
         this.modelMapper = modelMapper;
+    }
+
+    //todo fix npe
+    private Cart setUpEmptyCart(User user) {
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cart.setDeliveryStatus(DeliveryStatus.PREORDER);
+        cart = cartRepository.save(cart);
+        return cart;
     }
 
     public UserDto findOne(Long id) {
@@ -48,6 +63,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setAuthorities(authorityRepository.findAuthoritiesByAuthority(defaultRole));
             user = userRepository.save(user);
+            setUpEmptyCart(user);
             return modelMapper.map(user, UserDto.class);
         }
     }

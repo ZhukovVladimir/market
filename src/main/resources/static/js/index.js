@@ -1,7 +1,8 @@
 let json = null;
+let hostName = "http://localhost:8080";
 
 async function searchFetch(searchDto) {
-    let response = await fetch("http://localhost:8080/api/products/search", {
+    let response = await fetch(hostName + "/api/products/search", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -41,7 +42,7 @@ function createDivWithProduct(product) {
 }
 
 //insert products into container
-function renderProducts(resp) {
+function    renderProducts(resp) {
     let products = resp.content;
     document.getElementById("products").innerHTML = "";
     for (let i = 0; i < products.length; i++) {
@@ -50,12 +51,39 @@ function renderProducts(resp) {
     }
 }
 
+//get all carts for current user
+async function getCarts() {
+    let getCartsURL = hostName + "/api/orders";
+    let response = await fetch(getCartsURL)
+    if (response.ok) {
+        json = await response.json();
+    } else {
+        alert(response.status);
+    }
+}
+
+//action for buy buttons
+function onClickBuy() {
+    let buyButtons = document.getElementsByClassName("buybtn");
+
+    getCarts().then(() => {
+        let cartId = json[0].id;
+        for (let i = 0; i < buyButtons.length; i++) {
+            buyButtons.item(i).onclick = function () {
+                let addProductURL = hostName + "/api/orders/add?cartId=" + cartId + "&count=1&productId=" + this.value;
+                let response = fetch(addProductURL, {
+                    method : "POST"
+                });
+                return false;
+            }
+        }
+    })
+}
+
 $(document).ready(() => {
 
-    //show cart
-    // document.getElementById("productContainer").innerHTML = "";
-    // $("#cart").removeClass("invisible");
-
+    //action for buy buttons
+    onClickBuy();
 
     //showing search bar
     let categoryButtons = document.getElementsByClassName("btn-light")

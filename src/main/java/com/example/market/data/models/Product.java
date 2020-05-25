@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,11 +71,11 @@ public class Product {
     @JoinColumn(name = "memory_id", nullable = false)
     private Memory memory;
 
-    /**
-     * list of carts that contain the current product
-     */
-    @ManyToMany(mappedBy = "products")
-    private List<Cart> carts;
+//    /**
+//     * list of carts that contain the current product
+//     */
+//    @ManyToMany(mappedBy = "products")
+//    private List<Cart> carts = new ArrayList<>();
 
     /**
      * model of the product

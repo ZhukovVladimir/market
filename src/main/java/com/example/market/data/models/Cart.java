@@ -1,11 +1,12 @@
 package com.example.market.data.models;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * entity for working with cart and orders
@@ -35,9 +36,9 @@ public class Cart {
      * if delivery status "pre-order" - this entity is cart
      * else - this entity is order
      */
-    //todo should to be enum
     @Column(name = "delivery_status")
-    private String deliveryStatus;
+    @Enumerated(EnumType.ORDINAL)
+    private DeliveryStatus deliveryStatus;
 
     /**
      * time of creation the order
@@ -57,23 +58,22 @@ public class Cart {
      */
     //todo change the type
     @Column(name = "bill")
-    private Double bill;
+    private Double bill = 0d;
 
     /**
      * user of the cart
      */
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User user;
 
     /**
-     * list of products into the cart
+     * map of products into the cart
      */
-    @ManyToMany
-    @JoinTable(
-            name = "product_cart",
-            joinColumns = { @JoinColumn(name = "cart_id") },
-            inverseJoinColumns = { @JoinColumn(name = "product_id") }
-    )
-    private List<Product> products;
+    @ElementCollection
+    @CollectionTable(name = "product_cart", joinColumns = @JoinColumn(name = "cart_id"))
+    @MapKeyJoinColumn(name = "product_id")
+    @Column(name = "count")
+    private Map<Product, Integer> products = new HashMap<>();
 }

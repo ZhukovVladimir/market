@@ -76,7 +76,7 @@
                             Storage: ${product.memory.volume}
                         </div>
                         <div class="buy">
-                            <button type="button" id="buy_button" class="btn btn-primary btn-sm">Buy</button>
+                            <button type="button" value=${product.id} class="btn btn-primary btn-sm buybtn">Buy</button>
                         </div>
                     </div>
                 </div>

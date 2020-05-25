@@ -1,0 +1,1 @@
+ALTER TABLE product_cart ADD COLUMN count INTEGER;
