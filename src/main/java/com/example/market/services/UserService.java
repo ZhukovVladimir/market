@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-//todo добавить генерацию админа
     private final String defaultRole = "ROLE_USER";
 
     private final UserRepository userRepository;
@@ -35,15 +34,6 @@ public class UserService {
         this.modelMapper = modelMapper;
     }
 
-    //todo fix npe
-    private Cart setUpEmptyCart(User user) {
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cart.setDeliveryStatus(DeliveryStatus.PREORDER);
-        cart = cartRepository.save(cart);
-        return cart;
-    }
-
     public UserDto findOne(Long id) {
         return modelMapper.map(
                 userRepository.findById(id).orElseThrow(ResourceNotFoundException::new),
@@ -55,7 +45,7 @@ public class UserService {
         return modelMapper.map(user, UserDto.class);
     }
 
-    public UserDto createUser(UserDto userDto, PasswordEncoder passwordEncoder) {
+    public void createUser(UserDto userDto, PasswordEncoder passwordEncoder) {
         if (userRepository.findByUsername(userDto.getUsername()) != null) {
             throw new ConflictException(userDto.getUsername() + " User already exist");
         } else {
@@ -64,7 +54,13 @@ public class UserService {
             user.setAuthorities(authorityRepository.findAuthoritiesByAuthority(defaultRole));
             user = userRepository.save(user);
             setUpEmptyCart(user);
-            return modelMapper.map(user, UserDto.class);
         }
+    }
+
+    private void setUpEmptyCart(User user) {
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cart.setDeliveryStatus(DeliveryStatus.PREORDER);
+        cartRepository.save(cart);
     }
 }

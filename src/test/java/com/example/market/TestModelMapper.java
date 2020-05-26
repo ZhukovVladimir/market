@@ -59,6 +59,3 @@ public class TestModelMapper {
         return modelDto;
     }
 }
-//todo remove constructor from dto, fix npe, cart, page with desc product
-//todo cart -> добавление кнопки корзины, функционал кнопки buy (добавление в корзину endpoint), страница корзины,
-//todo удалить из корзины, поменять количество в корзине (put endpoint),

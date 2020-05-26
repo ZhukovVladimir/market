@@ -58,7 +58,7 @@
                 <div class="card-body">
                     <h5 class="card-title text-center">Sign In</h5>
                     <p><a href="/register">Register</a></p>
-                    <form method="post" action="/login" id="loginForm" class="form-signin">
+                    <form method="post" enctype="application/x-www-form-urlencoded" action="/login" id="loginForm" class="form-signin">
                         <ul class="wrapper">
                             <li class="form-row">
                                 <label for="username">Email: </label>

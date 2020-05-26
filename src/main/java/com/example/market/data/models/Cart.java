@@ -43,9 +43,8 @@ public class Cart {
     /**
      * time of creation the order
      */
-    //todo rename to timestamp
     @Column(name = "creation_time")
-    private LocalDateTime creationTime;
+    private LocalDateTime timestamp;
 
     /**
      * payment time
@@ -56,7 +55,6 @@ public class Cart {
     /**
      * bill of the cart
      */
-    //todo change the type
     @Column(name = "bill")
     private Double bill = 0d;
 
@@ -75,5 +73,6 @@ public class Cart {
     @CollectionTable(name = "product_cart", joinColumns = @JoinColumn(name = "cart_id"))
     @MapKeyJoinColumn(name = "product_id")
     @Column(name = "count")
+    @ToString.Exclude
     private Map<Product, Integer> products = new HashMap<>();
 }

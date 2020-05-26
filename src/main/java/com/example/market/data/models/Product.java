@@ -1,6 +1,7 @@
 package com.example.market.data.models;
 
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -34,7 +35,6 @@ public class Product {
     /**
      * price of the product
      */
-    //todo change the type
     @Column(name = "price", nullable = false)
     private Double price;
 
@@ -62,6 +62,7 @@ public class Product {
      */
     @ManyToOne
     @JoinColumn(name = "color_id", nullable = false)
+    @ToString.Exclude
     private Color color;
 
     /**
@@ -69,19 +70,15 @@ public class Product {
      */
     @ManyToOne
     @JoinColumn(name = "memory_id", nullable = false)
+    @ToString.Exclude
     private Memory memory;
-
-//    /**
-//     * list of carts that contain the current product
-//     */
-//    @ManyToMany(mappedBy = "products")
-//    private List<Cart> carts = new ArrayList<>();
 
     /**
      * model of the product
      */
     @ManyToOne
     @JoinColumn(name = "model_id", nullable = false)
+    @ToString.Exclude
     private Model model;
 
     /**
@@ -89,5 +86,6 @@ public class Product {
      */
     @ManyToOne
     @JoinColumn(name = "image_id")
+    @ToString.Exclude
     private Image image;
 }

@@ -20,7 +20,6 @@ import java.util.Set;
 @Data
 @Table(name = "\"user\"")
 public class User implements UserDetails {
-
     /**
      * id in product table
      * this is generated value

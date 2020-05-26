@@ -1,8 +1,10 @@
 package com.example.market.controllers.api;
 
 import com.example.market.data.dto.CartDto;
+import com.example.market.data.models.User;
 import com.example.market.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<CartDto> getAllCarts() {
-        return cartService.getAll();
+    public List<CartDto> getAllCarts(@AuthenticationPrincipal User user) {
+        return cartService.getAll(user.getId());
     }
 }

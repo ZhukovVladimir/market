@@ -42,7 +42,7 @@ function createDivWithProduct(product) {
 }
 
 //insert products into container
-function    renderProducts(resp) {
+function renderProducts(resp) {
     let products = resp.content;
     document.getElementById("products").innerHTML = "";
     for (let i = 0; i < products.length; i++) {
@@ -52,38 +52,36 @@ function    renderProducts(resp) {
 }
 
 //get all carts for current user
-async function getCarts() {
+async function initByBtn() {
     let getCartsURL = hostName + "/api/orders";
-    let response = await fetch(getCartsURL)
-    if (response.ok) {
-        json = await response.json();
-    } else {
-        alert(response.status);
-    }
+
+    $.ajax({
+        url: getCartsURL,
+        success: function (data) {
+            initOnClickBuy(data);
+        }
+    });
 }
 
 //action for buy buttons
-function onClickBuy() {
+function initOnClickBuy(carts) {
     let buyButtons = document.getElementsByClassName("buybtn");
+    let cartId = carts[0].id;
 
-    getCarts().then(() => {
-        let cartId = json[0].id;
-        for (let i = 0; i < buyButtons.length; i++) {
-            buyButtons.item(i).onclick = function () {
-                let addProductURL = hostName + "/api/orders/add?cartId=" + cartId + "&count=1&productId=" + this.value;
-                let response = fetch(addProductURL, {
-                    method : "POST"
-                });
-                return false;
-            }
+    for (let i = 0; i < buyButtons.length; i++) {
+        buyButtons.item(i).onclick = function () {
+            let addProductURL = hostName + "/api/orders/add?cartId=" + cartId + "&count=1&productId=" + this.value;
+            $.ajax({
+                url: addProductURL,
+                method: "POST"
+            });
         }
-    })
+    }
 }
 
 $(document).ready(() => {
-
     //action for buy buttons
-    onClickBuy();
+    initByBtn();
 
     //showing search bar
     let categoryButtons = document.getElementsByClassName("btn-light")
