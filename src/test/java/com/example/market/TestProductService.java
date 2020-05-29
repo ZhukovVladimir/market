@@ -3,17 +3,16 @@ package com.example.market;
 import com.example.market.data.dto.ColorDto;
 import com.example.market.data.dto.MemoryDto;
 import com.example.market.data.dto.ProductDto;
-import com.example.market.data.models.Color;
-import com.example.market.data.models.Memory;
-import com.example.market.data.models.Product;
-import com.example.market.data.repositories.ProductRepository;
-import com.example.market.services.ProductService;
+import com.example.market.data.model.Color;
+import com.example.market.data.model.Memory;
+import com.example.market.data.model.Product;
+import com.example.market.data.repository.ProductRepository;
+import com.example.market.service.ProductService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.market.data.repositories.specifications.ProductSpecification.defaultSpecification;
+import static com.example.market.data.repository.specification.ProductSpecification.defaultSpecification;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)

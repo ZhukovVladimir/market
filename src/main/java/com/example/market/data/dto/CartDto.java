@@ -3,7 +3,10 @@ package com.example.market.data.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -15,5 +18,5 @@ public class CartDto {
     private LocalDateTime creationTime;
     private LocalDateTime paymentTime;
     private Double bill;
-    private Map<ProductDto, Integer> products;
+    private List<BookedProductDto> products;
 }

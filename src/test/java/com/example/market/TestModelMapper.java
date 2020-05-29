@@ -1,7 +1,7 @@
 package com.example.market;
 
 import com.example.market.data.dto.*;
-import com.example.market.data.models.*;
+import com.example.market.data.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

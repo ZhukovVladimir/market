@@ -22,13 +22,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">SHOP</a>
     <a class="navbar-brand" href="/">profile</a>
+    <button type="button" id="cart_button" class="btn btn-light" value="">Cart</button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
+        <div id="categoryBtnPanel" class="navbar-nav">
             <#list categories as category>
-                <button type="button" class="btn btn-light" value=${category.name}> ${category.name}</button>
+                <button type="button" class="btn btn-light categoryBtn" value=${category.name}> ${category.name}</button>
             </#list>
         </div>
     </div>
@@ -57,41 +58,41 @@
 
         <!--products-->
 <div id="productContainer" class="container">
-        <div id="products" class="row row-cols-3 align-items-end">
-            <#list products as product>
-                <div class="col">
-                    <div class="image">
-                        <img class="img-fluid" src="http://localhost:8080/api/images/${product.image.id}"/>
+    <div id="products" class="row row-cols-3 align-items-end">
+        <#list products as product>
+            <div class="col">
+                <div class="image">
+                    <img class="img-fluid" src="http://localhost:8080/api/images/${product.image.id}"/>
+                </div>
+                <div class="info">
+                    <div class="name"> ${product.name} </div>
+                    <#if product.count gt 0>
+                        <div class="price"> ${product.price} </div>
+                    <#else>
+                        <div class="not_available"> <b>Not available</b> </div>
+                    </#if>
+                    <div class="desc">
+                        ${product.description}
+                        Color: ${product.color.name}
+                        Storage: ${product.memory.volume}
                     </div>
-                    <div class="info">
-                        <div class="name"> ${product.name} </div>
-                        <#if product.count gt 0>
-                            <div class="price"> ${product.price} </div>
-                        <#else>
-                            <div class="not_available"> <b>Not available</b> </div>
-                        </#if>
-                        <div class="desc">
-                            ${product.description}
-                            Color: ${product.color.name}
-                            Storage: ${product.memory.volume}
-                        </div>
-                        <div class="buy">
-                            <button type="button" value=${product.id} class="btn btn-primary btn-sm buybtn">Buy</button>
-                        </div>
+                    <div class="buy">
+                        <button type="button" value=${product.id} class="btn btn-primary btn-sm buybtn">Buy</button>
                     </div>
                 </div>
+            </div>
         </#list>
-        </div>
+    </div>
 </div>
 
 
         <!-- cart -->
-<div id="cart" class="container invisible">
-    <div class="row row-cols-5">
+<div id="globalCart" class="container invisible">
+    <div id="cartContainer" class="row row-cols-5 deliveryProducts">
         <div class="col" >
-            <img class="img-fluid" src="ссылка на фото"/>
+            <img class="img-thumbnail cart_prod_img" src="ссылка на фото"/>
         </div>
-        <div  class="col" >
+        <div class="col" >
             Название
         </div>
         <div class="col" >
@@ -101,7 +102,7 @@
             Количество
         </div>
         <div class="col" >
-            Удалить
+            <button type="button" class="btn btn-light">Delete</button>
         </div>
 
     </div>
