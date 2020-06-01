@@ -2,9 +2,11 @@ package com.example.market.controller.api;
 
 import com.example.market.data.dto.BookedProductDto;
 import com.example.market.data.dto.CartDto;
+import com.example.market.data.model.BookedProduct;
 import com.example.market.data.model.User;
 import com.example.market.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +24,22 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public BookedProductDto addProduct(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer count) throws InterruptedException {
+    public BookedProductDto addProduct(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer count) {
         return cartService.addProduct(cartId, productId, count);
+    }
+
+    @PutMapping("/reduce")
+    public BookedProductDto reduceProduct(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer count) {
+        return cartService.reduceProduct(cartId, productId, count);
     }
 
     @GetMapping
     public List<CartDto> getAllCarts(@AuthenticationPrincipal User user) {
         return cartService.getAll(user.getId());
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteProduct(@RequestParam Long cartId, @RequestParam Long productId) {
+        cartService.deleteProduct(cartId, productId);
     }
 }

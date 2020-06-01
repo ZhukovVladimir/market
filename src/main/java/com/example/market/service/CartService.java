@@ -41,7 +41,7 @@ public class CartService {
     public BookedProductDto addProduct(Long cartId, Long productId, Integer count) {
         Product storedProduct = productRepository.findById(productId).orElseThrow(ResourceNotFoundException::new);
         BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
-        BookedProduct savedProduct = null;
+        BookedProduct savedProduct;
 
         //if cart contain the product
         if (bookedProductRepository.existsById(bookedProductId)) {
@@ -75,5 +75,25 @@ public class CartService {
         return carts.stream()
                 .map(cart -> modelMapper.map(cart, CartDto.class))
                 .collect(Collectors.toList());
+    }
+
+
+    public BookedProductDto reduceProduct(Long cartId, Long productId, Integer count) {
+        BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
+        BookedProduct storedProduct = bookedProductRepository.findById(bookedProductId).orElseThrow(ResourceNotFoundException::new);
+
+        if (count >= storedProduct.getCount()) {
+            throw new BadRequestException("You can't delete so much products");
+        }
+        count = storedProduct.getCount() - count;
+        BookedProduct savedProduct = bookedProductRepository.save(storedProduct.setCount(count));
+
+        return modelMapper.map(savedProduct, BookedProductDto.class);
+    }
+
+    public void deleteProduct(Long cartId, Long productId) {
+        BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
+        BookedProduct storedProduct = bookedProductRepository.findById(bookedProductId).orElseThrow(ResourceNotFoundException::new);
+        bookedProductRepository.delete(storedProduct);
     }
 }
