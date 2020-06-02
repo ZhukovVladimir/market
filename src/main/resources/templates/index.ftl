@@ -62,7 +62,7 @@
         <#list products as product>
             <div class="col">
                 <div class="image">
-                    <img class="img-fluid" src="http://localhost:8080/api/images/${product.image.id}"/>
+                    <img id="${product.id}" class="img-fluid product-img" src="http://localhost:8080/api/images/${product.image.id}"/>
                 </div>
                 <div class="info">
                     <div class="name"> ${product.name} </div>

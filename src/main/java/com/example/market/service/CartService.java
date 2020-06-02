@@ -2,10 +2,7 @@ package com.example.market.service;
 
 import com.example.market.data.dto.BookedProductDto;
 import com.example.market.data.dto.CartDto;
-import com.example.market.data.model.BookedProduct;
-import com.example.market.data.model.BookedProductId;
-import com.example.market.data.model.Cart;
-import com.example.market.data.model.Product;
+import com.example.market.data.model.*;
 import com.example.market.data.repository.BookedProductRepository;
 import com.example.market.data.repository.CartRepository;
 import com.example.market.data.repository.ProductRepository;
@@ -39,6 +36,12 @@ public class CartService {
 
     //todo look for controller advice (exception handler)
     public BookedProductDto addProduct(Long cartId, Long productId, Integer count) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(ResourceNotFoundException::new);
+
+        if (!(cart.getDeliveryStatus() == DeliveryStatus.PREORDER)) {
+            throw new BadRequestException("You can't edit that cart");
+        }
+
         Product storedProduct = productRepository.findById(productId).orElseThrow(ResourceNotFoundException::new);
         BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
         BookedProduct savedProduct;
@@ -79,6 +82,12 @@ public class CartService {
 
 
     public BookedProductDto reduceProduct(Long cartId, Long productId, Integer count) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(ResourceNotFoundException::new);
+
+        if (!(cart.getDeliveryStatus() == DeliveryStatus.PREORDER)) {
+            throw new BadRequestException("You can't edit that cart");
+        }
+
         BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
         BookedProduct storedProduct = bookedProductRepository.findById(bookedProductId).orElseThrow(ResourceNotFoundException::new);
 
