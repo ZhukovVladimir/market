@@ -172,6 +172,26 @@ function initCartPage() {
 //init cart btn
 function initCartBtn() {
     let cartBtn = document.getElementById("cart_button");
+    let cartsURL = hostName + "/api/orders";
+    let badgeCart = document.getElementById("badge");
+    let count = 0;
+    $.ajax({
+        url: cartsURL,
+        success: function (data) {
+            if (data[0] === "<") {
+
+            } else {
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].deliveryStatus === "PREORDER") {
+                        for (let j = 0; j < data[i].products.length; j++) {
+                            count = count + data[i].products[j].count;
+                        }
+                    }
+                }
+            }
+            badgeCart.textContent = count;
+        }
+    })
 
     cartBtn.onclick = function () {
         document.getElementById("productContainer").innerHTML = "";
