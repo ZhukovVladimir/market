@@ -8,6 +8,7 @@ import com.example.market.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,5 +42,10 @@ public class OrderController {
     @DeleteMapping("/delete")
     public void deleteProduct(@RequestParam Long cartId, @RequestParam Long productId) {
         cartService.deleteProduct(cartId, productId);
+    }
+
+    @PutMapping("/confirm")
+    public CartDto confirmOrder(@AuthenticationPrincipal User user, @RequestBody @Validated CartDto cartDto) {
+        return cartService.confirmOrder(user, cartDto);
     }
 }

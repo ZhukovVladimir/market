@@ -61,11 +61,11 @@
                         <ul class="wrapper">
                             <li class="form-row">
                                 <label for="username">Email: </label>
-                                <input type="email" name="username"/>
+                                <input type="email" required name="username"/>
                             </li>
                             <li class="form-row">
                                 <label for="password">Password: </label>
-                                <input type="password" name="password"/><br/>
+                                <input type="password" required name="password"/><br/>
                             </li>
                             <li class="form-row">
                                 <label for="firstName">First name: </label>
@@ -81,11 +81,11 @@
                             </li>
                             <li class="form-row">
                                 <label for="phoneCountryCode">Phone Code: </label>
-                                <input type="text" name="phoneCountryCode"/><br/>
+                                <input type="text" required name="phoneCountryCode"/><br/>
                             </li>
                             <li class="form-row">
                                 <label for="phone">Phone: </label>
-                                <input type="text" name="phone"/><br/>
+                                <input type="text" required name="phone"/><br/>
                             </li>
                             <li class="form-row">
                                 <input type="submit" value="Register"/>

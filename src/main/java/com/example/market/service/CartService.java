@@ -11,6 +11,7 @@ import com.example.market.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,5 +105,32 @@ public class CartService {
         BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
         BookedProduct storedProduct = bookedProductRepository.findById(bookedProductId).orElseThrow(ResourceNotFoundException::new);
         bookedProductRepository.delete(storedProduct);
+    }
+
+    @Transactional
+    public CartDto confirmOrder(User user, CartDto cartDto) {
+        Cart cart = cartRepository.findByIdAndUserId(cartDto.getId(), user.getId()).orElseThrow(ResourceNotFoundException::new);
+        setUpBill(cart);
+
+        if (cartDto.getDeliveryAddress().isEmpty()) {
+            throw new BadRequestException("Delivery address shouldn't be empty");
+        }
+
+        if (!cart.getBill().equals(cartDto.getBill())) {
+            throw new BadRequestException("Your bill wrong expected: " + cart.getBill());
+        }
+
+        cart.setDeliveryAddress(cartDto.getDeliveryAddress());
+        cart.setDeliveryStatus(DeliveryStatus.TRANSFER);
+        cart = cartRepository.save(cart);
+        return modelMapper.map(cart, CartDto.class);
+    }
+
+    private void setUpBill(Cart cart) {
+        double bill = 0;
+        for (BookedProduct elem : cart.getProducts()) {
+            bill = bill + elem.getProduct().getPrice() * elem.getCount();
+        }
+        cart.setBill(bill);
     }
 }

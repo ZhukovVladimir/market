@@ -111,7 +111,133 @@ function initOnClickBuy(carts) {
 //init cart to order
 function confirmCart(cart) {
     let cartContainer = document.getElementById("cartContainer");
+    let delOrderCont = document.getElementById("orderContainer");
+    if (delOrderCont !== null) delOrderCont.innerHTML = "";
+    let products = cart.products;
     cartContainer.innerHTML = "";
+    //render preorder cart
+    //todo should be function (DRY)
+        //render products if status = preorder
+    for (let i = 0; i < products.length; i++) {
+        cartContainer.insertAdjacentHTML("beforeend",
+            "   <div class=\"col my-auto\" >\n" +
+            "        <img class=\"img-thumbnail cart_prod_img\" src=\"http://localhost:8080/api/images/" + products[i].product.image.id + "\"></div>\n" +
+            "        </div>\n" +
+            "        <div class=\"col my-auto\" >\n" +
+            "            " + products[i].product.name + "\n" +
+            "        </div>\n" +
+            "        <div class=\"col my-auto\" >\n" +
+            "            " + products[i].product.price + "\n" +
+            "        </div>\n" +
+            "        <div class=\"col my-auto\" >\n" +
+            "        <p><input id=\"inputCount" + products[i].product.id + "\" type=\"number\"  size=\"3\" min=\"1\" max=" + products[i].product.count + " value=" + products[i].count + "></p> \n" +
+            "        </div>\n" +
+            "        <div class=\"col my-auto\" >\n" +
+            "            <button id=\"deleteBtn" + products[i].product.id + "\" type=\"button\" class=\"btn btn-light\">Delete</button>\n" +
+            "        </div>\n" +
+            "\n");
+        //change count
+        document.getElementById("inputCount" + products[i].product.id).addEventListener('input', function (e) {
+            let totalPrice = document.getElementById("totalPrice");
+            let badge = document.getElementById("badge");
+            let changeCount = e.target.value - products[i].count;
+            if (changeCount > 0) {
+                let addProductURL = hostName + "/api/orders/add?cartId=" + cart.id + "&count=" + changeCount + "&productId=" + products[i].product.id;
+                $.ajax({
+                    url: addProductURL,
+                    method: "POST",
+                    success: function () {
+                        cart.products[i].count = cart.products[i].count + changeCount;
+                        badge.textContent = parseInt(badge.textContent) + changeCount;
+                        confirmCart(cart);
+                    }
+                })
+            }
+            if (changeCount <= 0) {
+                let reduceProductUrl = hostName + "/api/orders/reduce?cartId=" + cart.id + "&count=" + Math.abs(changeCount) + "&productId=" + products[i].product.id;
+                $.ajax({
+                    url: reduceProductUrl,
+                    method: "PUT",
+                    success: function () {
+                        cart.products[i].count = cart.products[i].count + changeCount;
+                        badge.textContent = parseInt(badge.textContent) + changeCount;
+                        confirmCart(cart);
+                    }
+                })
+            }
+        })
+        //delete products
+        document.getElementById("deleteBtn" + products[i].product.id).onclick = function () {
+            let deleteProduct = hostName + "/api/orders/delete?cartId=" + cart.id + "&productId=" + products[i].product.id;
+            $.ajax({
+                url: deleteProduct,
+                method: "DELETE",
+                success: function () {
+                    let badge = document.getElementById("badge");
+                    badge.textContent = parseInt(badge.textContent) - cart.products[i].count;
+                    cart.products.splice(i, 1);
+                    //todo need to change total sum
+                    confirmCart(cart);
+                }
+            })
+        }
+    }
+
+    //setup order info
+    let orderContainer = document.createElement("div");
+    orderContainer.id = "orderContainer";
+    orderContainer.classList.add("container");
+    cartContainer.insertAdjacentElement("afterend", orderContainer);
+
+    let bill = cart.products.reduce(function (sum, current) {
+        return sum + current.product.price * current.count;
+    }, 0);
+
+    cart.bill = bill;
+
+    //form for order info
+    let infoRowDiv = document.createElement("div");
+    infoRowDiv.id = "infoRowDiv";
+    infoRowDiv.classList.add("row");
+    infoRowDiv.classList.add("row-cols-4");
+
+    let address = "";
+    if (cart.deliveryAddress !== null) {
+        address = "value=\"" + cart.deliveryAddress + "\"";
+    }
+
+    orderContainer.insertAdjacentElement("afterbegin", infoRowDiv);
+    infoRowDiv.insertAdjacentHTML("afterbegin",
+        "        <div class=\"col text-center\" >\n" +
+        "        </div>\n" +
+        "        <div class=\"col text-center\" >\n" +
+        "        <input id=\"infoAddress\" required type=\"text\" placeholder=\"address\" " + address + " > \n" +
+        "        </div>\n" +
+        "        <div id=\"totalPrice\" class=\"col text-center\" >\n" +
+        "        Total price: " + bill + " \n" +
+        "        </div>\n" +
+        "        <div class=\"col text-center\" >\n" +
+        "        <button id=\"confirmOrderBtn\" type=\"button\" class=\"btn btn-dark\">Confirm</button>\n" +
+        "        </div>\n");
+
+    //onclick confirmOrderBtn
+    let confirmOrderBtn = document.getElementById("confirmOrderBtn");
+    confirmOrderBtn.onclick = function () {
+        let confirmOrderURL = hostName + "/api/orders/confirm"
+        cart.deliveryAddress = document.getElementById("infoAddress").value;
+        //let cartDto = JSON.stringify(cart);
+        $.ajax({
+            url: confirmOrderURL,
+            method: "PUT",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(cart),
+            success: function () {
+                initCartPage();
+            }
+        });
+    }
+
 }
 
 function renderCart(cart) {
@@ -132,7 +258,7 @@ function renderCart(cart) {
             "        </div>\n"
         );
     }
-
+    //render preorder cart
     if (cart.deliveryStatus === "PREORDER") {
         //render products if status = preorder
         for (let i = 0; i < products.length; i++) {
@@ -177,7 +303,7 @@ function renderCart(cart) {
                             products[i].count = products[i].count + changeCount;
                             badge.textContent = parseInt(badge.textContent) + changeCount;
                         }
-                    })
+                    });
                 }
             })
             //delete products
@@ -187,30 +313,34 @@ function renderCart(cart) {
                     url: deleteProduct,
                     method: "DELETE",
                     success: function () {
+                        let badge = document.getElementById("badge");
+                        badge.textContent = parseInt(badge.textContent) - products[i].count;
                         initCartPage();
                     }
                 })
             }
         }
         //confirm button
-        cartContainer.insertAdjacentHTML("beforeend",
-            "<div class=\"col my-auto\" >\n" +
-            "        </div>\n"+
-            "        <div class=\"col my-auto\" >\n" +
-            "        </div>\n" +
-            "        <div class=\"text-center\" >\n" +
-            "        <button id=\"confirmBtn\" type=\"button\" class=\"btn btn-dark\">Confirm</button>\n" +
-            "        </div>\n" +
-            "        <div class=\"col my-auto\" >\n" +
-            "        </div>\n" +
-            "        <div class=\"col my-auto\" >\n" +
-            "        </div>\n"
-        );
+        if (cart.products.length > 0) {
+            cartContainer.insertAdjacentHTML("beforeend",
+                "<div class=\"col my-auto\" >\n" +
+                "        </div>\n" +
+                "        <div class=\"col my-auto\" >\n" +
+                "        </div>\n" +
+                "        <div class=\"text-center\" >\n" +
+                "        <button id=\"confirmBtn\" type=\"button\" class=\"btn btn-dark\">Confirm</button>\n" +
+                "        </div>\n" +
+                "        <div class=\"col my-auto\" >\n" +
+                "        </div>\n" +
+                "        <div class=\"col my-auto\" >\n" +
+                "        </div>\n"
+            );
 
-        let confirmBtn = document.getElementById("confirmBtn");
-        confirmBtn.onclick = function () {
-            //render order page (confirm the cart)
-            confirmCart(cart);
+            let confirmBtn = document.getElementById("confirmBtn");
+            confirmBtn.onclick = function () {
+                //render order page (confirm the cart)
+                confirmCart(cart);
+            }
         }
 
     } else {
@@ -240,11 +370,14 @@ function initCartPage() {
     let cartsURL = hostName + "/api/orders";
     let delStatDivs = document.getElementsByClassName("deliveryStatus");
     let confirmBtn = document.getElementById("confirmBtn");
+    let orderInfoContainer = document.getElementById("orderContainer");
     //remove confirm buttons and del status labels
     if (confirmBtn != null) confirmBtn.remove();
     for (let i = 0; i < delStatDivs.length; i++) {
         delStatDivs.item(i).remove();
     }
+    //remove order info
+    if (orderInfoContainer != null) orderInfoContainer.remove();
     $.ajax({
         url: cartsURL,
         success: function (data) {

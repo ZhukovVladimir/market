@@ -61,6 +61,9 @@ public class UserService {
         Cart cart = new Cart();
         cart.setUser(user);
         cart.setDeliveryStatus(DeliveryStatus.PREORDER);
+        if (!user.getAddress().isEmpty()) {
+            cart.setDeliveryAddress(user.getAddress());
+        }
         cartRepository.save(cart);
     }
 }
