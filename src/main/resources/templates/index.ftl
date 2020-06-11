@@ -15,6 +15,7 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous" ></script>
     <script src="../js/index.js"></script>
+    <script src="../js/admin.js"></script>
 </head>
 <body>
 
@@ -59,30 +60,39 @@
         <!--products-->
 <div id="productContainer" class="container">
     <div id="products" class="row row-cols-3 align-items-end">
-        <#list products as product>
-            <div class="col">
+        <#list 0..5 as j>
+            <div id="product${products[j].id}Div" class="col">
                 <div class="image">
-                    <img id="${product.id}" class="img-fluid product-img" src="http://localhost:8080/api/images/${product.image.id}"/>
+                    <img id="${products[j].id}" class="img-fluid product-img" src="http://localhost:8080/api/images/${products[j].image.id}"/>
                 </div>
                 <div class="info">
-                    <div class="name"> ${product.name} </div>
-                    <#if product.count gt 0>
-                        <div class="price"> ${product.price} </div>
+                    <div class="name"> ${products[j].name} </div>
+                    <#if products[j].count gt 0>
+                        <div class="price"> ${products[j].price} </div>
                     <#else>
                         <div class="not_available"> <b>Not available</b> </div>
                     </#if>
                     <div class="desc">
-                        ${product.description}
-                        Color: ${product.color.name}
-                        Storage: ${product.memory.volume}
+                        ${products[j].description}
+                        Color: ${products[j].color.name}
+                        Storage: ${products[j].memory.volume}
                     </div>
                     <div class="buy">
-                        <button type="button" value=${product.id} class="btn btn-primary btn-sm buybtn">Buy</button>
+                        <button type="button" value=${products[j].id} class="btn btn-primary btn-sm buybtn">Buy</button>
                     </div>
                 </div>
             </div>
         </#list>
     </div>
+    <nav id="pages" aria-label="Page navigation example">
+        <ul id="pagesButtons" class="pagination justify-content-center">
+            <li class="page-item"><button id="prevPageBtn" class="page-link">Previous</button></li>
+            <#list 0..(products?size-1)/6 as i>
+                <li class="page-item"><button id="pageNumberBtn" class="page-link num-link" value="${i}">${i}</button></li>
+            </#list>
+            <li class="page-item"><button id="nextPageBtn" class="page-link">Next</button></li>
+        </ul>
+    </nav>
 </div>
 
 

@@ -1,13 +1,28 @@
 let json = null;
 let hostName = "http://localhost:8080";
+let currentPage = 0;
 
-async function searchFetch(searchDto) {
-    let response = await fetch(hostName + "/api/products/search", {
+async function searchFetch(searchDto, pageNum) {
+    let response = await fetch(hostName + "/api/products/search?page=" + pageNum, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(searchDto)
+    });
+    if (response.ok) {
+        json = await response.json();
+    } else {
+        alert(response.status);
+    }
+}
+
+async function pageFetch(pageNum) {
+    let response = await fetch(hostName + "/api/products?page=" + pageNum, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        }
     });
     if (response.ok) {
         json = await response.json();
@@ -25,6 +40,7 @@ function initCategoryBtn() {
     for (let i = 0; i < categoryButtons.length; i++) {
 
         categoryButtons.item(i).onclick = function () {
+            currentPage = 0;
             $("#searchPanel").removeClass("invisible");
             let searchDto = {
                 "model": {
@@ -33,9 +49,51 @@ function initCategoryBtn() {
                     }
                 }
             }
-            searchFetch(searchDto).then(() => {
-                renderProducts(json);
-            }, () => alert("try again"))
+            //pagination for category pages
+            $.ajax({
+                url: hostName + "/api/products/search?page=0",
+                method: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(searchDto),
+                success: function (data) {
+
+                    let numberOfPages = data.totalPages;
+                    let pagesBtns = document.getElementById("pagesButtons");
+                    pagesBtns.innerHTML = "";
+                    let newPageBtns = "<li class=\"page-item\"><button id=\"prevPageBtn\" class=\"page-link\">Previous</button></li>";
+                    for (let i = 0; i < numberOfPages; i++) {
+                        newPageBtns = newPageBtns + "<li class=\"page-item\"><button id=\"pageNumberBtn\" class=\"page-link num-link\" value=\""+i+"\">"+i+"</button></li>";
+                    }
+                    newPageBtns = newPageBtns + "<li class=\"page-item\"><button id=\"nextPageBtn\" class=\"page-link\">Next</button></li>";
+                    pagesBtns.innerHTML = newPageBtns;
+                    let pageNumBtn = document.getElementsByClassName("page-link");
+                    for (let i = 0; i < pageNumBtn.length; i++) {
+                        if (pageNumBtn[i] !== null) {
+                            pageNumBtn[i].onclick = function () {
+                                if (pageNumBtn[i].id === "prevPageBtn" || pageNumBtn[i].id === "nextPageBtn") {
+                                    if (!(currentPage <= 0 && pageNumBtn[i].id === "prevPageBtn")) {
+                                        if (!(currentPage >= pageNumBtn.length - 3 && pageNumBtn[i].id === "nextPageBtn")) {
+
+                                            if (pageNumBtn[i].id === "prevPageBtn") currentPage--;
+                                            if (pageNumBtn[i].id === "nextPageBtn") currentPage++;
+                                        }
+                                    }
+                                } else {
+                                    currentPage = pageNumBtn[i].value;
+                                }
+                                searchFetch(searchDto, currentPage).then(() => {
+                                    renderProducts(json);
+                                }, () => alert("try again"))
+                            };
+                        }
+                    }
+
+                    searchFetch(searchDto, currentPage).then(() => {
+                        renderProducts(json);
+                    }, () => alert("try again"))
+                }
+            })
         };
     }
 }
@@ -429,6 +487,7 @@ function initCartBtn() {
 //render product page
 function renderProductPage(product) {
     let productsDiv = document.getElementById("products");
+    document.getElementById("pages").remove();
     productsDiv.innerHTML="";
     productsDiv.insertAdjacentHTML("afterbegin", "<div class=\"col\">\n" +
         "                <div class=\"image\">\n" +
@@ -467,7 +526,34 @@ function initProductDesc() {
     }
 }
 
+//pagination for main page
+function initPageBtn() {
+    let pageNumBtn = document.getElementsByClassName("page-link");
+
+    for (let i = 0; i < pageNumBtn.length; i++) {
+        pageNumBtn[i].onclick = function () {
+            if (pageNumBtn[i].id === "prevPageBtn" || pageNumBtn[i].id === "nextPageBtn") {
+
+                if (!(currentPage <= 0 && pageNumBtn[i].id === "prevPageBtn")) {
+                    if (!(currentPage >= pageNumBtn.length - 3 && pageNumBtn[i].id === "nextPageBtn")) {
+
+                        if (pageNumBtn[i].id === "prevPageBtn") currentPage--;
+                        if (pageNumBtn[i].id === "nextPageBtn") currentPage++;
+                    }
+                }
+            } else {
+                currentPage = pageNumBtn[i].value;
+            }
+            pageFetch(currentPage).then(() => {
+                renderProducts(json);
+            }, () => alert("try again"))
+        };
+    }
+}
+
 $(document).ready(() => {
+    //onclick page button
+    initPageBtn();
     //action for buy buttons
     initByBtn();
     //action for cart btn into top panel

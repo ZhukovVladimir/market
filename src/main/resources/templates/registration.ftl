@@ -81,11 +81,11 @@
                             </li>
                             <li class="form-row">
                                 <label for="phoneCountryCode">Phone Code: </label>
-                                <input type="text" required name="phoneCountryCode"/><br/>
+                                <input type="number" required name="phoneCountryCode"/><br/>
                             </li>
                             <li class="form-row">
                                 <label for="phone">Phone: </label>
-                                <input type="text" required name="phone"/><br/>
+                                <input type="number" required name="phone"/><br/>
                             </li>
                             <li class="form-row">
                                 <input type="submit" value="Register"/>
