@@ -2,9 +2,6 @@ package ru.reksoft.market.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.reksoft.market.data.dto.UserDto;
@@ -15,12 +12,11 @@ import ru.reksoft.market.data.repository.AuthorityRepository;
 import ru.reksoft.market.data.repository.CartRepository;
 import ru.reksoft.market.data.repository.UserRepository;
 import ru.reksoft.market.exception.ConflictException;
-import ru.reksoft.market.exception.ForbiddenException;
 import ru.reksoft.market.exception.ResourceNotFoundException;
 
 @Service
 public class UserService {
-    private final String defaultRole = "ROLE_USER";
+    private static final String DEFAULT_ROLE = "ROLE_USER";
 
     private final UserRepository userRepository;
 
@@ -55,7 +51,7 @@ public class UserService {
         } else {
             User user = modelMapper.map(userDto, User.class);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setAuthorities(authorityRepository.findAuthoritiesByAuthority(defaultRole));
+            user.setAuthorities(authorityRepository.findAuthoritiesByAuthority(DEFAULT_ROLE));
             user = userRepository.save(user);
             setUpEmptyCart(user);
         }

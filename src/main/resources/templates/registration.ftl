@@ -57,7 +57,7 @@
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Registration</h5>
-                    <form method="post" action="/register" id="registerForm" class="form-signin">
+                    <form method="post" action="/registration" id="registerForm" class="form-signin">
                         <ul class="wrapper">
                             <li class="form-row">
                                 <label for="username">Email: </label>
@@ -81,14 +81,14 @@
                             </li>
                             <li class="form-row">
                                 <label for="phoneCountryCode">Phone Code: </label>
-                                <input type="number" required name="phoneCountryCode"/><br/>
+                                <input type="number" min="1" max="999"  required name="phoneCountryCode"/><br/>
                             </li>
                             <li class="form-row">
                                 <label for="phone">Phone: </label>
                                 <input type="number" required name="phone"/><br/>
                             </li>
                             <li class="form-row">
-                                <input type="submit" value="Register"/>
+                                <input type="submit" value="Registration"/>
                             </li>
                         </ul>
                     </form>

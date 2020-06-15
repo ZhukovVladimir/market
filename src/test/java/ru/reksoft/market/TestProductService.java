@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class TestProductService {
 
     Pageable pageable = PageRequest.of(0, 2);
 
-    private Product createProduct(Long id, String name, Double price, Integer count, String desc,
+    private Product createProduct(Long id, String name, BigDecimal price, Integer count, String desc,
                                   Color color, Memory memory) {
 
         Product product = new Product();
@@ -84,13 +85,13 @@ public class TestProductService {
     public void findAllTest() {
         List<Product> productsFromRepository = new ArrayList<>();
 
-        Product productOne = createProduct(1l, "prod1", 100d, 10, "desc",
+        Product productOne = createProduct(1l, "prod1", new BigDecimal(100), 10, "desc",
                 new Color().setId(1L), new Memory().setId(1L));
 
-        Product productTwo = createProduct(2l, "prod2", 100d, 10, "desc2",
+        Product productTwo = createProduct(2l, "prod2", new BigDecimal(100), 10, "desc2",
                 new Color().setId(1L), new Memory().setId(1L));
 
-        Product productThree = createProduct(3l, "prod3", 100d, 10, "desc3",
+        Product productThree = createProduct(3l, "prod3", new BigDecimal(100), 10, "desc3",
                 new Color().setId(1L), new Memory().setId(1L));
 
         productsFromRepository.add(productOne);

@@ -30,7 +30,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div id="categoryBtnPanel" class="navbar-nav">
             <#list categories as category>
-                <button type="button" class="btn btn-light categoryBtn" value=${category.name}> ${category.name}</button>
+                <button type="button" class="btn btn-light categoryBtn" id="${category.name}Button" value=${category.name}> ${category.name}</button>
             </#list>
         </div>
     </div>
@@ -49,10 +49,8 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse">
-        <div class="navbar-nav">
-            <#list categories as category>
-                <a class="nav-item nav-link" href="">здесь должны быть штуки для поиска</a>
-            </#list>
+        <div id="searchFilters" class="navbar-nav">
+
         </div>
     </div>
 </nav>
@@ -61,34 +59,36 @@
 <div id="productContainer" class="container">
     <div id="products" class="row row-cols-3 align-items-end">
         <#list 0..5 as j>
-            <div id="product${products[j].id}Div" class="col">
-                <div class="image">
-                    <img id="${products[j].id}" class="img-fluid product-img" src="http://localhost:8080/api/images/${products[j].image.id}"/>
-                </div>
-                <div class="info">
-                    <div class="name"> ${products[j].name} </div>
-                    <#if products[j].count gt 0>
-                        <div class="price"> ${products[j].price} </div>
-                    <#else>
-                        <div class="not_available"> <b>Not available</b> </div>
-                    </#if>
-                    <div class="desc">
-                        ${products[j].description}
-                        Color: ${products[j].color.name}
-                        Storage: ${products[j].memory.volume}
+            <#if products[j]??>
+                <div id="product${products[j].id}Div" class="col">
+                    <div class="image">
+                        <img id="${products[j].id}" class="img-fluid product-img" src="http://localhost:8080/api/images/${products[j].image.id}"/>
                     </div>
-                    <div class="buy">
-                        <button type="button" value=${products[j].id} class="btn btn-primary btn-sm buybtn">Buy</button>
+                    <div class="info">
+                        <div class="name"> ${products[j].name} </div>
+                        <#if products[j].count gt 0>
+                            <div class="price"> ${products[j].price} </div>
+                        <#else>
+                            <div class="not_available"> <b>Not available</b> </div>
+                        </#if>
+                        <div class="desc">
+                            ${products[j].description}
+                            Color: ${products[j].color.name}
+                            Storage: ${products[j].memory.volume}
+                        </div>
+                        <div class="buy">
+                            <button type="button" value=${products[j].id} class="btn btn-primary btn-sm buybtn">Buy</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </#if>
         </#list>
     </div>
     <nav id="pages" aria-label="Page navigation example">
         <ul id="pagesButtons" class="pagination justify-content-center">
             <li class="page-item"><button id="prevPageBtn" class="page-link">Previous</button></li>
             <#list 0..(products?size-1)/6 as i>
-                <li class="page-item"><button id="pageNumberBtn" class="page-link num-link" value="${i}">${i}</button></li>
+                <li id="page${i}" class="page-item num-page-item"><button id="pageNumberBtn" class="page-link num-link" value="${i}">${i}</button></li>
             </#list>
             <li class="page-item"><button id="nextPageBtn" class="page-link">Next</button></li>
         </ul>

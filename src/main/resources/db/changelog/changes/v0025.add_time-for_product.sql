@@ -1,0 +1,1 @@
+alter table product add column creation_time timestamp without time zone;

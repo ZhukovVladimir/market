@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,8 +55,14 @@ public class ProductService {
                 && productSearchDto.getModel().getCategory().getName() != null) {
             specification = specification.and(hasCategory(productSearchDto));
         }
+        if (productSearchDto.getColor() != null && productSearchDto.getColor().getName() != null) {
+            specification = specification.and(hasColor(productSearchDto));
+        }
         if (productSearchDto.getModel() != null && productSearchDto.getModel().getName() != null) {
             specification = specification.and(hasModel(productSearchDto));
+        }
+        if (productSearchDto.getMemory() != null && productSearchDto.getMemory().getVolume() != null) {
+            specification = specification.and(hasMemory(productSearchDto));
         }
         if (productSearchDto.getPrice() != null) {
             specification = specification.and(priceLessThen(productSearchDto));
@@ -71,6 +78,7 @@ public class ProductService {
         if (productDto.getId() != null) {
             throw new BadRequestException("Id should be null");
         } else {
+            productDto.setCreationTime(LocalDateTime.now());
             Product product = modelMapper.map(productDto, Product.class);
             product = productRepository.save(product);
             return modelMapper.map(product, ProductDto.class);

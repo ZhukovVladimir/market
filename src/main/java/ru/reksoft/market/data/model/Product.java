@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * entity for working with products
@@ -33,7 +35,7 @@ public class Product {
      * price of the product
      */
     @Column(name = "price", nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     /**
      * count of the product
@@ -53,6 +55,12 @@ public class Product {
      */
     @Column(name = "deleted")
     private Boolean deleted;
+
+    /**
+     * creation time
+     */
+    @Column(name = "creation_time")
+    private LocalDateTime creationTime;
 
     /**
      * color of the product

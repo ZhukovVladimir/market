@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -127,9 +128,10 @@ public class CartService {
     }
 
     private void setUpBill(Cart cart) {
-        double bill = 0;
+        BigDecimal bill = new BigDecimal(0);
         for (BookedProduct elem : cart.getProducts()) {
-            bill = bill + elem.getProduct().getPrice() * elem.getCount();
+            bill = bill.add(elem.getProduct().getPrice()
+                            .multiply(new BigDecimal(elem.getCount())));
         }
         cart.setBill(bill);
     }

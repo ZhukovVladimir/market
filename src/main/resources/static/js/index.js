@@ -1,6 +1,11 @@
 let json = null;
 let hostName = "http://localhost:8080";
 let currentPage = 0;
+let activeColor;
+let activeCategory;
+let activeMemory;
+let activeAvailable;
+let maxPrice;
 
 async function searchFetch(searchDto, pageNum) {
     let response = await fetch(hostName + "/api/products/search?page=" + pageNum, {
@@ -40,14 +45,23 @@ function initCategoryBtn() {
     for (let i = 0; i < categoryButtons.length; i++) {
 
         categoryButtons.item(i).onclick = function () {
+            activeCategory = categoryButtons.item(i).value
             currentPage = 0;
             $("#searchPanel").removeClass("invisible");
             let searchDto = {
                 "model": {
                     "category": {
-                        "name": categoryButtons.item(i).value
+                        "name": activeCategory
                     }
-                }
+                },
+                "color": {
+                    "name": activeColor
+                },
+                "memory": {
+                    "volume": activeMemory
+                },
+                "price": maxPrice,
+                "available": activeAvailable
             }
             //pagination for category pages
             $.ajax({
@@ -60,13 +74,16 @@ function initCategoryBtn() {
 
                     let numberOfPages = data.totalPages;
                     let pagesBtns = document.getElementById("pagesButtons");
+                    //update page buttons
                     pagesBtns.innerHTML = "";
                     let newPageBtns = "<li class=\"page-item\"><button id=\"prevPageBtn\" class=\"page-link\">Previous</button></li>";
                     for (let i = 0; i < numberOfPages; i++) {
-                        newPageBtns = newPageBtns + "<li class=\"page-item\"><button id=\"pageNumberBtn\" class=\"page-link num-link\" value=\""+i+"\">"+i+"</button></li>";
+                        newPageBtns = newPageBtns + "<li id=\"page"+i+"\" class=\"page-item num-page-item\"><button id=\"pageNumberBtn\" class=\"page-link num-link\" value=\"" + i + "\">" + i + "</button></li>";
                     }
                     newPageBtns = newPageBtns + "<li class=\"page-item\"><button id=\"nextPageBtn\" class=\"page-link\">Next</button></li>";
                     pagesBtns.innerHTML = newPageBtns;
+
+                    //onclick on page buttons
                     let pageNumBtn = document.getElementsByClassName("page-link");
                     for (let i = 0; i < pageNumBtn.length; i++) {
                         if (pageNumBtn[i] !== null) {
@@ -91,9 +108,11 @@ function initCategoryBtn() {
 
                     searchFetch(searchDto, currentPage).then(() => {
                         renderProducts(json);
+                        initCurrentPage();
                     }, () => alert("try again"))
                 }
             })
+
         };
     }
 }
@@ -117,7 +136,7 @@ function createDivWithProduct(product) {
         "                            Storage: " + product.memory.volume + "\n" +
         "                        </div>\n" +
         "                        <div class=\"buy\">\n" +
-        "                            <button type=\"button\" value="+ product.id +" class=\"btn btn-primary btn-sm buybtn\">Buy</button>\n" +
+        "                            <button type=\"button\" value=" + product.id + " class=\"btn btn-primary btn-sm buybtn\">Buy</button>\n" +
         "                        </div>\n" +
         "                    </div>")
     return div;
@@ -140,6 +159,7 @@ function initByBtn() {
     $.ajax({
         url: getCartsURL,
         success: function (data) {
+            data.reverse();
             initOnClickBuy(data);
         }
     });
@@ -166,6 +186,7 @@ function initOnClickBuy(carts) {
         }
     }
 }
+
 //init cart to order
 function confirmCart(cart) {
     let cartContainer = document.getElementById("cartContainer");
@@ -175,7 +196,7 @@ function confirmCart(cart) {
     cartContainer.innerHTML = "";
     //render preorder cart
     //todo should be function (DRY)
-        //render products if status = preorder
+    //render products if status = preorder
     for (let i = 0; i < products.length; i++) {
         cartContainer.insertAdjacentHTML("beforeend",
             "   <div class=\"col my-auto\" >\n" +
@@ -234,7 +255,6 @@ function confirmCart(cart) {
                     let badge = document.getElementById("badge");
                     badge.textContent = parseInt(badge.textContent) - cart.products[i].count;
                     cart.products.splice(i, 1);
-                    //todo need to change total sum
                     confirmCart(cart);
                 }
             })
@@ -322,7 +342,7 @@ function renderCart(cart) {
         for (let i = 0; i < products.length; i++) {
             cartContainer.insertAdjacentHTML("beforeend",
                 "   <div class=\"col my-auto\" >\n" +
-                "        <img class=\"img-thumbnail cart_prod_img\" src=\"http://localhost:8080/api/images/" + products[i].product.image.id + "\"></div>\n" +
+                "        <img class=\"img-thumbnail product-img cart_prod_img\" id=\"" + products[i].product.id + "\" src=\"http://localhost:8080/api/images/" + products[i].product.image.id + "\"></div>\n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
                 "            " + products[i].product.name + "\n" +
@@ -405,7 +425,7 @@ function renderCart(cart) {
         for (let i = 0; i < products.length; i++) {
             cartContainer.insertAdjacentHTML("beforeend",
                 "   <div class=\"col my-auto\" >\n" +
-                "        <img class=\"img-thumbnail cart_prod_img\" src=\"http://localhost:8080/api/images/" + products[i].product.image.id + "\"></div>\n" +
+                "        <img class=\"img-thumbnail product-img cart_prod_img\"  id=\"" + products[i].product.id + "\" src=\"http://localhost:8080/api/images/" + products[i].product.image.id + "\"></div>\n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
                 "            " + products[i].product.name + "\n" +
@@ -421,6 +441,7 @@ function renderCart(cart) {
                 "\n");
         }
     }
+    initProductDesc();
 }
 
 function initCartPage() {
@@ -442,6 +463,7 @@ function initCartPage() {
             if (data[0] === "<") {
                 window.location.href = hostName + "/login";
             } else {
+                data.reverse();
                 for (let i = 0; i < data.length; i++) {
                     renderCart(data[i]);
                 }
@@ -476,10 +498,12 @@ function initCartBtn() {
     })
 
     cartBtn.onclick = function () {
-        document.getElementById("productContainer").innerHTML = "";
+        document.getElementById("products").innerHTML = "";
         document.getElementById("globalCart").classList.remove("invisible");
         $("#searchPanel").addClass("invisible");
         $("#categoryBtnPanel").addClass("invisible");
+        let pages = document.getElementById("pages");
+        if (pages !== null) pages.remove();
         initCartPage();
     }
 }
@@ -487,26 +511,31 @@ function initCartBtn() {
 //render product page
 function renderProductPage(product) {
     let productsDiv = document.getElementById("products");
-    document.getElementById("pages").remove();
-    productsDiv.innerHTML="";
-    productsDiv.insertAdjacentHTML("afterbegin", "<div class=\"col\">\n" +
-        "                <div class=\"image\">\n" +
-        "                    <img class=\"img-fluid product-img\" src=\"http://localhost:8080/api/images/"+ product.image.id +"\"/>\n" +
-        "                </div>\n" +
-        "                <div class=\"info\">\n" +
-        "                    <div class=\"name\"> " + product.name + "</div>\n" +
-        "                        <div class=\"price\">" + product.price + "</div>\n" +
-        "                    <div class=\"desc\">\n" +
-        "                        "+ product.description +"\n" +
-        "                        Color: "+ product.color.name +"\n" +
-        "                        Storage: "+ product.memory.volume +"\n" +
-        "                    </div>\n" +
-        "                    <div class=\"buy\">\n" +
-        "                        <button type=\"button\" value="+ product.id +" class=\"btn btn-primary btn-sm buybtn\">Buy</button>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>")
-    initByBtn();
+    let pages = document.getElementById("pages");
+    let cartCintainer = document.getElementById("cartContainer");
+    if (cartCintainer !== null) cartCintainer.innerHTML = "";
+    if (pages !== null) pages.remove();
+    if (productsDiv !== null) {
+        productsDiv.innerHTML = "";
+        productsDiv.insertAdjacentHTML("afterbegin", "<div class=\"col\">\n" +
+            "                <div class=\"image\">\n" +
+            "                    <img class=\"img-fluid product-img\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"/>\n" +
+            "                </div>\n" +
+            "                <div class=\"info\">\n" +
+            "                    <div class=\"name\"> " + product.name + "</div>\n" +
+            "                        <div class=\"price\">" + product.price + "</div>\n" +
+            "                    <div class=\"desc\">\n" +
+            "                        " + product.description + "\n" +
+            "                        Color: " + product.color.name + "\n" +
+            "                        Storage: " + product.memory.volume + "\n" +
+            "                    </div>\n" +
+            "                    <div class=\"buy\">\n" +
+            "                        <button type=\"button\" value=" + product.id + " class=\"btn btn-primary btn-sm buybtn\">Buy</button>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "            </div>")
+        initByBtn();
+    }
 }
 
 //init click on product img
@@ -551,6 +580,192 @@ function initPageBtn() {
     }
 }
 
+//init Color
+function initColor(searchFiltersDiv) {
+
+    let colorButtonDiv = document.getElementById("colorButtons");
+    if (colorButtonDiv !== null) colorButtonDiv.innerHTML = "";
+    let getColorsUrl = hostName + "/api/dictionary/colors";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
+        //"  <label for=\"colorButton\">Color </label>" +
+        "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"colorButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
+        "    Color\n" +
+        "  </button>\n" +
+        "  <div class=\"dropdown-menu\" id=\"colorButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
+        "  </div>\n" +
+        "</div>");
+
+    $.ajax({
+        url: getColorsUrl,
+        method: "GET",
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                colorButtonDiv = document.getElementById("colorButtons");
+                colorButtonDiv.insertAdjacentHTML("beforeend",
+                    "<button value=\"" + data[i].name + "\" id=\"" + data[i].name + "Color\" class=\"dropdown-item color-button\">" + data[i].name[0].toUpperCase() + data[i].name.slice(1) + "</button>\n"
+                );
+                let actionColorBtn = document.getElementById(data[i].name + "Color");
+                actionColorBtn.onclick = function () {
+                    document.getElementById("colorButton").textContent =  data[i].name[0].toUpperCase() + data[i].name.slice(1) ;
+                    activeColor = data[i].name;
+                };
+            }
+        }
+    });
+}
+
+//init memory
+function initMemory(searchFiltersDiv) {
+    let memoryButtonDiv = document.getElementById("memoryButtons");
+    if (memoryButtonDiv !== null) memoryButtonDiv.innerHTML = "";
+    let getMemoryUrl = hostName + "/api/dictionary/storage";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
+        //"  <label for=\"memoryButton\">Memory </label>" +
+        "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"memoryButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
+        "    Memory\n" +
+        "  </button>\n" +
+        "  <div class=\"dropdown-menu\" id=\"memoryButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
+        "  </div>\n" +
+        "</div>");
+
+    $.ajax({
+        url: getMemoryUrl,
+        method: "GET",
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                memoryButtonDiv = document.getElementById("memoryButtons");
+                memoryButtonDiv.insertAdjacentHTML("beforeend",
+                    "<button value=\"" + data[i].volume + "\" id=\"" + data[i].volume + "Memory\" class=\"dropdown-item memory-button\">" + data[i].volume + "</button>\n"
+                );
+                let actionMemoryBtn = document.getElementById(data[i].volume + "Memory");
+                actionMemoryBtn.onclick = function () {
+                    document.getElementById("memoryButton").textContent = data[i].volume;
+                    activeMemory = data[i].volume;
+                };
+            }
+        }
+    });
+}
+
+//init Price
+function initPrice(searchFiltersDiv) {
+    let maxPriceInput = document.getElementById("maxPrice");
+    if (maxPriceInput !== null) maxPriceInput.innerHTML = "";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"maxPrice\">Max price </label>" +
+        "<p class=\"my-auto\"><input id=\"maxPrice\" type=\"number\" min=\"0\" step=\"100\"></p> \n"
+    );
+    document.getElementById("maxPrice").addEventListener('input', function (e) {
+        maxPrice = e.target.value;
+    })
+}
+
+//init checkbox
+function initCheckBoxAv(searchFiltersDiv) {
+    let availableCheckBox = document.getElementById("availableCheckBox");
+    if (availableCheckBox !== null) availableCheckBox.innerHTML = "";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"my-auto\">" +
+        "<label class=\"my-auto\" for=\"availableCheckBox\">Available</label>" +
+        "<input type=\"checkbox\" class=\"my-auto\" id=\"availableCheckBox\">" +
+        "</div>"
+    );
+    document.getElementById("availableCheckBox").onclick = function () {
+        activeAvailable = this.checked;
+    }
+}
+
+//init Apply btn
+function initApply(searchFiltersDiv) {
+    let applyBtn = document.getElementById("applyBtn");
+    if (applyBtn !== null) applyBtn.innerHTML = "";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"applyBtn\">\n" +
+        "    Apply\n" +
+        "  </button>\n"
+    );
+
+    document.getElementById("applyBtn").onclick = function () {
+        document.getElementById(activeCategory+"Button").click();
+    }
+}
+
+//init Clear
+function initClearBtn(searchFiltersDiv) {
+    let clearBtn = document.getElementById("clearBtn");
+    if (clearBtn !== null) clearBtn.innerHTML = "";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"clearBtn\">\n" +
+        "    Clear\n" +
+        "  </button>\n"
+    );
+
+    document.getElementById("clearBtn").onclick = function () {
+
+        let searchFiltersDiv = document.getElementById("searchFilters");
+        if (searchFiltersDiv !== null) searchFiltersDiv.innerHTML = "";
+
+        activeColor = undefined;
+        activeMemory = undefined;
+        activeAvailable = undefined;
+        maxPrice = undefined;
+
+        initColor(searchFiltersDiv);
+        initMemory(searchFiltersDiv);
+        initPrice(searchFiltersDiv);
+        initCheckBoxAv(searchFiltersDiv);
+        initApply(searchFiltersDiv);
+        initClearBtn(searchFiltersDiv);
+
+        document.getElementById(activeCategory+"Button").click();
+
+    }
+}
+
+function initSearchFilters() {
+    let searchFiltersDiv = document.getElementById("searchFilters");
+    if (searchFiltersDiv !== null) searchFiltersDiv.innerHTML = "";
+
+    //initColors
+    initColor(searchFiltersDiv);
+
+    //initMemory
+    initMemory(searchFiltersDiv);
+
+    //initPrice
+    initPrice(searchFiltersDiv);
+
+    //initCheckBox
+    initCheckBoxAv(searchFiltersDiv)
+
+    //init Apply
+    initApply(searchFiltersDiv)
+
+    //init Clear
+    initClearBtn(searchFiltersDiv);
+}
+
+//init current number of page
+function initCurrentPage() {
+    $(".num-page-item:eq(0)").addClass("active");
+    $(".num-page-item").bind("click", function () {
+        $(".num-page-item").each(function () {
+            $(this).removeClass("active");
+        })
+        this.classList.add("active");
+    })
+
+    $("#prevPageBtn").bind("click", function () {
+        if (!$(".num-page-item:eq(0)").hasClass("active")) {
+           $("#page"+(currentPage + 1)).removeClass("active");
+           $("#page"+currentPage).addClass("active");
+        }
+    })
+
+    $("#nextPageBtn").bind("click", function () {
+        if (currentPage !== ($(".page-item").length - 2)) {
+            $("#page"+(currentPage - 1)).removeClass("active");
+            $("#page"+currentPage).addClass("active");
+        }
+    })
+}
+
 $(document).ready(() => {
     //onclick page button
     initPageBtn();
@@ -562,4 +777,8 @@ $(document).ready(() => {
     initProductDesc();
     //onclick category button
     initCategoryBtn();
+    //initFilters
+    initSearchFilters();
+    //initCurrentPage
+    initCurrentPage();
 })

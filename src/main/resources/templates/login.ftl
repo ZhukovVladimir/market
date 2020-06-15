@@ -57,7 +57,12 @@
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Sign In</h5>
-                    <p><a href="/register">Register</a></p>
+                    <p><a href="/registration">Registration</a></p>
+                    <#if RequestParameters.error??>
+                        <script type="text/javascript">
+                            alert("Login error");
+                        </script>
+                    </#if>
                     <form method="post" enctype="application/x-www-form-urlencoded" action="/login" id="loginForm" class="form-signin">
                         <ul class="wrapper">
                             <li class="form-row">

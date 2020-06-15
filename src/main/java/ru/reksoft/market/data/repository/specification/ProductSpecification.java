@@ -22,6 +22,13 @@ public class ProductSpecification {
         };
     }
 
+    public static Specification<Product> hasMemory(ProductSearchDto referenceProduct) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            Join<Product_, Memory_> productMemoryJoin = root.join(Product_.MEMORY);
+            return criteriaBuilder.equal(productMemoryJoin.get(Memory_.VOLUME), referenceProduct.getMemory().getVolume());
+        };
+    }
+
     public static Specification<Product> hasColor(ProductSearchDto referenceProduct) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             Join<Product_, Color_> productColorJoin = root.join(Product_.COLOR);

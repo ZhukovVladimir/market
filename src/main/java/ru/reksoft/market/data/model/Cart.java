@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class Cart {
      * bill of the cart
      */
     @Column(name = "bill")
-    private Double bill = 0d;
+    private BigDecimal bill = new BigDecimal(0);
 
     /**
      * user of the cart

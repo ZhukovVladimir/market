@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
@@ -18,7 +20,7 @@ public class ProductDto {
     private String name;
 
     @NotNull
-    private Double price;
+    private BigDecimal price;
 
     @NotNull
     private Integer count;
@@ -36,5 +38,8 @@ public class ProductDto {
 
     @NotNull
     private ImageDto image;
+
+    @Null
+    private LocalDateTime creationTime;
 
 }

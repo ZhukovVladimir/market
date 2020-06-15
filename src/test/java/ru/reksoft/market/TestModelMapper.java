@@ -14,6 +14,8 @@ import ru.reksoft.market.data.model.Memory;
 import ru.reksoft.market.data.model.Model;
 import ru.reksoft.market.data.model.Product;
 
+import java.math.BigDecimal;
+
 @RunWith(SpringRunner.class)
 public class TestModelMapper {
 
@@ -29,7 +31,7 @@ public class TestModelMapper {
         product.setMemory(new Memory().setId(1L));
         product.setModel(new Model().setId(1L));
         product.setName("firstProduct");
-        product.setPrice(1000d);
+        product.setPrice(new BigDecimal(1000));
 
         ProductDto resultProductDto = new ProductDto().setId(product.getId())
                 .setColor(colorToColorDto(product.getColor()))

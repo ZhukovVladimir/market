@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +20,6 @@ public class CartDto {
     private LocalDateTime creationTime;
     private LocalDateTime paymentTime;
     @NotNull
-    private Double bill;
+    private BigDecimal bill;
     private List<BookedProductDto> products;
 }
