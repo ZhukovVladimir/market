@@ -30,6 +30,6 @@ public class UserController {
 
     @GetMapping()
     public UserDto getCurrentUser(@AuthenticationPrincipal User user) {
-        return modelMapper.map(user, UserDto.class);//userService.getCurrentUser();
+        return modelMapper.map(user, UserDto.class);
     }
 }

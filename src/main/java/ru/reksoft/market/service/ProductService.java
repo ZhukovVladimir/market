@@ -64,8 +64,11 @@ public class ProductService {
         if (productSearchDto.getMemory() != null && productSearchDto.getMemory().getVolume() != null) {
             specification = specification.and(hasMemory(productSearchDto));
         }
-        if (productSearchDto.getPrice() != null) {
+        if (productSearchDto.getMaxPrice() != null) {
             specification = specification.and(priceLessThen(productSearchDto));
+        }
+        if (productSearchDto.getMinPrice() != null) {
+            specification = specification.and(priceHigherThen(productSearchDto));
         }
         if (productSearchDto.getAvailable() != null && productSearchDto.getAvailable()) {
             specification = specification.and(isAvailable());

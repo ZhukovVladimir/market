@@ -38,7 +38,13 @@ public class ProductSpecification {
 
     public static Specification<Product> priceLessThen(ProductSearchDto referenceProduct) {
         return (root, criteriaQuery, criteriaBuilder) -> {
-            return criteriaBuilder.le(root.get(Product_.PRICE), referenceProduct.getPrice());
+            return criteriaBuilder.le(root.get(Product_.PRICE), referenceProduct.getMaxPrice());
+        };
+    }
+
+    public static Specification<Product> priceHigherThen(ProductSearchDto referenceProduct) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.ge(root.get(Product_.PRICE), referenceProduct.getMinPrice());
         };
     }
 

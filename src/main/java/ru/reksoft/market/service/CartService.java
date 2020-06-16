@@ -117,7 +117,7 @@ public class CartService {
             throw new BadRequestException("Delivery address shouldn't be empty");
         }
 
-        if (!cart.getBill().equals(cartDto.getBill())) {
+        if (cart.getBill().compareTo(cartDto.getBill()) != 0) {
             throw new BadRequestException("Your bill wrong expected: " + cart.getBill());
         }
 

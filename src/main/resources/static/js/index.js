@@ -6,6 +6,7 @@ let activeCategory;
 let activeMemory;
 let activeAvailable;
 let maxPrice;
+let minPrice;
 
 async function searchFetch(searchDto, pageNum) {
     let response = await fetch(hostName + "/api/products/search?page=" + pageNum, {
@@ -60,7 +61,8 @@ function initCategoryBtn() {
                 "memory": {
                     "volume": activeMemory
                 },
-                "price": maxPrice,
+                "maxPrice": maxPrice,
+                "minPrice": minPrice,
                 "available": activeAvailable
             }
             //pagination for category pages
@@ -647,8 +649,8 @@ function initMemory(searchFiltersDiv) {
     });
 }
 
-//init Price
-function initPrice(searchFiltersDiv) {
+//init max Price
+function initMaxPrice(searchFiltersDiv) {
     let maxPriceInput = document.getElementById("maxPrice");
     if (maxPriceInput !== null) maxPriceInput.innerHTML = "";
     searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"maxPrice\">Max price </label>" +
@@ -656,6 +658,18 @@ function initPrice(searchFiltersDiv) {
     );
     document.getElementById("maxPrice").addEventListener('input', function (e) {
         maxPrice = e.target.value;
+    })
+}
+
+//init max Price
+function initMinPrice(searchFiltersDiv) {
+    let minPriceInput = document.getElementById("minPrice");
+    if (minPriceInput !== null) minPriceInput.innerHTML = "";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"minPrice\">Min price </label>" +
+        "<p class=\"my-auto\"><input id=\"minPrice\" type=\"number\" min=\"0\" step=\"100\"></p> \n"
+    );
+    document.getElementById("minPrice").addEventListener('input', function (e) {
+        minPrice = e.target.value;
     })
 }
 
@@ -708,7 +722,8 @@ function initClearBtn(searchFiltersDiv) {
 
         initColor(searchFiltersDiv);
         initMemory(searchFiltersDiv);
-        initPrice(searchFiltersDiv);
+        initMinPrice(searchFiltersDiv);
+        initMaxPrice(searchFiltersDiv);
         initCheckBoxAv(searchFiltersDiv);
         initApply(searchFiltersDiv);
         initClearBtn(searchFiltersDiv);
@@ -729,13 +744,14 @@ function initSearchFilters() {
     initMemory(searchFiltersDiv);
 
     //initPrice
-    initPrice(searchFiltersDiv);
+    initMinPrice(searchFiltersDiv);
+    initMaxPrice(searchFiltersDiv);
 
     //initCheckBox
-    initCheckBoxAv(searchFiltersDiv)
+    initCheckBoxAv(searchFiltersDiv);
 
     //init Apply
-    initApply(searchFiltersDiv)
+    initApply(searchFiltersDiv);
 
     //init Clear
     initClearBtn(searchFiltersDiv);
