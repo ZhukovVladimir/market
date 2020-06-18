@@ -133,7 +133,7 @@ function createDivWithProduct(product) {
         price = "<b>Not available</b>"
     }
     div.insertAdjacentHTML("afterbegin", "<div class=\"image\">\n" +
-        "                        <img class=\"img-fluid product-img\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
+        "                        <img class=\"img-fluid product-img\" id=\""+product.id+"\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
         "                        <div class=\"info\">\n" +
         "                        <div class=\"name\">" + product.name + "</div>\n" +
         "                        <div class=\"price\">" + price + "</div>\n" +
