@@ -22,7 +22,6 @@
 <!--top panel-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">SHOP</a>
-    <a class="navbar-brand" href="/">profile</a>
     <button type="button" id="cart_button" class="btn btn-light" value="">Cart <span id="badge" class="badge">0</span></button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

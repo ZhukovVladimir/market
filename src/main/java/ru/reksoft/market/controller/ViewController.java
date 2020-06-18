@@ -35,7 +35,7 @@ public class ViewController {
                                 "Ignored because swagger ui shows the wrong params, " +
                                         "instead they are explained in the implicit params"
                         )
-                        @PageableDefault(sort = "id", size = Integer.MAX_VALUE, direction = Sort.Direction.DESC)
+                        @PageableDefault(sort = "creationTime", size = Integer.MAX_VALUE, direction = Sort.Direction.DESC)
                                 Pageable pageable) {
         List<ProductDto> products = productService.search(pageable).toList();
         List<CategoryDto> categories = categoryService.findAll();

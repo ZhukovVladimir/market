@@ -30,7 +30,7 @@ public class ProductController {
                     "Ignored because swagger ui shows the wrong params, " +
                             "instead they are explained in the implicit params"
             )
-            @PageableDefault(sort = "id", size = 6, direction = Sort.Direction.DESC)
+            @PageableDefault(sort = "creationTime", size = 6, direction = Sort.Direction.DESC)
                     Pageable pageable) {
         return productService.search(pageable);
     }
@@ -47,7 +47,7 @@ public class ProductController {
                                                 "Ignored because swagger ui shows the wrong params, " +
                                                         "instead they are explained in the implicit params"
                                         )
-                                        @PageableDefault(sort = "id", size = 6, direction = Sort.Direction.DESC)
+                                        @PageableDefault(sort = "creationTime", size = 6, direction = Sort.Direction.DESC)
                                                 Pageable pageable) {
         return productService.search(productSearchDto, pageable);
     }

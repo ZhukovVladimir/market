@@ -5,8 +5,13 @@ let activeColor;
 let activeCategory;
 let activeMemory;
 let activeAvailable;
+let activeModel;
 let maxPrice;
 let minPrice;
+let prodNameForDto;
+let prodDescForDto;
+let prodPriceForDto;
+let prodCountForDto;
 
 async function searchFetch(searchDto, pageNum) {
     let response = await fetch(hostName + "/api/products/search?page=" + pageNum, {
@@ -89,7 +94,7 @@ function initCategoryBtn() {
                     let pageNumBtn = document.getElementsByClassName("page-link");
                     for (let i = 0; i < pageNumBtn.length; i++) {
                         if (pageNumBtn[i] !== null) {
-                            pageNumBtn[i].onclick = function () {
+                            $(pageNumBtn[i]).bindFirst('click', function () {
                                 if (pageNumBtn[i].id === "prevPageBtn" || pageNumBtn[i].id === "nextPageBtn") {
                                     if (!(currentPage <= 0 && pageNumBtn[i].id === "prevPageBtn")) {
                                         if (!(currentPage >= pageNumBtn.length - 3 && pageNumBtn[i].id === "nextPageBtn")) {
@@ -104,7 +109,7 @@ function initCategoryBtn() {
                                 searchFetch(searchDto, currentPage).then(() => {
                                     renderProducts(json);
                                 }, () => alert("try again"))
-                            };
+                            });
                         }
                     }
 
@@ -128,7 +133,7 @@ function createDivWithProduct(product) {
         price = "<b>Not available</b>"
     }
     div.insertAdjacentHTML("afterbegin", "<div class=\"image\">\n" +
-        "                        <img class=\"img-fluid\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
+        "                        <img class=\"img-fluid product-img\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
         "                        <div class=\"info\">\n" +
         "                        <div class=\"name\">" + product.name + "</div>\n" +
         "                        <div class=\"price\">" + price + "</div>\n" +
@@ -153,16 +158,21 @@ function renderProducts(resp) {
         document.getElementById("products").append(createDivWithProduct(product))
     }
     initByBtn();
+    initProductDesc();
+    //if user == admin
+    initAdminBtn();
 }
 
-function initByBtn() {
+function initByBtn()    {
     let getCartsURL = hostName + "/api/orders";
 
     $.ajax({
         url: getCartsURL,
         success: function (data) {
-            data.reverse();
-            initOnClickBuy(data);
+            if (!((data.length === 0) || (data[0] === "<"))) {
+                data.reverse();
+                initOnClickBuy(data);
+            }
         }
     });
 }
@@ -170,6 +180,7 @@ function initByBtn() {
 //action for buy buttons
 function initOnClickBuy(carts) {
     let buyButtons = document.getElementsByClassName("buybtn");
+
     let cartId = carts[0].id;
 
     for (let i = 0; i < buyButtons.length; i++) {
@@ -562,7 +573,7 @@ function initPageBtn() {
     let pageNumBtn = document.getElementsByClassName("page-link");
 
     for (let i = 0; i < pageNumBtn.length; i++) {
-        pageNumBtn[i].onclick = function () {
+        $(pageNumBtn[i]).bindFirst('click',function () {
             if (pageNumBtn[i].id === "prevPageBtn" || pageNumBtn[i].id === "nextPageBtn") {
 
                 if (!(currentPage <= 0 && pageNumBtn[i].id === "prevPageBtn")) {
@@ -578,7 +589,7 @@ function initPageBtn() {
             pageFetch(currentPage).then(() => {
                 renderProducts(json);
             }, () => alert("try again"))
-        };
+        });
     }
 }
 
@@ -643,6 +654,39 @@ function initMemory(searchFiltersDiv) {
                 actionMemoryBtn.onclick = function () {
                     document.getElementById("memoryButton").textContent = data[i].volume;
                     activeMemory = data[i].volume;
+                };
+            }
+        }
+    });
+}
+
+//init Model
+function initModel(searchFiltersDiv) {
+    let modelButtonDiv = document.getElementById("modelButtons");
+    if (modelButtonDiv !== null) modelButtonDiv.innerHTML = "";
+    let getModelUrl = hostName + "/api/dictionary/models";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
+        //"  <label for=\"memoryButton\">Memory </label>" +
+        "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"modelButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
+        "    Model\n" +
+        "  </button>\n" +
+        "  <div class=\"dropdown-menu\" id=\"modelButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
+        "  </div>\n" +
+        "</div>");
+
+    $.ajax({
+        url: getModelUrl,
+        method: "GET",
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                modelButtonDiv = document.getElementById("modelButtons");
+                modelButtonDiv.insertAdjacentHTML("beforeend",
+                    "<button value=\"" + data[i].id + "\" id=\"" + data[i].name + "Model\" class=\"dropdown-item model-button\">" + data[i].name + "</button>\n"
+                );
+                let actionModelBtn = document.getElementById(data[i].name + "Model");
+                actionModelBtn.onclick = function () {
+                    document.getElementById("modelButton").textContent = data[i].name;
+                    activeModel = data[i].name;
                 };
             }
         }
@@ -760,21 +804,21 @@ function initSearchFilters() {
 //init current number of page
 function initCurrentPage() {
     $(".num-page-item:eq(0)").addClass("active");
-    $(".num-page-item").bind("click", function () {
+    $(".num-page-item").on("click", function () {
         $(".num-page-item").each(function () {
             $(this).removeClass("active");
         })
         this.classList.add("active");
     })
 
-    $("#prevPageBtn").bind("click", function () {
+    $("#prevPageBtn").on("click", function () {
         if (!$(".num-page-item:eq(0)").hasClass("active")) {
            $("#page"+(currentPage + 1)).removeClass("active");
            $("#page"+currentPage).addClass("active");
         }
     })
 
-    $("#nextPageBtn").bind("click", function () {
+    $("#nextPageBtn").on("click", function () {
         if (currentPage !== ($(".page-item").length - 2)) {
             $("#page"+(currentPage - 1)).removeClass("active");
             $("#page"+currentPage).addClass("active");
@@ -797,4 +841,6 @@ $(document).ready(() => {
     initSearchFilters();
     //initCurrentPage
     initCurrentPage();
+    //initAdminBtn
+    initAdminBtn();
 })

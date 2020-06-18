@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/user")
 public class UserController {
 
     private final UserService userService;
@@ -30,6 +30,10 @@ public class UserController {
 
     @GetMapping()
     public UserDto getCurrentUser(@AuthenticationPrincipal User user) {
-        return modelMapper.map(user, UserDto.class);
+        UserDto userDto = null;
+        if (user != null) {
+            userDto = modelMapper.map(user, UserDto.class);
+        }
+        return userDto;
     }
 }
