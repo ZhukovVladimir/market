@@ -1,5 +1,9 @@
 package ru.reksoft.market.service;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.reksoft.market.data.dto.BookedProductDto;
 import ru.reksoft.market.data.dto.CartDto;
 import ru.reksoft.market.data.model.*;
@@ -8,10 +12,6 @@ import ru.reksoft.market.data.repository.CartRepository;
 import ru.reksoft.market.data.repository.ProductRepository;
 import ru.reksoft.market.exception.BadRequestException;
 import ru.reksoft.market.exception.ResourceNotFoundException;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -131,8 +131,22 @@ public class CartService {
         BigDecimal bill = new BigDecimal(0);
         for (BookedProduct elem : cart.getProducts()) {
             bill = bill.add(elem.getProduct().getPrice()
-                            .multiply(new BigDecimal(elem.getCount())));
+                    .multiply(new BigDecimal(elem.getCount())));
         }
         cart.setBill(bill);
+    }
+
+    public void deleteProductFromActiveCarts(Long idProduct) {
+
+        List<Cart> activeCarts = cartRepository.findAllByDeliveryStatus(DeliveryStatus.PREORDER)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        for (Cart activeCart : activeCarts) {
+            Long idCart = activeCart.getId();
+            BookedProductId storedProductId = new BookedProductId().setCartId(idCart).setProductId(idProduct);
+
+            bookedProductRepository.findById(storedProductId)
+                    .ifPresent(bookedProductRepository::delete);
+        }
     }
 }

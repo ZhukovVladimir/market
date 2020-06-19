@@ -2,6 +2,7 @@ package ru.reksoft.market.data.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

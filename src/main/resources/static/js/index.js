@@ -535,12 +535,17 @@ function renderProductPage(product) {
             "                    <img class=\"img-fluid product-img\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"/>\n" +
             "                </div>\n" +
             "                <div class=\"info\">\n" +
-            "                    <div class=\"name\"> " + product.name + "</div>\n" +
-            "                        <div class=\"price\">" + product.price + "</div>\n" +
+            "                    <div class=\"name\"> name: " + product.name + "</div>\n" +
+            "                        <div class=\"price\"> price: " + product.price + "</div>\n" +
             "                    <div class=\"desc\">\n" +
-            "                        " + product.description + "\n" +
+            "                        desc: " + product.description + "\n" +
+            "                    </div>\n" +
+            "                    <div class=\"color\">\n" +
             "                        Color: " + product.color.name + "\n" +
+            "                    </div>\n" +
+            "                    <div class=\"storage\">\n" +
             "                        Storage: " + product.memory.volume + "\n" +
+            "                    </div>\n" +
             "                    </div>\n" +
             "                    <div class=\"buy\">\n" +
             "                        <button type=\"button\" value=" + product.id + " class=\"btn btn-primary btn-sm buybtn\">Buy</button>\n" +
@@ -562,6 +567,9 @@ function initProductDesc() {
                 method: "GET",
                 success: function (data) {
                     renderProductPage(data);
+                    //if user == admin
+                    initAdminBtn();
+                    $("#categoryBtnPanel").remove();
                 }
             })
         }
@@ -573,7 +581,7 @@ function initPageBtn() {
     let pageNumBtn = document.getElementsByClassName("page-link");
 
     for (let i = 0; i < pageNumBtn.length; i++) {
-        $(pageNumBtn[i]).bindFirst('click',function () {
+        $(pageNumBtn[i]).bind('click',function () {
             if (pageNumBtn[i].id === "prevPageBtn" || pageNumBtn[i].id === "nextPageBtn") {
 
                 if (!(currentPage <= 0 && pageNumBtn[i].id === "prevPageBtn")) {

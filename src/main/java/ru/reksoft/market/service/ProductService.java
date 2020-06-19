@@ -1,8 +1,11 @@
 package ru.reksoft.market.service;
 
+import org.springframework.security.access.prepost.PostAuthorize;
+import ru.reksoft.market.data.dto.CartDto;
 import ru.reksoft.market.data.dto.ProductDto;
 import ru.reksoft.market.data.dto.ProductSearchDto;
 import ru.reksoft.market.data.model.Product;
+import ru.reksoft.market.data.model.User;
 import ru.reksoft.market.data.repository.ProductRepository;
 import ru.reksoft.market.exception.BadRequestException;
 import ru.reksoft.market.exception.ResourceNotFoundException;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ru.reksoft.market.service.auth.UserDetailsServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,18 +27,15 @@ import static ru.reksoft.market.data.repository.specification.ProductSpecificati
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ModelService modelService;
-    private final ColorService colorService;
-    private final MemoryService memoryService;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final CartService cartService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ModelService modelService, ColorService colorService,
-                          MemoryService memoryService, ModelMapper modelMapper) {
+    public ProductService(ProductRepository productRepository, UserDetailsServiceImpl userDetailsService, CartService cartService, ModelMapper modelMapper) {
         this.productRepository = productRepository;
-        this.modelService = modelService;
-        this.colorService = colorService;
-        this.memoryService = memoryService;
+        this.userDetailsService = userDetailsService;
+        this.cartService = cartService;
         this.modelMapper = modelMapper;
     }
 
@@ -104,10 +105,13 @@ public class ProductService {
                 ProductDto.class);
     }
 
+    @PostAuthorize("hasRole('ROLE_ADMIN')")
     public ProductDto deleteProduct(Long id) {
         Specification<Product> specification = defaultSpecification().and(hasId(id));
         Product product = productRepository.findOne(specification)
                 .orElseThrow(ResourceNotFoundException::new);
+
+        cartService.deleteProductFromActiveCarts(id);
 
         product = productRepository.save(product.setDeleted(true));
         return modelMapper.map(product, ProductDto.class);

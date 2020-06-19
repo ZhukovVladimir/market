@@ -252,34 +252,111 @@ function initConfirmBtn(productsDiv) {
                 })
             }
         })
-
-        // let createDto = {
-        //     "model": {
-        //         "name": activeModel
-        //     },
-        //     "color": {
-        //         "name": activeColor
-        //     },
-        //     "memory": {
-        //         "volume": activeMemory
-        //     },
-        //     "price": prodPriceForDto,
-        //     "count": prodCountForDto,
-        //     "description": prodDescForDto,
-        //     "name": prodNameForDto,
-        // }
-
-        // $.ajax({
-        //     url: createProdUrl,
-        //     method: "POST",
-        //     contentType: 'application/json',
-        //     dataType: 'json',
-        //     data: JSON.stringify(searchDto),
-        //     success: function () {
-        //         alert("Created");
-        //     }
-        // })
     }
+}
+
+function initUpdateBtn(productsDiv, idProd) {
+    let updateProdUrl = hostName + "/api/admin/products"
+    let updateBtn = document.getElementById("updateBtn");
+    if (updateBtn !== null) updateBtn.innerHTML = "";
+    productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"updateBtn\">\n" +
+        "    Update\n" +
+        "  </button>\n"
+    );
+
+    document.getElementById("updateBtn").onclick = function () {
+
+        let updateDto = {
+            "model": {
+                "id": activeModel
+            },
+            "color": {
+                "id": activeColor
+            },
+            "memory": {
+                "id": activeMemory
+            },
+            "price": prodPriceForDto,
+            "count": prodCountForDto,
+            "description": prodDescForDto,
+            "name": prodNameForDto,
+            "image": {
+                "id": parseInt(document.getElementsByClassName("product-img")[0].src.split("/")[5])
+            }
+        }
+        $.ajax({
+            url: updateProdUrl + "/" + idProd,
+            method: "PUT",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(updateDto),
+            success: function () {
+                alert("Updated");
+            }
+        })
+    }
+}
+
+function initDeleteBtn(productsDiv, idProd) {
+    let deleteProdUrl = hostName + "/api/admin/products"
+    let deleteBtn = document.getElementById("deleteBtn");
+    if (deleteBtn !== null) deleteBtn.innerHTML = "";
+    productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-danger\" type=\"button\" id=\"deleteBtn\">\n" +
+        "    Delete\n" +
+        "  </button>\n"
+    );
+
+    document.getElementById("deleteBtn").onclick = function () {
+
+        $.ajax({
+            url: deleteProdUrl + "/" + idProd,
+            method: "DELETE",
+            success: function () {
+                alert("Deleted");
+            }
+        })
+
+
+    }
+}
+
+function initEditProductPage(idProd) {
+    let getProdUrl = hostName + "/api/products/";
+    let products = document.getElementById("products");
+    $("#searchPanel").remove();
+    products.classList.remove("row-cols-3");
+    products.classList.add("row-cols-2");
+    $("#categoryBtnPanel").remove();
+    $.ajax({
+        url: getProdUrl + idProd,
+        method: "GET",
+        success: function (data) {
+            renderProductPage(data);
+            activeColor = data.color.id;
+            activeMemory = data.memory.id;
+            activeModel = data.model.id;
+            prodNameForDto = data.name;
+            prodDescForDto = data.description;
+            prodPriceForDto = data.price;
+            prodCountForDto = data.count;
+            document.getElementsByClassName("info")[0].insertAdjacentHTML("beforeend",
+                "<div class=\"model\"> model: " + data.model.name + "</div>");
+            $(".buy").remove();
+            //test
+            products.insertAdjacentHTML("afterend", "<div id=\"newProd\" class=\"row row-cols-1 text-center\"></div>")
+            let productsDiv = document.getElementById("newProd");
+            initColorInput(productsDiv);
+            initMemoryInput(productsDiv);
+            initModelInput(productsDiv);
+            initNameInput(productsDiv);
+            initDescInput(productsDiv);
+            initPriceInput(productsDiv);
+            initCountInput(productsDiv);
+            initUpdateBtn(productsDiv, idProd);
+            initDeleteBtn(productsDiv, idProd);
+        }
+    })
+
 }
 
 $.fn.bindFirst = function (name, fn) {

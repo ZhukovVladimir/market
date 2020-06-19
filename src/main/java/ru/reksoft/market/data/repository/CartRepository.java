@@ -3,6 +3,7 @@ package ru.reksoft.market.data.repository;
 import ru.reksoft.market.data.model.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import ru.reksoft.market.data.model.DeliveryStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +14,6 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     List<Cart> findAllByUserId(Long id);
 
     Optional<Cart> findByIdAndUserId(Long cartId, Long userId);
+
+    Optional<List<Cart>> findAllByDeliveryStatus(DeliveryStatus deliveryStatus);
 }
