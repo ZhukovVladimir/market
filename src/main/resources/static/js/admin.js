@@ -248,6 +248,9 @@ function initConfirmBtn(productsDiv) {
                     data: JSON.stringify(createDto),
                     success: function () {
                         alert("Created");
+                    },
+                    error: function () {
+                        alert("All fields are required");
                     }
                 })
             }
