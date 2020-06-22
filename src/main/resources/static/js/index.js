@@ -706,12 +706,14 @@ function initSort(searchFiltersDiv) {
     let sortButtonDiv = document.getElementById("sortButtons");
     if (sortButtonDiv !== null) sortButtonDiv.innerHTML = "";
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
+        //"  <label for=\"sortButton\">Sort: </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"sortButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
         "    Order By\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"sortButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
         "  <button value=\"creationTime\" id=\"creationTimeOrder\" class=\"dropdown-item order-button\">Date</button>\n" +
         "  <button value=\"price\" id=\"priceOrder\" class=\"dropdown-item order-button\">Price</button>\n" +
+        "  <button value=\"name\" id=\"nameOrder\" class=\"dropdown-item order-button\">Name</button>\n" +
         "  </div>\n" +
         "</div>");
         let actionOrderBtn = document.getElementById("creationTimeOrder");
@@ -724,6 +726,12 @@ function initSort(searchFiltersDiv) {
         actionOrderBtn.onclick = function () {
             document.getElementById("sortButton").textContent = "Price";
             sort = "Price";
+        };
+
+        actionOrderBtn = document.getElementById("nameOrder");
+        actionOrderBtn.onclick = function () {
+            document.getElementById("sortButton").textContent = "Name";
+            sort = "Name";
         };
 }
 
