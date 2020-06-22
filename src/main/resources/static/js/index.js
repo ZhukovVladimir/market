@@ -166,16 +166,31 @@ function renderProducts(resp) {
 
 function initByBtn() {
     let getCartsURL = hostName + "/api/orders";
-
+    let getCurrentUserUrl = hostName + "/user";
     $.ajax({
-        url: getCartsURL,
+        url: getCurrentUserUrl,
+        method: "GET",
         success: function (data) {
-            if (!((data.length === 0) || (data[0] === "<"))) {
-                data.reverse();
-                initOnClickBuy(data);
+            if (data !== "") {
+                $.ajax({
+                    url: getCartsURL,
+                    success: function (data) {
+                        if (!((data.length === 0) || (data[0] === "<"))) {
+                            data.reverse();
+                            initOnClickBuy(data);
+                        }
+                    }
+                });
+            } else {
+                let buyBtns = document.getElementsByClassName("buybtn");
+                for (let i = 0; i < buyBtns.length; i++) {
+                    buyBtns[i].onclick = function () {
+                        window.location.href = hostName + "/login";
+                    }
+                }
             }
         }
-    });
+    })
 }
 
 //action for buy buttons
@@ -903,6 +918,8 @@ function initUserName() {
         method: "GET",
         success: function (data) {
             let cartBtn = document.getElementById("cart_button");
+            let currentName = document.getElementById("currentName");
+            if (currentName !== null) currentName.innerHTML = "";
             cartBtn.insertAdjacentHTML("afterend", "<a id=\"currentName\"> Current user: " + data.username + " </a>");
         }
     });

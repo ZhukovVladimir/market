@@ -252,7 +252,10 @@ function initConfirmBtn(productsDiv) {
                     error: function () {
                         alert("All fields are required");
                     }
-                })
+                });
+            },
+            error: function () {
+                alert("Ошибка при загрузке изображения")
             }
         })
     }
