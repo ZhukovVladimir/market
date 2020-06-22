@@ -866,6 +866,28 @@ function initCurrentPage() {
     })
 }
 
+function initLoginBtn() {
+    let getCurrentUserUrl = hostName + "/user";
+    $.ajax({
+        url: getCurrentUserUrl,
+        method: "GET",
+        success: function (data) {
+            let loginBtn = document.getElementById("loginBtn");
+            if (data !== "") {
+                loginBtn.textContent = "Logout";
+                loginBtn.onclick = function () {
+                    document.location.href = hostName + "/logout";
+                }
+            } else {
+                loginBtn.textContent = "Login";
+                loginBtn.onclick = function () {
+                    document.location.href = hostName + "/login";
+                }
+            }
+        }
+    })
+}
+
 $(document).ready(() => {
     //onclick page button
     initPageBtn();
@@ -881,6 +903,8 @@ $(document).ready(() => {
     initSearchFilters();
     //initCurrentPage
     initCurrentPage();
+    //initLoginBtn
+    initLoginBtn();
     //initAdminBtn
     initAdminBtn();
 })
