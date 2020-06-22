@@ -12,9 +12,10 @@ let prodNameForDto;
 let prodDescForDto;
 let prodPriceForDto;
 let prodCountForDto;
+let sort = "creationTime";
 
 async function searchFetch(searchDto, pageNum) {
-    let response = await fetch(hostName + "/api/products/search?page=" + pageNum, {
+    let response = await fetch(hostName + "/api/products/search?page=" + pageNum + "&sort=" + sort, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -72,7 +73,7 @@ function initCategoryBtn() {
             }
             //pagination for category pages
             $.ajax({
-                url: hostName + "/api/products/search?page=0",
+                url: hostName + "/api/products/search?page=0" + "&sort=" + sort,
                 method: "POST",
                 contentType: 'application/json',
                 dataType: 'json',
@@ -701,6 +702,31 @@ function initModel(searchFiltersDiv) {
     });
 }
 
+function initSort(searchFiltersDiv) {
+    let sortButtonDiv = document.getElementById("sortButtons");
+    if (sortButtonDiv !== null) sortButtonDiv.innerHTML = "";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
+        "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"sortButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
+        "    Order By\n" +
+        "  </button>\n" +
+        "  <div class=\"dropdown-menu\" id=\"sortButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
+        "  <button value=\"creationTime\" id=\"creationTimeOrder\" class=\"dropdown-item order-button\">Date</button>\n" +
+        "  <button value=\"price\" id=\"priceOrder\" class=\"dropdown-item order-button\">Price</button>\n" +
+        "  </div>\n" +
+        "</div>");
+        let actionOrderBtn = document.getElementById("creationTimeOrder");
+        actionOrderBtn.onclick = function () {
+            document.getElementById("sortButton").textContent = "Date";
+            sort = "creationTime";
+        };
+
+        actionOrderBtn = document.getElementById("priceOrder");
+        actionOrderBtn.onclick = function () {
+            document.getElementById("sortButton").textContent = "Price";
+            sort = "Price";
+        };
+}
+
 //init max Price
 function initMaxPrice(searchFiltersDiv) {
     let maxPriceInput = document.getElementById("maxPrice");
@@ -771,12 +797,15 @@ function initClearBtn(searchFiltersDiv) {
         activeMemory = undefined;
         activeAvailable = undefined;
         maxPrice = undefined;
+        minPrice = undefined;
+        sort = "creationTime";
 
         initColor(searchFiltersDiv);
         initMemory(searchFiltersDiv);
         initMinPrice(searchFiltersDiv);
         initMaxPrice(searchFiltersDiv);
         initCheckBoxAv(searchFiltersDiv);
+        initSort(searchFiltersDiv);
         initApply(searchFiltersDiv);
         initClearBtn(searchFiltersDiv);
 
@@ -801,6 +830,9 @@ function initSearchFilters() {
 
     //initCheckBox
     initCheckBoxAv(searchFiltersDiv);
+
+    //initSort
+    initSort(searchFiltersDiv);
 
     //init Apply
     initApply(searchFiltersDiv);
