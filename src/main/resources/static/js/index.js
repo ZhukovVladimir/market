@@ -86,7 +86,7 @@ function initCategoryBtn() {
                     pagesBtns.innerHTML = "";
                     let newPageBtns = "<li class=\"page-item\"><button id=\"prevPageBtn\" class=\"page-link\">Previous</button></li>";
                     for (let i = 0; i < numberOfPages; i++) {
-                        newPageBtns = newPageBtns + "<li id=\"page"+i+"\" class=\"page-item num-page-item\"><button id=\"pageNumberBtn\" class=\"page-link num-link\" value=\"" + i + "\">" + i + "</button></li>";
+                        newPageBtns = newPageBtns + "<li id=\"page" + i + "\" class=\"page-item num-page-item\"><button id=\"pageNumberBtn\" class=\"page-link num-link\" value=\"" + i + "\">" + i + "</button></li>";
                     }
                     newPageBtns = newPageBtns + "<li class=\"page-item\"><button id=\"nextPageBtn\" class=\"page-link\">Next</button></li>";
                     pagesBtns.innerHTML = newPageBtns;
@@ -134,7 +134,7 @@ function createDivWithProduct(product) {
         price = "<b>Not available</b>"
     }
     div.insertAdjacentHTML("afterbegin", "<div class=\"image\">\n" +
-        "                        <img class=\"img-fluid product-img\" id=\""+product.id+"\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
+        "                        <img class=\"img-fluid product-img\" id=\"" + product.id + "\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
         "                        <div class=\"info\">\n" +
         "                        <div class=\"name\">" + product.name + "</div>\n" +
         "                        <div class=\"price\">" + price + "</div>\n" +
@@ -164,7 +164,7 @@ function renderProducts(resp) {
     initAdminBtn();
 }
 
-function initByBtn()    {
+function initByBtn() {
     let getCartsURL = hostName + "/api/orders";
 
     $.ajax({
@@ -474,6 +474,7 @@ function initCartPage() {
     $.ajax({
         url: cartsURL,
         success: function (data) {
+            initUserName();
             if (data[0] === "<") {
                 window.location.href = hostName + "/login";
             } else {
@@ -582,7 +583,7 @@ function initPageBtn() {
     let pageNumBtn = document.getElementsByClassName("page-link");
 
     for (let i = 0; i < pageNumBtn.length; i++) {
-        $(pageNumBtn[i]).bind('click',function () {
+        $(pageNumBtn[i]).bind('click', function () {
             if (pageNumBtn[i].id === "prevPageBtn" || pageNumBtn[i].id === "nextPageBtn") {
 
                 if (!(currentPage <= 0 && pageNumBtn[i].id === "prevPageBtn")) {
@@ -628,7 +629,7 @@ function initColor(searchFiltersDiv) {
                 );
                 let actionColorBtn = document.getElementById(data[i].name + "Color");
                 actionColorBtn.onclick = function () {
-                    document.getElementById("colorButton").textContent =  data[i].name[0].toUpperCase() + data[i].name.slice(1) ;
+                    document.getElementById("colorButton").textContent = data[i].name[0].toUpperCase() + data[i].name.slice(1);
                     activeColor = data[i].name;
                 };
             }
@@ -716,23 +717,23 @@ function initSort(searchFiltersDiv) {
         "  <button value=\"name\" id=\"nameOrder\" class=\"dropdown-item order-button\">Name</button>\n" +
         "  </div>\n" +
         "</div>");
-        let actionOrderBtn = document.getElementById("creationTimeOrder");
-        actionOrderBtn.onclick = function () {
-            document.getElementById("sortButton").textContent = "Date";
-            sort = "creationTime";
-        };
+    let actionOrderBtn = document.getElementById("creationTimeOrder");
+    actionOrderBtn.onclick = function () {
+        document.getElementById("sortButton").textContent = "Date";
+        sort = "creationTime";
+    };
 
-        actionOrderBtn = document.getElementById("priceOrder");
-        actionOrderBtn.onclick = function () {
-            document.getElementById("sortButton").textContent = "Price";
-            sort = "Price";
-        };
+    actionOrderBtn = document.getElementById("priceOrder");
+    actionOrderBtn.onclick = function () {
+        document.getElementById("sortButton").textContent = "Price";
+        sort = "Price";
+    };
 
-        actionOrderBtn = document.getElementById("nameOrder");
-        actionOrderBtn.onclick = function () {
-            document.getElementById("sortButton").textContent = "Name";
-            sort = "Name";
-        };
+    actionOrderBtn = document.getElementById("nameOrder");
+    actionOrderBtn.onclick = function () {
+        document.getElementById("sortButton").textContent = "Name";
+        sort = "Name";
+    };
 }
 
 //init max Price
@@ -783,7 +784,7 @@ function initApply(searchFiltersDiv) {
     );
 
     document.getElementById("applyBtn").onclick = function () {
-        document.getElementById(activeCategory+"Button").click();
+        document.getElementById(activeCategory + "Button").click();
     }
 }
 
@@ -817,7 +818,7 @@ function initClearBtn(searchFiltersDiv) {
         initApply(searchFiltersDiv);
         initClearBtn(searchFiltersDiv);
 
-        document.getElementById(activeCategory+"Button").click();
+        document.getElementById(activeCategory + "Button").click();
 
     }
 }
@@ -861,15 +862,15 @@ function initCurrentPage() {
 
     $("#prevPageBtn").on("click", function () {
         if (!$(".num-page-item:eq(0)").hasClass("active")) {
-           $("#page"+(currentPage + 1)).removeClass("active");
-           $("#page"+currentPage).addClass("active");
+            $("#page" + (currentPage + 1)).removeClass("active");
+            $("#page" + currentPage).addClass("active");
         }
     })
 
     $("#nextPageBtn").on("click", function () {
         if (currentPage !== ($(".page-item").length - 2)) {
-            $("#page"+(currentPage - 1)).removeClass("active");
-            $("#page"+currentPage).addClass("active");
+            $("#page" + (currentPage - 1)).removeClass("active");
+            $("#page" + currentPage).addClass("active");
         }
     })
 }
@@ -894,6 +895,17 @@ function initLoginBtn() {
             }
         }
     })
+}
+
+function initUserName() {
+    $.ajax({
+        url: hostName + "/user",
+        method: "GET",
+        success: function (data) {
+            let cartBtn = document.getElementById("cart_button");
+            cartBtn.insertAdjacentHTML("afterend", "<a id=\"currentName\"> Current user: " + data.username + " </a>");
+        }
+    });
 }
 
 $(document).ready(() => {
