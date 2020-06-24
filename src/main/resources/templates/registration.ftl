@@ -64,27 +64,27 @@
                                 <input type="email" required name="username"/>
                             </li>
                             <li class="form-row">
-                                <label for="password">Password: </label>
+                                <label for="password">Пароль: </label>
                                 <input type="password" required name="password"/><br/>
                             </li>
                             <li class="form-row">
-                                <label for="firstName">First name: </label>
+                                <label for="firstName">Имя: </label>
                                 <input type="text" name="firstName"/><br/>
                             </li>
                             <li class="form-row">
-                                <label for="lastName">Last name: </label>
+                                <label for="lastName">Фамилия: </label>
                                 <input type="text" name="lastName"/><br/>
                             </li>
                             <li class="form-row">
-                                <label for="address">Address: </label>
+                                <label for="address">Адрес: </label>
                                 <input type="text" name="address"/><br/>
                             </li>
                             <li class="form-row">
-                                <label for="phoneCountryCode">Phone Code: </label>
+                                <label for="phoneCountryCode">Код телефона: </label>
                                 <input type="number" min="1" max="999"  required name="phoneCountryCode"/><br/>
                             </li>
                             <li class="form-row">
-                                <label for="phone">Phone: </label>
+                                <label for="phone">Номер телефона: </label>
                                 <input type="number" required name="phone"/><br/>
                             </li>
                             <li class="form-row">

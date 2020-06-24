@@ -23,7 +23,7 @@ function btnsForAdmin() {
     let addBtn = document.getElementById("cart_button");
     if (addBtn !== null) {
         addBtn.id = "addProductBtn";
-        addBtn.textContent = "Add Product";
+        addBtn.textContent = "Добавить продукт";
         addBtn.onclick = function () {
             //onclick add product button
             initAddProductPage();
@@ -32,7 +32,7 @@ function btnsForAdmin() {
 
     let editBtns = document.getElementsByClassName("buybtn");
     for (let i = 0; i < editBtns.length; i++) {
-        editBtns[i].textContent = "Edit";
+        editBtns[i].textContent = "Изменить";
         editBtns[i].onclick = function () {
             //onclick edit product
             initEditProductPage(this.value);
@@ -41,11 +41,16 @@ function btnsForAdmin() {
 }
 
 function initAddProductPage() {
+
     $("#categoryBtnPanel").remove();
     $("#search_form").remove();
     $("#search_button").remove();
     $("#searchPanel").remove();
     $("#globalCart").remove();
+    $("#addModelBtn").remove();
+    $("#addMemoryBtn").remove();
+    $("#addColorBtn").remove();
+
     let productContainer = document.getElementById("productContainer");
     productContainer.innerHTML = "";
 
@@ -65,6 +70,175 @@ function initAddProductPage() {
     initCountInput(productsDiv);
     initConfirmBtn(productsDiv);
 
+    //initAddBtns
+    initAddDictBtns(productsDiv);
+
+}
+
+//initAddBtns
+function initAddDictBtns(productsDiv) {
+    let addProdBtn = document.getElementById("addProductBtn");
+
+    initAddModelBtn(addProdBtn, productsDiv);
+    initAddMemoryBtn(addProdBtn, productsDiv);
+    initAddColorBtn(addProdBtn, productsDiv);
+}
+
+//initAddColorPage
+function initAddColorBtn(addProdBtn, productsDiv) {
+    productsDiv.innerHtml = "";
+
+    addProdBtn.insertAdjacentHTML("afterend", "<button type=\"button\" id=\"addColorBtn\" class=\"btn btn-light\" value=\"\">Добавить цвет</button>")
+
+    document.getElementById("addColorBtn").onclick = function () {
+        if (productsDiv !== null) productsDiv.innerHTML = "";
+        initNameInput(productsDiv);
+
+        let createColorUrl = hostName + "/api/admin/dictionary/colors"
+        let confirmBtn = document.getElementById("confirmBtn");
+        if (confirmBtn !== null) confirmBtn.innerHTML = "";
+        productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"confirmBtn\">\n" +
+            "    Добавить\n" +
+            "  </button>\n"
+        );
+
+        document.getElementById("confirmBtn").onclick = function () {
+
+            let createDto = {
+                "name": prodNameForDto
+            }
+
+            $.ajax({
+                url: createColorUrl,
+                method: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(createDto),
+                success: function () {
+                    alert("Добавлено")
+                },
+                error: function () {
+                    alert("Ошибка при загрузке")
+                }
+            })
+        }
+    }
+}
+
+//initAddMemoryPage
+function initAddMemoryBtn(addProdBtn, productsDiv) {
+    productsDiv.innerHtml = "";
+
+    addProdBtn.insertAdjacentHTML("afterend", "<button type=\"button\" id=\"addMemoryBtn\" class=\"btn btn-light\" value=\"\">Добавить память</button>")
+
+    document.getElementById("addMemoryBtn").onclick = function () {
+        if (productsDiv !== null) productsDiv.innerHTML = "";
+        initNameInput(productsDiv);
+        let volumeInput = document.getElementById("createProdName");
+        volumeInput.type = "number";
+        volumeInput.placeholder = "Объем памяти";
+
+        let createMemoryUrl = hostName + "/api/admin/dictionary/storage"
+        let confirmBtn = document.getElementById("confirmBtn");
+        if (confirmBtn !== null) confirmBtn.innerHTML = "";
+        productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"confirmBtn\">\n" +
+            "    Добавить\n" +
+            "  </button>\n"
+        );
+
+        document.getElementById("confirmBtn").onclick = function () {
+
+            let createDto = {
+                "volume": prodNameForDto
+            }
+
+            $.ajax({
+                url: createMemoryUrl,
+                method: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(createDto),
+                success: function () {
+                    alert("Добавлено")
+                },
+                error: function () {
+                    alert("Ошибка при загрузке")
+                }
+            })
+        }
+    }
+}
+//initAddModelPage
+function initAddModelBtn(addProdBtn, productsDiv) {
+    productsDiv.innerHtml = "";
+
+    addProdBtn.insertAdjacentHTML("afterend", "<button type=\"button\" id=\"addModelBtn\" class=\"btn btn-light\" value=\"\">Добавить модель</button>")
+
+    document.getElementById("addModelBtn").onclick = function () {
+        if (productsDiv !== null) productsDiv.innerHTML = "";
+        let categoryButtonDiv = document.getElementById("categoryButtons");
+        if (categoryButtonDiv !== null) categoryButtonDiv.innerHTML = "";
+        let getCategoryUrl = hostName + "/api/dictionary/categories";
+        productsDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
+            //"  <label for=\"memoryButton\">Memory </label>" +
+            "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"categoriesButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
+            "    Категория\n" +
+            "  </button>\n" +
+            "  <div class=\"dropdown-menu\" id=\"categoryButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
+            "  </div>\n" +
+            "</div>");
+
+        $.ajax({
+            url: getCategoryUrl,
+            method: "GET",
+            success: function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    categoryButtonDiv = document.getElementById("categoryButtons");
+                    categoryButtonDiv.insertAdjacentHTML("beforeend",
+                        "<button value=\"" + data[i].id + "\" id=\"" + data[i].name + "Category\" class=\"dropdown-item memory-button\">" + data[i].name + "</button>\n"
+                    );
+                    let actionCategoryBtn = document.getElementById(data[i].name + "Category");
+                    actionCategoryBtn.onclick = function () {
+                        document.getElementById("categoriesButton").textContent = data[i].name;
+                        activeCategory = data[i].id;
+                    };
+                }
+            }
+        });
+         initNameInput(productsDiv);
+
+        let createModelUrl = hostName + "/api/admin/dictionary/models"
+        let confirmBtn = document.getElementById("confirmBtn");
+        if (confirmBtn !== null) confirmBtn.innerHTML = "";
+        productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"confirmBtn\">\n" +
+            "    Добавить\n" +
+            "  </button>\n"
+        );
+
+        document.getElementById("confirmBtn").onclick = function () {
+
+            let createDto = {
+                "category": {
+                    "id": activeCategory
+                },
+                "name": prodNameForDto
+            }
+
+            $.ajax({
+                url: createModelUrl,
+                method: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(createDto),
+                success: function () {
+                    alert("Добавлено")
+                },
+                error: function () {
+                    alert("Ошибка при загрузке")
+                }
+            })
+        }
+    }
 }
 
 function initModelInput(searchFiltersDiv) {
@@ -74,7 +248,7 @@ function initModelInput(searchFiltersDiv) {
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
         //"  <label for=\"memoryButton\">Memory </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"modelButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
-        "    Model\n" +
+        "    Модель\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"modelButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
         "  </div>\n" +
@@ -107,7 +281,7 @@ function initColorInput(searchFiltersDiv) {
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
         //"  <label for=\"colorButton\">Color </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"colorButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
-        "    Color\n" +
+        "    Цвет\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"colorButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
         "  </div>\n" +
@@ -139,7 +313,7 @@ function initMemoryInput(searchFiltersDiv) {
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
         //"  <label for=\"memoryButton\">Memory </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"memoryButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
-        "    Memory\n" +
+        "    Память\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"memoryButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
         "  </div>\n" +
@@ -167,7 +341,7 @@ function initMemoryInput(searchFiltersDiv) {
 function initNameInput(productsDiv) {
     let nameButtonDiv = document.getElementById("nameInput");
     if (nameButtonDiv !== null) nameButtonDiv.innerHTML = "";
-    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdName\" required type=\"text\" placeholder=\"Name\">");
+    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdName\" required type=\"text\" placeholder=\"Название\">");
     document.getElementById("createProdName").addEventListener('input', function (e) {
         prodNameForDto = e.target.value;
     });
@@ -176,7 +350,7 @@ function initNameInput(productsDiv) {
 function initDescInput(productsDiv) {
     let descButtonDiv = document.getElementById("descInput");
     if (descButtonDiv !== null) descButtonDiv.innerHTML = "";
-    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdDesc\" required type=\"text\" placeholder=\"Description\">");
+    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdDesc\" required type=\"text\" placeholder=\"Описание\">");
     document.getElementById("createProdDesc").addEventListener('input', function (e) {
         prodDescForDto = e.target.value;
     });
@@ -185,7 +359,7 @@ function initDescInput(productsDiv) {
 function initPriceInput(productsDiv) {
     let priceButtonDiv = document.getElementById("priceInput");
     if (priceButtonDiv !== null) priceButtonDiv.innerHTML = "";
-    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdPrice\" required type=\"number\" step=\"100\" placeholder=\"Price\">");
+    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdPrice\" required type=\"number\" step=\"100\" placeholder=\"Цена\">");
     document.getElementById("createProdPrice").addEventListener('input', function (e) {
         prodPriceForDto = e.target.value;
     });
@@ -194,7 +368,7 @@ function initPriceInput(productsDiv) {
 function initCountInput(productsDiv) {
     let countButtonDiv = document.getElementById("countInput");
     if (countButtonDiv !== null) countButtonDiv.innerHTML = "";
-    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdCount\" required type=\"number\" placeholder=\"Count\">");
+    productsDiv.insertAdjacentHTML("beforeend", "<input id=\"createProdCount\" required type=\"number\" placeholder=\"Количество\">");
     document.getElementById("createProdCount").addEventListener('input', function (e) {
         prodCountForDto = e.target.value;
     });
@@ -205,7 +379,7 @@ function initConfirmBtn(productsDiv) {
     let confirmBtn = document.getElementById("confirmBtn");
     if (confirmBtn !== null) confirmBtn.innerHTML = "";
     productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"confirmBtn\">\n" +
-        "    Confirm\n" +
+        "    Добавить\n" +
         "  </button>\n"
     );
 
@@ -247,10 +421,10 @@ function initConfirmBtn(productsDiv) {
                     dataType: 'json',
                     data: JSON.stringify(createDto),
                     success: function () {
-                        alert("Created");
+                        alert("Добавлено");
                     },
                     error: function () {
-                        alert("All fields are required");
+                        alert("Должны быть заполнены все поля");
                     }
                 });
             },
@@ -266,7 +440,7 @@ function initUpdateBtn(productsDiv, idProd) {
     let updateBtn = document.getElementById("updateBtn");
     if (updateBtn !== null) updateBtn.innerHTML = "";
     productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"updateBtn\">\n" +
-        "    Update\n" +
+        "    Обновить\n" +
         "  </button>\n"
     );
 
@@ -297,7 +471,7 @@ function initUpdateBtn(productsDiv, idProd) {
             dataType: 'json',
             data: JSON.stringify(updateDto),
             success: function () {
-                alert("Updated");
+                alert("Обновлено");
             }
         })
     }
@@ -308,7 +482,7 @@ function initDeleteBtn(productsDiv, idProd) {
     let deleteBtn = document.getElementById("deleteBtn");
     if (deleteBtn !== null) deleteBtn.innerHTML = "";
     productsDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-danger\" type=\"button\" id=\"deleteBtn\">\n" +
-        "    Delete\n" +
+        "    Удалить\n" +
         "  </button>\n"
     );
 
@@ -318,7 +492,7 @@ function initDeleteBtn(productsDiv, idProd) {
             url: deleteProdUrl + "/" + idProd,
             method: "DELETE",
             success: function () {
-                alert("Deleted");
+                alert("Удалено");
             }
         })
 

@@ -84,11 +84,11 @@ function initCategoryBtn() {
                     let pagesBtns = document.getElementById("pagesButtons");
                     //update page buttons
                     pagesBtns.innerHTML = "";
-                    let newPageBtns = "<li class=\"page-item\"><button id=\"prevPageBtn\" class=\"page-link\">Previous</button></li>";
+                    let newPageBtns = "<li class=\"page-item\"><button id=\"prevPageBtn\" class=\"page-link\">Предыдущая</button></li>";
                     for (let i = 0; i < numberOfPages; i++) {
                         newPageBtns = newPageBtns + "<li id=\"page" + i + "\" class=\"page-item num-page-item\"><button id=\"pageNumberBtn\" class=\"page-link num-link\" value=\"" + i + "\">" + i + "</button></li>";
                     }
-                    newPageBtns = newPageBtns + "<li class=\"page-item\"><button id=\"nextPageBtn\" class=\"page-link\">Next</button></li>";
+                    newPageBtns = newPageBtns + "<li class=\"page-item\"><button id=\"nextPageBtn\" class=\"page-link\">Следующая</button></li>";
                     pagesBtns.innerHTML = newPageBtns;
 
                     //onclick on page buttons
@@ -109,7 +109,7 @@ function initCategoryBtn() {
                                 }
                                 searchFetch(searchDto, currentPage).then(() => {
                                     renderProducts(json);
-                                }, () => alert("try again"))
+                                }, () => alert("Ошибка при загрузке продуктов"))
                             });
                         }
                     }
@@ -117,7 +117,7 @@ function initCategoryBtn() {
                     searchFetch(searchDto, currentPage).then(() => {
                         renderProducts(json);
                         initCurrentPage();
-                    }, () => alert("try again"))
+                    }, () => alert("Ошибка при загрузке продуктов"))
                 }
             })
 
@@ -137,14 +137,18 @@ function createDivWithProduct(product) {
         "                        <img class=\"img-fluid product-img\" id=\"" + product.id + "\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
         "                        <div class=\"info\">\n" +
         "                        <div class=\"name\">" + product.name + "</div>\n" +
-        "                        <div class=\"price\">" + price + "</div>\n" +
+        "                        <div class=\"price\">" + "Цена: " + price + "</div>\n" +
         "                        <div class=\"desc\">\n" +
         "                            " + product.description + "\n" +
-        "                            Color: " + product.color.name + "\n" +
-        "                            Storage: " + product.memory.volume + "\n" +
+        "                        </div>\n" +
+        "                        <div class=\"color\">\n" +
+        "                            Цвет: " + product.color.name + "\n" +
+        "                        </div>\n" +
+        "                        <div class=\"memory\">\n" +
+        "                            Объем памяти: " + product.memory.volume + "\n" +
         "                        </div>\n" +
         "                        <div class=\"buy\">\n" +
-        "                            <button type=\"button\" value=" + product.id + " class=\"btn btn-primary btn-sm buybtn\">Buy</button>\n" +
+        "                            <button type=\"button\" value=" + product.id + " class=\"btn btn-primary btn-sm buybtn\">Купить</button>\n" +
         "                        </div>\n" +
         "                    </div>")
     return div;
@@ -160,6 +164,7 @@ function renderProducts(resp) {
     }
     initByBtn();
     initProductDesc();
+    removeStorageForWatch();
     //if user == admin
     initAdminBtn();
 }
@@ -318,13 +323,13 @@ function confirmCart(cart) {
         "        <div class=\"col text-center\" >\n" +
         "        </div>\n" +
         "        <div class=\"col text-center\" >\n" +
-        "        <input id=\"infoAddress\" required type=\"text\" placeholder=\"address\" " + address + " > \n" +
+        "        <input id=\"infoAddress\" required type=\"text\" placeholder=\"Адрес \" " + address + " > \n" +
         "        </div>\n" +
         "        <div id=\"totalPrice\" class=\"col text-center\" >\n" +
-        "        Total price: " + bill + " \n" +
+        "        Сумма : " + bill + " \n" +
         "        </div>\n" +
         "        <div class=\"col text-center\" >\n" +
-        "        <button id=\"confirmOrderBtn\" type=\"button\" class=\"btn btn-dark\">Confirm</button>\n" +
+        "        <button id=\"confirmOrderBtn\" type=\"button\" class=\"btn btn-dark\">Подтвердить</button>\n" +
         "        </div>\n");
 
     //onclick confirmOrderBtn
@@ -383,7 +388,7 @@ function renderCart(cart) {
                 "        <p><input id=\"inputCount" + products[i].product.id + "\" type=\"number\"  size=\"3\" min=\"1\" max=" + products[i].product.count + " value=" + products[i].count + "></p> \n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
-                "            <button id=\"deleteBtn" + products[i].product.id + "\" type=\"button\" class=\"btn btn-light\">Delete</button>\n" +
+                "            <button id=\"deleteBtn" + products[i].product.id + "\" type=\"button\" class=\"btn btn-light\">Удалить</button>\n" +
                 "        </div>\n" +
                 "\n");
             //change count
@@ -435,7 +440,7 @@ function renderCart(cart) {
                 "        <div class=\"col my-auto\" >\n" +
                 "        </div>\n" +
                 "        <div class=\"text-center\" >\n" +
-                "        <button id=\"confirmBtn\" type=\"button\" class=\"btn btn-dark\">Confirm</button>\n" +
+                "        <button id=\"confirmBtn\" type=\"button\" class=\"btn btn-dark\">Подтвердить</button>\n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
                 "        </div>\n" +
@@ -552,20 +557,20 @@ function renderProductPage(product) {
             "                    <img class=\"img-fluid product-img\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"/>\n" +
             "                </div>\n" +
             "                <div class=\"info\">\n" +
-            "                    <div class=\"name\"> name: " + product.name + "</div>\n" +
-            "                        <div class=\"price\"> price: " + product.price + "</div>\n" +
+            "                    <div class=\"name\"> Название: " + product.name + "</div>\n" +
+            "                        <div class=\"price\"> Цена: " + product.price + "</div>\n" +
             "                    <div class=\"desc\">\n" +
-            "                        desc: " + product.description + "\n" +
+            "                        Описание: " + product.description + "\n" +
             "                    </div>\n" +
             "                    <div class=\"color\">\n" +
-            "                        Color: " + product.color.name + "\n" +
+            "                        Цвет: " + product.color.name + "\n" +
             "                    </div>\n" +
             "                    <div class=\"storage\">\n" +
-            "                        Storage: " + product.memory.volume + "\n" +
+            "                        Объем памяти: " + product.memory.volume + "\n" +
             "                    </div>\n" +
             "                    </div>\n" +
             "                    <div class=\"buy\">\n" +
-            "                        <button type=\"button\" value=" + product.id + " class=\"btn btn-primary btn-sm buybtn\">Buy</button>\n" +
+            "                        <button type=\"button\" value=" + product.id + " class=\"btn btn-primary btn-sm buybtn\">Купить</button>\n" +
             "                    </div>\n" +
             "                </div>\n" +
             "            </div>")
@@ -613,7 +618,7 @@ function initPageBtn() {
             }
             pageFetch(currentPage).then(() => {
                 renderProducts(json);
-            }, () => alert("try again"))
+            }, () => alert("Ошибка при загрузке продуктов"))
         });
     }
 }
@@ -627,7 +632,7 @@ function initColor(searchFiltersDiv) {
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
         //"  <label for=\"colorButton\">Color </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"colorButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
-        "    Color\n" +
+        "    Цвет\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"colorButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
         "  </div>\n" +
@@ -660,7 +665,7 @@ function initMemory(searchFiltersDiv) {
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
         //"  <label for=\"memoryButton\">Memory </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"memoryButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
-        "    Memory\n" +
+        "    Память\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"memoryButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
         "  </div>\n" +
@@ -693,7 +698,7 @@ function initModel(searchFiltersDiv) {
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
         //"  <label for=\"memoryButton\">Memory </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"modelButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
-        "    Model\n" +
+        "    Модель\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"modelButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
         "  </div>\n" +
@@ -724,29 +729,29 @@ function initSort(searchFiltersDiv) {
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"dropdown show\">\n" +
         //"  <label for=\"sortButton\">Sort: </label>" +
         "  <button class=\"btn bg-light dropdown-toggle\" type=\"button\" id=\"sortButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n" +
-        "    Order By\n" +
+        "    Сортировка\n" +
         "  </button>\n" +
         "  <div class=\"dropdown-menu\" id=\"sortButtons\" aria-labelledby=\"dropdownMenuButton\">\n" +
-        "  <button value=\"creationTime\" id=\"creationTimeOrder\" class=\"dropdown-item order-button\">Date</button>\n" +
-        "  <button value=\"price\" id=\"priceOrder\" class=\"dropdown-item order-button\">Price</button>\n" +
-        "  <button value=\"name\" id=\"nameOrder\" class=\"dropdown-item order-button\">Name</button>\n" +
+        "  <button value=\"creationTime\" id=\"creationTimeOrder\" class=\"dropdown-item order-button\">По новизне</button>\n" +
+        "  <button value=\"price\" id=\"priceOrder\" class=\"dropdown-item order-button\">По цене</button>\n" +
+        "  <button value=\"name\" id=\"nameOrder\" class=\"dropdown-item order-button\">По имени</button>\n" +
         "  </div>\n" +
         "</div>");
     let actionOrderBtn = document.getElementById("creationTimeOrder");
     actionOrderBtn.onclick = function () {
-        document.getElementById("sortButton").textContent = "Date";
+        document.getElementById("sortButton").textContent = "По новизне";
         sort = "creationTime";
     };
 
     actionOrderBtn = document.getElementById("priceOrder");
     actionOrderBtn.onclick = function () {
-        document.getElementById("sortButton").textContent = "Price";
+        document.getElementById("sortButton").textContent = "По цене";
         sort = "Price";
     };
 
     actionOrderBtn = document.getElementById("nameOrder");
     actionOrderBtn.onclick = function () {
-        document.getElementById("sortButton").textContent = "Name";
+        document.getElementById("sortButton").textContent = "По имени";
         sort = "Name";
     };
 }
@@ -755,7 +760,7 @@ function initSort(searchFiltersDiv) {
 function initMaxPrice(searchFiltersDiv) {
     let maxPriceInput = document.getElementById("maxPrice");
     if (maxPriceInput !== null) maxPriceInput.innerHTML = "";
-    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"maxPrice\">Max price </label>" +
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"maxPrice\">Максимальная цена </label>" +
         "<p class=\"my-auto\"><input id=\"maxPrice\" type=\"number\" min=\"0\" step=\"100\"></p> \n"
     );
     document.getElementById("maxPrice").addEventListener('input', function (e) {
@@ -767,7 +772,7 @@ function initMaxPrice(searchFiltersDiv) {
 function initMinPrice(searchFiltersDiv) {
     let minPriceInput = document.getElementById("minPrice");
     if (minPriceInput !== null) minPriceInput.innerHTML = "";
-    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"minPrice\">Min price </label>" +
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"minPrice\">Минимальная цена </label>" +
         "<p class=\"my-auto\"><input id=\"minPrice\" type=\"number\" min=\"0\" step=\"100\"></p> \n"
     );
     document.getElementById("minPrice").addEventListener('input', function (e) {
@@ -780,7 +785,7 @@ function initCheckBoxAv(searchFiltersDiv) {
     let availableCheckBox = document.getElementById("availableCheckBox");
     if (availableCheckBox !== null) availableCheckBox.innerHTML = "";
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<div class=\"my-auto\">" +
-        "<label class=\"my-auto\" for=\"availableCheckBox\">Available</label>" +
+        "<label class=\"my-auto\" for=\"availableCheckBox\">В наличие</label>" +
         "<input type=\"checkbox\" class=\"my-auto\" id=\"availableCheckBox\">" +
         "</div>"
     );
@@ -794,7 +799,7 @@ function initApply(searchFiltersDiv) {
     let applyBtn = document.getElementById("applyBtn");
     if (applyBtn !== null) applyBtn.innerHTML = "";
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"applyBtn\">\n" +
-        "    Apply\n" +
+        "    Применить\n" +
         "  </button>\n"
     );
 
@@ -808,7 +813,7 @@ function initClearBtn(searchFiltersDiv) {
     let clearBtn = document.getElementById("clearBtn");
     if (clearBtn !== null) clearBtn.innerHTML = "";
     searchFiltersDiv.insertAdjacentHTML("beforeend", "<button class=\"btn btn-secondary\" type=\"button\" id=\"clearBtn\">\n" +
-        "    Clear\n" +
+        "    Очистить\n" +
         "  </button>\n"
     );
 
@@ -920,9 +925,20 @@ function initUserName() {
             let cartBtn = document.getElementById("cart_button");
             let currentName = document.getElementById("currentName");
             if (currentName !== null) currentName.innerHTML = "";
-            cartBtn.insertAdjacentHTML("afterend", "<a id=\"currentName\"> Current user: " + data.username + " </a>");
+            cartBtn.insertAdjacentHTML("afterend", "<a id=\"currentName\"> Текущий пользователь: " + data.username + " </a>");
         }
     });
+}
+
+function removeStorageForWatch() {
+    let storageDivs = document.getElementsByClassName("memory");
+    if (storageDivs !== null) {
+        for (let i = 0; i < storageDivs.length; i++) {
+            if (storageDivs[i].textContent.length === 69) {
+                storageDivs[i].innerHTML = "";
+            }
+        }
+    }
 }
 
 $(document).ready(() => {
@@ -942,6 +958,8 @@ $(document).ready(() => {
     initCurrentPage();
     //initLoginBtn
     initLoginBtn();
+    //removeStorageForWatch
+    removeStorageForWatch();
     //initAdminBtn
     initAdminBtn();
 })

@@ -22,7 +22,7 @@
 <!--top panel-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">SHOP</a>
-    <button type="button" id="cart_button" class="btn btn-light" value="">Cart <span id="badge" class="badge">0</span></button>
+    <button type="button" id="cart_button" class="btn btn-light" value="">Корзина <span id="badge" class="badge">0</span></button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -64,17 +64,21 @@
                     <div class="info">
                         <div class="name"> ${products[j].name} </div>
                         <#if products[j].count gt 0>
-                            <div class="price"> ${products[j].price} </div>
+                            <div class="price"> Цена: ${products[j].price} </div>
                         <#else>
-                            <div class="not_available"> <b>Not available</b> </div>
+                            <div class="not_available"> <b>Нет в наличии</b> </div>
                         </#if>
                         <div class="desc">
                             ${products[j].description}
-                            Color: ${products[j].color.name}
-                            Storage: ${products[j].memory.volume}
+                        </div>
+                        <div class="color">
+                            Цвет: ${products[j].color.name}
+                        </div>
+                        <div class="memory">
+                            Объем памяти: ${products[j].memory.volume}
                         </div>
                         <div class="buy">
-                            <button type="button" value=${products[j].id} class="btn btn-primary btn-sm buybtn">Buy</button>
+                            <button type="button" value=${products[j].id} class="btn btn-primary btn-sm buybtn">Купить</button>
                         </div>
                     </div>
                 </div>
@@ -83,11 +87,11 @@
     </div>
     <nav id="pages" aria-label="Page navigation example">
         <ul id="pagesButtons" class="pagination justify-content-center">
-            <li class="page-item"><button id="prevPageBtn" class="page-link">Previous</button></li>
+            <li class="page-item"><button id="prevPageBtn" class="page-link">Предыдущая</button></li>
             <#list 0..(products?size-1)/6 as i>
                 <li id="page${i}" class="page-item num-page-item"><button id="pageNumberBtn" class="page-link num-link" value="${i}">${i}</button></li>
             </#list>
-            <li class="page-item"><button id="nextPageBtn" class="page-link">Next</button></li>
+            <li class="page-item"><button id="nextPageBtn" class="page-link">Следующая</button></li>
         </ul>
     </nav>
 </div>
@@ -109,7 +113,7 @@
             Количество
         </div>
         <div class="col" >
-            <button type="button" class="btn btn-light">Delete</button>
+            <button type="button" class="btn btn-light">Удалить</button>
         </div>
 
     </div>

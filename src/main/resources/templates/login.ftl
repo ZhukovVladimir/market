@@ -70,7 +70,7 @@
                                 <input type="email" name="username" id="username"/>
                             </li>
                             <li class="form-row">
-                                <label for="password">Password: </label>
+                                <label for="password">Пароль: </label>
                                 <input type="password" name="password" id="password"/>
                             </li>
                             <li class="form-row">
