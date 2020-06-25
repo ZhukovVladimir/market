@@ -1,7 +1,5 @@
 package ru.reksoft.market.controller;
 
-import ru.reksoft.market.data.dto.UserDto;
-import ru.reksoft.market.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -9,6 +7,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.reksoft.market.data.dto.UserDto;
+import ru.reksoft.market.service.UserService;
 
 @Controller
 @RequestMapping("/registration")

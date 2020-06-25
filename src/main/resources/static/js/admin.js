@@ -23,7 +23,7 @@ function btnsForAdmin() {
     let addBtn = document.getElementById("cart_button");
     if (addBtn !== null) {
         addBtn.id = "addProductBtn";
-        addBtn.textContent = "Добавить продукт";
+        addBtn.textContent = "Редактировать";
         addBtn.onclick = function () {
             //onclick add product button
             initAddProductPage();

@@ -1,13 +1,13 @@
 package ru.reksoft.market.controller.api;
 
-import ru.reksoft.market.data.dto.BookedProductDto;
-import ru.reksoft.market.data.dto.CartDto;
-import ru.reksoft.market.data.model.User;
-import ru.reksoft.market.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.reksoft.market.data.dto.BookedProductDto;
+import ru.reksoft.market.data.dto.CartDto;
+import ru.reksoft.market.data.model.User;
+import ru.reksoft.market.service.CartService;
 
 import java.util.List;
 
