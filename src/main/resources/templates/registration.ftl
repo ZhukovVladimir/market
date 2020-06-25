@@ -69,15 +69,15 @@
                             </li>
                             <li class="form-row">
                                 <label for="firstName">Имя: </label>
-                                <input type="text" name="firstName"/><br/>
+                                <input type="text" required name="firstName"/><br/>
                             </li>
                             <li class="form-row">
                                 <label for="lastName">Фамилия: </label>
-                                <input type="text" name="lastName"/><br/>
+                                <input type="text" required name="lastName"/><br/>
                             </li>
                             <li class="form-row">
                                 <label for="address">Адрес: </label>
-                                <input type="text" name="address"/><br/>
+                                <input type="text" required name="address"/><br/>
                             </li>
                             <li class="form-row">
                                 <label for="phoneCountryCode">Код телефона: </label>

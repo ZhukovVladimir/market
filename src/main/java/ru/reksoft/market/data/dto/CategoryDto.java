@@ -10,10 +10,10 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 public class CategoryDto {
-    @Null
+    @Null(message = "{id.null}")
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "{name.notempty}")
     private String name;
 
 }

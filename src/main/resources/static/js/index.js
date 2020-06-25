@@ -6,6 +6,7 @@ let activeCategory;
 let activeMemory;
 let activeAvailable;
 let activeModel;
+let activeName;
 let maxPrice;
 let minPrice;
 let prodNameForDto;
@@ -69,7 +70,8 @@ function initCategoryBtn() {
                 },
                 "maxPrice": maxPrice,
                 "minPrice": minPrice,
-                "available": activeAvailable
+                "available": activeAvailable,
+                "name": activeName
             }
             //pagination for category pages
             $.ajax({
@@ -780,6 +782,18 @@ function initMinPrice(searchFiltersDiv) {
     })
 }
 
+//init Name
+function initName(searchFiltersDiv) {
+    let nameInput = document.getElementById("nameInput");
+    if (nameInput !== null) nameInput.innerHTML = "";
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"nameInput\">Название </label>" +
+        "<p class=\"my-auto\"><input id=\"nameInput\" type=\"text\" ></p> \n"
+    );
+    document.getElementById("nameInput").addEventListener('input', function (e) {
+        activeName = e.target.value;
+    })
+}
+
 //init checkbox
 function initCheckBoxAv(searchFiltersDiv) {
     let availableCheckBox = document.getElementById("availableCheckBox");
@@ -856,6 +870,9 @@ function initSearchFilters() {
     //initPrice
     initMinPrice(searchFiltersDiv);
     initMaxPrice(searchFiltersDiv);
+
+    //initName
+    initName(searchFiltersDiv);
 
     //initCheckBox
     initCheckBoxAv(searchFiltersDiv);

@@ -60,6 +60,12 @@ public class ProductSpecification {
         };
     }
 
+    public static Specification<Product> hasName(ProductSearchDto referenceProduct) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.like(root.get(Product_.NAME), "%" + referenceProduct.getName() + "%");
+        };
+    }
+
     public static Specification<Product> defaultSpecification() {
         return (root, criteriaQuery, criteriaBuilder) -> {
             return criteriaBuilder.or(

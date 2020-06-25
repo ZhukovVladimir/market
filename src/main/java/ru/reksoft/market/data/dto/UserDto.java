@@ -11,34 +11,34 @@ import java.util.Set;
 
 @Data
 public class UserDto {
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "{password.notnull}")
+    @NotEmpty(message = "{password.notempty}")
     @JsonIgnore
     private String password;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "{username.notnull}")
+    @NotEmpty(message = "{username.notempty}")
     @Email
     private String username;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "{firstName.notnull}")
+    @NotEmpty(message = "{firstName.notempty}")
     private String firstName;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "{lastName.notnull}")
+    @NotEmpty(message = "{lastName.notempty}")
     private String lastName;
 
-    @NotNull
+    @NotNull(message = "{phone.notnull}")
     private Long phone;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "{address.notnull}")
+    @NotEmpty(message = "{address.notempty}")
     private String address;
 
-    @NotNull
+    @NotNull(message = "{phoneCountryCode.notnull}")
     private Integer phoneCountryCode;
 
-    @Null
+    @Null(message = "{authorities.null}")
     private Set<AuthorityDto> authorities;
 }

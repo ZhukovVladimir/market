@@ -3,6 +3,7 @@ package ru.reksoft.market.data.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.io.Serializable;
@@ -10,10 +11,10 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 public class MemoryDto {
-    @Null
+    @Null(message = "{id.null}")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "{name.notempty}")
     private Integer volume;
 
 }

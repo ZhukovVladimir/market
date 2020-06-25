@@ -10,13 +10,13 @@ import javax.validation.constraints.Null;
 @Data
 @Accessors(chain = true)
 public class ModelDto {
-    @Null
+    @Null(message = "{id.null}")
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "{name.notempty}")
     private String name;
 
-    @NotNull
+    @NotNull(message = "{category.notnull}")
     private CategoryDto category;
 
 }

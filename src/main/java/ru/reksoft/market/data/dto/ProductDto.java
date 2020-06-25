@@ -13,33 +13,33 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class ProductDto {
 
-    @Null
+    @Null(message = "{id.null}")
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "{name.notempty}")
     private String name;
 
-    @NotNull
+    @NotNull(message = "{price.notnull}")
     private BigDecimal price;
 
-    @NotNull
+    @NotNull(message = "{count.notnull}")
     private Integer count;
 
     private String description;
 
-    @NotNull
+    @NotNull(message = "{color.notnull}")
     private ColorDto color;
 
-    @NotNull
+    @NotNull(message = "{memory.notnull}")
     private MemoryDto memory;
 
-    @NotNull
+    @NotNull(message = "{model.notnull}")
     private ModelDto model;
 
-    @NotNull
+    @NotNull(message = "{image.notnull}")
     private ImageDto image;
 
-    @Null
+    @Null(message = "{creationTime.null}")
     private LocalDateTime creationTime;
 
 }

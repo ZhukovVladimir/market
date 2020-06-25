@@ -12,14 +12,14 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class CartDto {
-    @NotNull
+    @NotNull(message = "{id.notnull}")
     private Long id;
-    @NotEmpty
+    @NotEmpty(message = "{deliveryAddress.notempty}")
     private String deliveryAddress;
     private String deliveryStatus;
     private LocalDateTime creationTime;
     private LocalDateTime paymentTime;
-    @NotNull
+    @NotNull(message = "{bill.notnull}")
     private BigDecimal bill;
     private List<BookedProductDto> products;
 }

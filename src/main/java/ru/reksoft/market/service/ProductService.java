@@ -74,6 +74,9 @@ public class ProductService {
         if (productSearchDto.getAvailable() != null && productSearchDto.getAvailable()) {
             specification = specification.and(isAvailable());
         }
+        if (productSearchDto.getName() != null) {
+            specification = specification.and(hasName(productSearchDto));
+        }
         return productRepository.findAll(specification, pageable)
                 .map(product -> modelMapper.map(product, ProductDto.class));
     }
