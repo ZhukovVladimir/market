@@ -1,5 +1,6 @@
 package ru.reksoft.market.service;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.reksoft.market.data.dto.ColorDto;
 import ru.reksoft.market.data.model.Color;
 import ru.reksoft.market.data.repository.ColorRepository;
@@ -31,6 +32,7 @@ public class ColorService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ColorDto createColor(ColorDto colorDto) {
         if (colorDto.getId() != null) {
             throw new BadRequestException("Id should be null");
@@ -41,6 +43,7 @@ public class ColorService {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ColorDto updateColor(Long id, ColorDto colorDto) {
         if (colorRepository.existsById(id)) {
             Color color = modelMapper.map(colorDto, Color.class).setId(id);
@@ -50,6 +53,7 @@ public class ColorService {
         throw new ResourceNotFoundException(id, "Color");
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ColorDto deleteColor(Long id) {
         Color color = colorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         color = colorRepository.save(color.setDeleted(true));

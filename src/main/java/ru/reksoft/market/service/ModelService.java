@@ -1,5 +1,6 @@
 package ru.reksoft.market.service;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.reksoft.market.data.dto.ModelDto;
 import ru.reksoft.market.data.model.Model;
 import ru.reksoft.market.data.repository.ModelRepository;
@@ -31,6 +32,7 @@ public class ModelService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelDto createModel(ModelDto modelDto) {
         if (modelDto.getId() != null) {
             throw new BadRequestException("Id should be null");
@@ -41,6 +43,7 @@ public class ModelService {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelDto updateModel(Long id, ModelDto modelDto) {
         if (modelRepository.existsById(id)) {
             Model model = modelMapper.map(modelDto, Model.class).setId(id);
@@ -50,6 +53,7 @@ public class ModelService {
         throw new ResourceNotFoundException(id, "Model");
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelDto deleteModel(Long id) {
         Model model = modelRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         model = modelRepository.save(model.setDeleted(true));

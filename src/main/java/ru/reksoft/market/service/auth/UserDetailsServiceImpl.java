@@ -1,5 +1,6 @@
 package ru.reksoft.market.service.auth;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.reksoft.market.data.model.User;
 import ru.reksoft.market.data.repository.UserRepository;
 import ru.reksoft.market.exception.ForbiddenException;
@@ -23,6 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);

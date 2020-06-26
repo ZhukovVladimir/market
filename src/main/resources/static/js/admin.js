@@ -50,6 +50,7 @@ function initAddProductPage() {
     $("#addModelBtn").remove();
     $("#addMemoryBtn").remove();
     $("#addColorBtn").remove();
+    $("#addProductBtn").text("Добавить продукт");
 
     let productContainer = document.getElementById("productContainer");
     productContainer.innerHTML = "";

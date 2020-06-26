@@ -8,11 +8,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Locale;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -50,5 +54,19 @@ public class AppleMarketApplication {
 		bean.setValidationMessageSource(messageSource());
 		return bean;
 	}
+
+//	@Bean
+//	public LocaleResolver localeResolver() {
+//		SessionLocaleResolver slr = new SessionLocaleResolver();
+//		slr.setDefaultLocale(new Locale("ru"));
+//		return slr;
+//	}
+
+//	@Bean
+//	public static LocaleChangeInterceptor localeChangeInterceptor() {
+//		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+//		lci.setParamName("lang");
+//		return lci;
+//	}
 
 }

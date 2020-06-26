@@ -1,5 +1,6 @@
 package ru.reksoft.market.service;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.reksoft.market.data.dto.ImageDto;
 import ru.reksoft.market.data.model.Image;
 import ru.reksoft.market.data.repository.ImageRepository;
@@ -44,6 +45,7 @@ public class ImageService {
                 ImageDto.class);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ImageDto saveImage(MultipartFile image) {
         if (image.isEmpty()) {
             throw new BadRequestException("Image not selected");

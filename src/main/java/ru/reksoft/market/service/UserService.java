@@ -12,7 +12,6 @@ import ru.reksoft.market.data.repository.AuthorityRepository;
 import ru.reksoft.market.data.repository.CartRepository;
 import ru.reksoft.market.data.repository.UserRepository;
 import ru.reksoft.market.exception.ConflictException;
-import ru.reksoft.market.exception.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -26,23 +25,15 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
+    private final CartService cartService;
+
     @Autowired
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, CartRepository cartRepository, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, CartRepository cartRepository, ModelMapper modelMapper, CartService cartService) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.cartRepository = cartRepository;
         this.modelMapper = modelMapper;
-    }
-
-    public UserDto findOne(Long id) {
-        return modelMapper.map(
-                userRepository.findById(id).orElseThrow(ResourceNotFoundException::new),
-                UserDto.class);
-    }
-
-    public UserDto findByEmail(String username) {
-        User user = userRepository.findByUsername(username);
-        return modelMapper.map(user, UserDto.class);
+        this.cartService = cartService;
     }
 
     public void createUser(UserDto userDto, PasswordEncoder passwordEncoder) {
@@ -53,25 +44,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setAuthorities(authorityRepository.findAuthoritiesByAuthority(DEFAULT_ROLE));
             user = userRepository.save(user);
-            setUpEmptyCart(user);
+            cartService.setUpEmptyCart(user);
         }
     }
-
-    private void setUpEmptyCart(User user) {
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cart.setDeliveryStatus(DeliveryStatus.PREORDER);
-        if (!user.getAddress().isEmpty()) {
-            cart.setDeliveryAddress(user.getAddress());
-        }
-        cartRepository.save(cart);
-    }
-
-//    public UserDto getCurrentUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null) {
-//            throw new ForbiddenException();
-//        }
-//        return modelMapper.map(authentication.getPrincipal(), UserDto.class);
-//    }
 }

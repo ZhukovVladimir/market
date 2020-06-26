@@ -56,8 +56,8 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Sign In</h5>
-                    <p><a href="/registration">Registration</a></p>
+                    <h5 class="card-title text-center">Вход</h5>
+                    <p><a href="/registration">Регистрация</a></p>
                     <#if RequestParameters.error??>
                         <script type="text/javascript">
                             alert("Login error");
@@ -74,7 +74,7 @@
                                 <input type="password" name="password" id="password"/>
                             </li>
                             <li class="form-row">
-                                <input type="submit" value="Login"/>
+                                <input type="submit" value="Войти"/>
                             </li>
                         </ul>
                     </form>

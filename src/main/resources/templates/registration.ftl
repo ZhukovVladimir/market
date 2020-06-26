@@ -56,7 +56,7 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Registration</h5>
+                    <h5 class="card-title text-center">Регистрация</h5>
                     <form method="post" action="/registration" id="registerForm" class="form-signin">
                         <ul class="wrapper">
                             <li class="form-row">
@@ -88,7 +88,7 @@
                                 <input type="number" required name="phone"/><br/>
                             </li>
                             <li class="form-row">
-                                <input type="submit" value="Registration"/>
+                                <input type="submit" value="Зарегистрироваться"/>
                             </li>
                         </ul>
                     </form>

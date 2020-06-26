@@ -1,6 +1,7 @@
 package ru.reksoft.market.service;
 
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.reksoft.market.data.dto.CartDto;
 import ru.reksoft.market.data.dto.ProductDto;
 import ru.reksoft.market.data.dto.ProductSearchDto;
@@ -81,6 +82,7 @@ public class ProductService {
                 .map(product -> modelMapper.map(product, ProductDto.class));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ProductDto createProduct(ProductDto productDto) {
         if (productDto.getId() != null) {
             throw new BadRequestException("Id should be null");
@@ -92,6 +94,7 @@ public class ProductService {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ProductDto updateProduct(Long id, ProductDto productDto) {
         if (productRepository.existsById(id)) {
             Product product = modelMapper.map(productDto, Product.class).setId(id);
@@ -108,7 +111,7 @@ public class ProductService {
                 ProductDto.class);
     }
 
-    @PostAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ProductDto deleteProduct(Long id) {
         Specification<Product> specification = defaultSpecification().and(hasId(id));
         Product product = productRepository.findOne(specification)

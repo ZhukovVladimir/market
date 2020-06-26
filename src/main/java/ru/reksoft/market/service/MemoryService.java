@@ -1,5 +1,6 @@
 package ru.reksoft.market.service;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.reksoft.market.data.dto.MemoryDto;
 import ru.reksoft.market.data.model.Memory;
 import ru.reksoft.market.data.repository.MemoryRepository;
@@ -31,6 +32,7 @@ public class MemoryService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public MemoryDto createMemory(MemoryDto memoryDto) {
         if (memoryDto.getId() != null) {
             throw new BadRequestException("Id should be null");
@@ -41,6 +43,7 @@ public class MemoryService {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public MemoryDto updateMemory(Long id, MemoryDto memoryDto) {
         if (memoryRepository.existsById(id)) {
             Memory memory = modelMapper.map(memoryDto, Memory.class).setId(id);
@@ -50,6 +53,7 @@ public class MemoryService {
         throw new ResourceNotFoundException(id, "Memory");
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public MemoryDto deleteMemory(Long id) {
         Memory memory = memoryRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         memory = memoryRepository.save(memory.setDeleted(true));

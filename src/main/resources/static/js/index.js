@@ -139,10 +139,7 @@ function createDivWithProduct(product) {
         "                        <img class=\"img-fluid product-img\" id=\"" + product.id + "\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
         "                        <div class=\"info\">\n" +
         "                        <div class=\"name\">" + product.name + "</div>\n" +
-        "                        <div class=\"price\">" + "Цена: " + price + "</div>\n" +
-        "                        <div class=\"desc\">\n" +
-        "                            " + product.description + "\n" +
-        "                        </div>\n" +
+        "                        <div class=\"price\">" + "Цена: " + price + " &#8381</div>\n" +
         "                        <div class=\"color\">\n" +
         "                            Цвет: " + product.color.name + "\n" +
         "                        </div>\n" +
@@ -242,10 +239,10 @@ function confirmCart(cart) {
             "            " + products[i].product.name + "\n" +
             "        </div>\n" +
             "        <div class=\"col my-auto\" >\n" +
-            "            " + products[i].product.price + "\n" +
+            "            " + products[i].product.price + " &#8381\n" +
             "        </div>\n" +
             "        <div class=\"col my-auto\" >\n" +
-            "        <p><input id=\"inputCount" + products[i].product.id + "\" type=\"number\"  size=\"3\" min=\"1\" max=" + products[i].product.count + " value=" + products[i].count + "></p> \n" +
+            "        <p><input id=\"inputCount" + products[i].product.id + "\" type=\"number\"  size=\"3\" min=\"1\" max=" + products[i].product.count + " value=" + products[i].count + ">шт</p> \n" +
             "        </div>\n" +
             "        <div class=\"col my-auto\" >\n" +
             "            <button id=\"deleteBtn" + products[i].product.id + "\" type=\"button\" class=\"btn btn-light\">Delete</button>\n" +
@@ -328,7 +325,7 @@ function confirmCart(cart) {
         "        <input id=\"infoAddress\" required type=\"text\" placeholder=\"Адрес \" " + address + " > \n" +
         "        </div>\n" +
         "        <div id=\"totalPrice\" class=\"col text-center\" >\n" +
-        "        Сумма : " + bill + " \n" +
+        "        Сумма : " + bill + " &#8381\n" +
         "        </div>\n" +
         "        <div class=\"col text-center\" >\n" +
         "        <button id=\"confirmOrderBtn\" type=\"button\" class=\"btn btn-dark\">Подтвердить</button>\n" +
@@ -361,7 +358,7 @@ function renderCart(cart) {
     //render delivery status
     if (cart.products.length > 0) {
         cartContainer.insertAdjacentHTML("beforeend",
-            "    <div class=\"deliveryStatus\"> " + cart.deliveryStatus + " </div>\n" +
+            "    <div class=\"deliveryStatus\"> Статус: " + cart.deliveryStatus + " </div>\n" +
             "        <div class=\"col my-auto\" >\n" +
             "        </div>\n" +
             "        <div class=\"col my-auto\" >\n" +
@@ -384,10 +381,10 @@ function renderCart(cart) {
                 "            " + products[i].product.name + "\n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
-                "            " + products[i].product.price + "\n" +
+                "            " + products[i].product.price + " &#8381\n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
-                "        <p><input id=\"inputCount" + products[i].product.id + "\" type=\"number\"  size=\"3\" min=\"1\" max=" + products[i].product.count + " value=" + products[i].count + "></p> \n" +
+                "        <p><input id=\"inputCount" + products[i].product.id + "\" type=\"number\"  size=\"3\" min=\"1\" max=" + products[i].product.count + " value=" + products[i].count + "> шт</p> \n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
                 "            <button id=\"deleteBtn" + products[i].product.id + "\" type=\"button\" class=\"btn btn-light\">Удалить</button>\n" +
@@ -467,7 +464,7 @@ function renderCart(cart) {
                 "            " + products[i].product.name + "\n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
-                "            " + products[i].product.price + "\n" +
+                "            " + products[i].product.price + " &#8381\n" +
                 "        </div>\n" +
                 "        <div class=\"col my-auto\" >\n" +
                 "            " + products[i].count + "\n" +
@@ -496,7 +493,6 @@ function initCartPage() {
     $.ajax({
         url: cartsURL,
         success: function (data) {
-            initUserName();
             if (data[0] === "<") {
                 window.location.href = hostName + "/login";
             } else {
@@ -505,6 +501,9 @@ function initCartPage() {
                     renderCart(data[i]);
                 }
             }
+        },
+        error: function () {
+            window.location.href = hostName + "/login";
         }
     })
 }
@@ -560,7 +559,7 @@ function renderProductPage(product) {
             "                </div>\n" +
             "                <div class=\"info\">\n" +
             "                    <div class=\"name\"> Название: " + product.name + "</div>\n" +
-            "                        <div class=\"price\"> Цена: " + product.price + "</div>\n" +
+            "                        <div class=\"price\"> Цена: " + product.price + " &#8381</div>\n" +
             "                    <div class=\"desc\">\n" +
             "                        Описание: " + product.description + "\n" +
             "                    </div>\n" +
@@ -762,8 +761,8 @@ function initSort(searchFiltersDiv) {
 function initMaxPrice(searchFiltersDiv) {
     let maxPriceInput = document.getElementById("maxPrice");
     if (maxPriceInput !== null) maxPriceInput.innerHTML = "";
-    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"maxPrice\">Максимальная цена </label>" +
-        "<p class=\"my-auto\"><input id=\"maxPrice\" type=\"number\" min=\"0\" step=\"100\"></p> \n"
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"maxPrice\">Макс. цена </label>" +
+        "<p class=\"my-auto\"><input id=\"maxPrice\" size=\"1\" type=\"number\" min=\"0\" step=\"100\" style=\"width: 5em\"></p> \n"
     );
     document.getElementById("maxPrice").addEventListener('input', function (e) {
         maxPrice = e.target.value;
@@ -774,8 +773,8 @@ function initMaxPrice(searchFiltersDiv) {
 function initMinPrice(searchFiltersDiv) {
     let minPriceInput = document.getElementById("minPrice");
     if (minPriceInput !== null) minPriceInput.innerHTML = "";
-    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"minPrice\">Минимальная цена </label>" +
-        "<p class=\"my-auto\"><input id=\"minPrice\" type=\"number\" min=\"0\" step=\"100\"></p> \n"
+    searchFiltersDiv.insertAdjacentHTML("beforeend", "  <label class=\"my-auto\" for=\"minPrice\">Мин. цена </label>" +
+        "<p class=\"my-auto\"><input id=\"minPrice\" type=\"number\" min=\"0\" step=\"100\" style=\"width: 5em\"></p> \n"
     );
     document.getElementById("minPrice").addEventListener('input', function (e) {
         minPrice = e.target.value;
@@ -939,10 +938,12 @@ function initUserName() {
         url: hostName + "/user",
         method: "GET",
         success: function (data) {
-            let cartBtn = document.getElementById("cart_button");
+            let loginBtn = document.getElementById("loginBtn");
             let currentName = document.getElementById("currentName");
             if (currentName !== null) currentName.innerHTML = "";
-            cartBtn.insertAdjacentHTML("afterend", "<a id=\"currentName\"> Текущий пользователь: " + data.username + " </a>");
+            if (data !== "") {
+                loginBtn.insertAdjacentHTML("beforebegin", "<a id=\"currentName\"> Текущий пользователь: " + data.username + " </a>");
+            }
         }
     });
 }
@@ -975,6 +976,8 @@ $(document).ready(() => {
     initCurrentPage();
     //initLoginBtn
     initLoginBtn();
+    //initName
+    initUserName();
     //removeStorageForWatch
     removeStorageForWatch();
     //initAdminBtn

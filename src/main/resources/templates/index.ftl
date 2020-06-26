@@ -22,7 +22,7 @@
 <!--top panel-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">SHOP</a>
-    <button type="button" id="cart_button" class="btn btn-light" value="">Корзина <span id="badge" class="badge">0</span></button>
+    <button type="button" id="cart_button" class="btn btn-light" value="">Заказы <span id="badge" class="badge">0</span></button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -64,13 +64,10 @@
                     <div class="info">
                         <div class="name"> ${products[j].name} </div>
                         <#if products[j].count gt 0>
-                            <div class="price"> Цена: ${products[j].price} </div>
+                            <div class="price"> Цена: ${products[j].price} &#8381 </div>
                         <#else>
                             <div class="not_available"> <b>Нет в наличии</b> </div>
                         </#if>
-                        <div class="desc">
-                            ${products[j].description}
-                        </div>
                         <div class="color">
                             Цвет: ${products[j].color.name}
                         </div>

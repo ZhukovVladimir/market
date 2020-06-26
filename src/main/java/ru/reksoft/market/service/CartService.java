@@ -2,6 +2,9 @@ package ru.reksoft.market.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.reksoft.market.data.dto.BookedProductDto;
@@ -37,7 +40,8 @@ public class CartService {
     }
 
     //todo look for controller advice (exception handler)
-    public BookedProductDto addProduct(Long cartId, Long productId, Integer count) {
+    @PreAuthorize("user.id == authentication.principal.id")
+    public BookedProductDto addProduct(User user, Long cartId, Long productId, Integer count) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(ResourceNotFoundException::new);
 
         if (!(cart.getDeliveryStatus() == DeliveryStatus.PREORDER)) {
@@ -74,16 +78,17 @@ public class CartService {
         return modelMapper.map(savedProduct, BookedProductDto.class);
     }
 
-    public List<CartDto> getAll(Long userId) {
-        List<Cart> carts = cartRepository.findAllByUserId(userId);
+    @PreAuthorize("user.id == authentication.principal.id")
+    public List<CartDto> getAll(User user, Pageable pageable) {
+        List<Cart> carts = cartRepository.findAllByUserId(user.getId(), pageable);
 
         return carts.stream()
                 .map(cart -> modelMapper.map(cart, CartDto.class))
                 .collect(Collectors.toList());
     }
 
-
-    public BookedProductDto reduceProduct(Long cartId, Long productId, Integer count) {
+    @PreAuthorize("user.id == authentication.principal.id")
+    public BookedProductDto reduceProduct(User user, Long cartId, Long productId, Integer count) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(ResourceNotFoundException::new);
 
         if (!(cart.getDeliveryStatus() == DeliveryStatus.PREORDER)) {
@@ -102,12 +107,14 @@ public class CartService {
         return modelMapper.map(savedProduct, BookedProductDto.class);
     }
 
-    public void deleteProduct(Long cartId, Long productId) {
+    @PreAuthorize("user.id == authentication.principal.id")
+    public void deleteProduct(User user, Long cartId, Long productId) {
         BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
         BookedProduct storedProduct = bookedProductRepository.findById(bookedProductId).orElseThrow(ResourceNotFoundException::new);
         bookedProductRepository.delete(storedProduct);
     }
 
+    @PreAuthorize("user.id == authentication.principal.id")
     @Transactional
     public CartDto confirmOrder(User user, CartDto cartDto) {
         Cart cart = cartRepository.findByIdAndUserId(cartDto.getId(), user.getId()).orElseThrow(ResourceNotFoundException::new);
@@ -124,7 +131,33 @@ public class CartService {
         cart.setDeliveryAddress(cartDto.getDeliveryAddress());
         cart.setDeliveryStatus(DeliveryStatus.TRANSFER);
         cart = cartRepository.save(cart);
+        reduceProductInStore(cart);
+        setUpEmptyCart(user);
         return modelMapper.map(cart, CartDto.class);
+    }
+
+    private void reduceProductInStore(Cart cart) {
+        for (BookedProduct bookedProduct : cart.getProducts()) {
+            Product currentProduct = bookedProduct.getProduct();
+            int currentCount = currentProduct.getCount();
+            int bookedCount = bookedProduct.getCount();
+            int remainCount = currentCount - bookedCount;
+            if (remainCount == 0) {
+                deleteProductFromActiveCarts(bookedProduct.getProductId());
+            } else {
+                productRepository.save(bookedProduct.getProduct().setCount(remainCount));
+            }
+        }
+    }
+
+    void setUpEmptyCart(User user) {
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cart.setDeliveryStatus(DeliveryStatus.PREORDER);
+        if (!user.getAddress().isEmpty()) {
+            cart.setDeliveryAddress(user.getAddress());
+        }
+        cartRepository.save(cart);
     }
 
     private void setUpBill(Cart cart) {
@@ -136,6 +169,7 @@ public class CartService {
         cart.setBill(bill);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteProductFromActiveCarts(Long idProduct) {
 
         List<Cart> activeCarts = cartRepository.findAllByDeliveryStatus(DeliveryStatus.PREORDER)
