@@ -39,13 +39,12 @@ public class CartService {
         this.modelMapper = modelMapper;
     }
 
-    //todo look for controller advice (exception handler)
-    @PreAuthorize("user.id == authentication.principal.id")
-    public BookedProductDto addProduct(User user, Long cartId, Long productId, Integer count) {
+    @PreAuthorize("authentication.principal.carts.contains(@cartRepository.findById(cartId))")
+    public BookedProductDto addProduct(Long cartId, Long productId, Integer count) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(ResourceNotFoundException::new);
 
         if (!(cart.getDeliveryStatus() == DeliveryStatus.PREORDER)) {
-            throw new BadRequestException("You can't edit that cart");
+            throw new BadRequestException("К сожалению, вы не можете изменять эту корзину");
         }
 
         Product storedProduct = productRepository.findById(productId).orElseThrow(ResourceNotFoundException::new);
@@ -61,7 +60,7 @@ public class CartService {
             if (count <= storedProduct.getCount()) {
                 savedProduct = bookedProductRepository.save(bookedProduct.setCount(count));
             } else {
-                throw new BadRequestException("Not enough products");
+                throw new BadRequestException("К сожалению, в магазине недостаточно продуктов");
             }
         } else {
             if (count <= storedProduct.getCount()) {
@@ -71,15 +70,15 @@ public class CartService {
                         .setCount(count)
                         .setProduct(storedProduct));
             } else {
-                throw new BadRequestException("Not enough products");
+                throw new BadRequestException("К сожалению, в магазине недостаточно продуктов");
             }
         }
 
         return modelMapper.map(savedProduct, BookedProductDto.class);
     }
 
-    @PreAuthorize("user.id == authentication.principal.id")
     public List<CartDto> getAll(User user, Pageable pageable) {
+        if (user == null) throw new ResourceNotFoundException("User not found");
         List<Cart> carts = cartRepository.findAllByUserId(user.getId(), pageable);
 
         return carts.stream()
@@ -87,19 +86,19 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("user.id == authentication.principal.id")
-    public BookedProductDto reduceProduct(User user, Long cartId, Long productId, Integer count) {
+    @PreAuthorize("authentication.principal.carts.contains(@cartRepository.findById(cartId))")
+    public BookedProductDto reduceProduct(Long cartId, Long productId, Integer count) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(ResourceNotFoundException::new);
 
         if (!(cart.getDeliveryStatus() == DeliveryStatus.PREORDER)) {
-            throw new BadRequestException("You can't edit that cart");
+            throw new BadRequestException("Вы не можете изменять эту корзину");
         }
 
         BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
         BookedProduct storedProduct = bookedProductRepository.findById(bookedProductId).orElseThrow(ResourceNotFoundException::new);
 
         if (count >= storedProduct.getCount()) {
-            throw new BadRequestException("You can't delete so much products");
+            throw new BadRequestException("Нельзя удалить продуктов больше, чем хранится");
         }
         count = storedProduct.getCount() - count;
         BookedProduct savedProduct = bookedProductRepository.save(storedProduct.setCount(count));
@@ -107,8 +106,8 @@ public class CartService {
         return modelMapper.map(savedProduct, BookedProductDto.class);
     }
 
-    @PreAuthorize("user.id == authentication.principal.id")
-    public void deleteProduct(User user, Long cartId, Long productId) {
+    @PreAuthorize("authentication.principal.carts.contains(@cartRepository.findById(cartId))")
+    public void deleteProduct(Long cartId, Long productId) {
         BookedProductId bookedProductId = new BookedProductId().setCartId(cartId).setProductId(productId);
         BookedProduct storedProduct = bookedProductRepository.findById(bookedProductId).orElseThrow(ResourceNotFoundException::new);
         bookedProductRepository.delete(storedProduct);
@@ -121,11 +120,11 @@ public class CartService {
         setUpBill(cart);
 
         if (cartDto.getDeliveryAddress().isEmpty()) {
-            throw new BadRequestException("Delivery address shouldn't be empty");
+            throw new BadRequestException("Укажите, пожалуйста, адрес доставки");
         }
 
         if (cart.getBill().compareTo(cartDto.getBill()) != 0) {
-            throw new BadRequestException("Your bill wrong expected: " + cart.getBill());
+            throw new BadRequestException("Ваша сумма неправильная, ожидается: " + cart.getBill());
         }
 
         cart.setDeliveryAddress(cartDto.getDeliveryAddress());
@@ -142,11 +141,12 @@ public class CartService {
             int currentCount = currentProduct.getCount();
             int bookedCount = bookedProduct.getCount();
             int remainCount = currentCount - bookedCount;
+
             if (remainCount == 0) {
                 deleteProductFromActiveCarts(bookedProduct.getProductId());
-            } else {
-                productRepository.save(bookedProduct.getProduct().setCount(remainCount));
             }
+
+            productRepository.save(bookedProduct.getProduct().setCount(remainCount));
         }
     }
 

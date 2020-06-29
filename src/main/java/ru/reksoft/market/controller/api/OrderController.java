@@ -30,13 +30,13 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public BookedProductDto addProduct(@AuthenticationPrincipal User user, @RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer count) {
-        return cartService.addProduct(user, cartId, productId, count);
+    public BookedProductDto addProduct(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer count) {
+        return cartService.addProduct(cartId, productId, count);
     }
 
     @PutMapping("/reduce")
-    public BookedProductDto reduceProduct(@AuthenticationPrincipal User user,@RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer count) {
-        return cartService.reduceProduct(user,cartId, productId, count);
+    public BookedProductDto reduceProduct(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer count) {
+        return cartService.reduceProduct(cartId, productId, count);
     }
 
     @GetMapping
@@ -52,8 +52,8 @@ public class OrderController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteProduct(@AuthenticationPrincipal User user,@RequestParam Long cartId, @RequestParam Long productId) {
-        cartService.deleteProduct(user, cartId, productId);
+    public void deleteProduct(@RequestParam Long cartId, @RequestParam Long productId) {
+        cartService.deleteProduct(cartId, productId);
     }
 
     @PutMapping("/confirm")

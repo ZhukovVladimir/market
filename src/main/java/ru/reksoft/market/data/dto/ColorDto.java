@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
@@ -14,6 +15,7 @@ public class ColorDto {
     private Long id;
 
     @NotEmpty(message = "{name.notempty}")
+    @Size(min = 1, max = 40, message = "{name.size}")
     private String name;
 
 }

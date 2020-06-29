@@ -5,6 +5,7 @@ import org.springframework.data.web.PageableDefault;
 import ru.reksoft.market.controller.api.annotation.ApiPageable;
 import ru.reksoft.market.data.dto.CategoryDto;
 import ru.reksoft.market.data.dto.ProductDto;
+import ru.reksoft.market.exception.InternalServerErrorException;
 import ru.reksoft.market.service.CategoryService;
 import ru.reksoft.market.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -120,6 +120,9 @@ function initCategoryBtn() {
                         renderProducts(json);
                         initCurrentPage();
                     }, () => alert("Ошибка при загрузке продуктов"))
+                },
+                error: function (data) {
+                    alert(data.responseJSON.message);
                 }
             })
 
@@ -134,12 +137,14 @@ function createDivWithProduct(product) {
     let price = product.price;
     if (product.count < 1) {
         price = "<b>Not available</b>"
+    } else {
+        price = price + " &#8381";
     }
     div.insertAdjacentHTML("afterbegin", "<div class=\"image\">\n" +
         "                        <img class=\"img-fluid product-img\" id=\"" + product.id + "\" src=\"http://localhost:8080/api/images/" + product.image.id + "\"></div>\n" +
         "                        <div class=\"info\">\n" +
         "                        <div class=\"name\">" + product.name + "</div>\n" +
-        "                        <div class=\"price\">" + "Цена: " + price + " &#8381</div>\n" +
+        "                        <div class=\"price\">" + "Цена: " + price + " </div>\n" +
         "                        <div class=\"color\">\n" +
         "                            Цвет: " + product.color.name + "\n" +
         "                        </div>\n" +
@@ -214,6 +219,9 @@ function initOnClickBuy(carts) {
                         let count = $("#badge")[0].textContent;
                         $("#badge")[0].textContent = parseInt(count) + 1;
                     }
+                },
+                error: function (data) {
+                    alert(data.responseJSON.message);
                 }
             });
         }
@@ -262,6 +270,9 @@ function confirmCart(cart) {
                         cart.products[i].count = cart.products[i].count + changeCount;
                         badge.textContent = parseInt(badge.textContent) + changeCount;
                         confirmCart(cart);
+                    },
+                    error: function (data) {
+                        alert(data.responseJSON.message);
                     }
                 })
             }
@@ -274,6 +285,9 @@ function confirmCart(cart) {
                         cart.products[i].count = cart.products[i].count + changeCount;
                         badge.textContent = parseInt(badge.textContent) + changeCount;
                         confirmCart(cart);
+                    },
+                    error: function (data) {
+                        alert(data.responseJSON.message);
                     }
                 })
             }
@@ -289,6 +303,9 @@ function confirmCart(cart) {
                     badge.textContent = parseInt(badge.textContent) - cart.products[i].count;
                     cart.products.splice(i, 1);
                     confirmCart(cart);
+                },
+                error: function (data) {
+                    alert(data.responseJSON.message);
                 }
             })
         }
@@ -345,6 +362,9 @@ function confirmCart(cart) {
             data: JSON.stringify(cart),
             success: function () {
                 initCartPage();
+            },
+            error: function (data) {
+                alert(data.responseJSON.message);
             }
         });
     }
@@ -402,6 +422,9 @@ function renderCart(cart) {
                         success: function () {
                             products[i].count = products[i].count + changeCount;
                             badge.textContent = parseInt(badge.textContent) + changeCount;
+                        },
+                        error: function (data) {
+                            alert(data.responseJSON.message);
                         }
                     })
                 }
@@ -413,6 +436,9 @@ function renderCart(cart) {
                         success: function () {
                             products[i].count = products[i].count + changeCount;
                             badge.textContent = parseInt(badge.textContent) + changeCount;
+                        },
+                        error: function (data) {
+                            alert(data.responseJSON.message);
                         }
                     });
                 }
@@ -427,6 +453,9 @@ function renderCart(cart) {
                         let badge = document.getElementById("badge");
                         badge.textContent = parseInt(badge.textContent) - products[i].count;
                         initCartPage();
+                    },
+                    error: function (data) {
+                        alert(data.responseJSON.message);
                     }
                 })
             }
@@ -593,6 +622,9 @@ function initProductDesc() {
                     //if user == admin
                     initAdminBtn();
                     $("#categoryBtnPanel").remove();
+                },
+                error: function (data) {
+                    alert(data.responseJSON.message);
                 }
             })
         }

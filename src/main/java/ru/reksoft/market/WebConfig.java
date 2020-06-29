@@ -15,8 +15,4 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/login");
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(localeChangeInterceptor());
-//    }
 }

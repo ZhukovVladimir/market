@@ -55,18 +55,4 @@ public class AppleMarketApplication {
 		return bean;
 	}
 
-//	@Bean
-//	public LocaleResolver localeResolver() {
-//		SessionLocaleResolver slr = new SessionLocaleResolver();
-//		slr.setDefaultLocale(new Locale("ru"));
-//		return slr;
-//	}
-
-//	@Bean
-//	public static LocaleChangeInterceptor localeChangeInterceptor() {
-//		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-//		lci.setParamName("lang");
-//		return lci;
-//	}
-
 }

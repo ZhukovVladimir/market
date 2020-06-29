@@ -118,8 +118,8 @@ function initAddColorBtn(addProdBtn, productsDiv) {
                 success: function () {
                     alert("Добавлено")
                 },
-                error: function () {
-                    alert("Ошибка при загрузке")
+                error: function (data) {
+                    alert(data.responseJSON.message);
                 }
             })
         }
@@ -162,8 +162,8 @@ function initAddMemoryBtn(addProdBtn, productsDiv) {
                 success: function () {
                     alert("Добавлено")
                 },
-                error: function () {
-                    alert("Ошибка при загрузке")
+                error: function (data) {
+                    alert(data.responseJSON.message);
                 }
             })
         }
@@ -234,8 +234,8 @@ function initAddModelBtn(addProdBtn, productsDiv) {
                 success: function () {
                     alert("Добавлено")
                 },
-                error: function () {
-                    alert("Ошибка при загрузке")
+                error: function (data) {
+                    alert(data.responseJSON.message);
                 }
             })
         }
@@ -424,8 +424,8 @@ function initConfirmBtn(productsDiv) {
                     success: function () {
                         alert("Добавлено");
                     },
-                    error: function () {
-                        alert("Должны быть заполнены все поля");
+                    error: function (data) {
+                        alert(data.responseJSON.message);
                     }
                 });
             },
@@ -473,6 +473,9 @@ function initUpdateBtn(productsDiv, idProd) {
             data: JSON.stringify(updateDto),
             success: function () {
                 alert("Обновлено");
+            },
+            error: function (data) {
+                alert(data.responseJSON.message);
             }
         })
     }
@@ -494,6 +497,9 @@ function initDeleteBtn(productsDiv, idProd) {
             method: "DELETE",
             success: function () {
                 alert("Удалено");
+            },
+            error: function (data) {
+                alert(data.responseJSON.message);
             }
         })
 
@@ -535,6 +541,9 @@ function initEditProductPage(idProd) {
             initCountInput(productsDiv);
             initUpdateBtn(productsDiv, idProd);
             initDeleteBtn(productsDiv, idProd);
+        },
+        error: function (data) {
+            alert(data.responseJSON.message);
         }
     })
 

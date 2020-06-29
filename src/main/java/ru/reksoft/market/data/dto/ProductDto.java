@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ public class ProductDto {
     private Long id;
 
     @NotEmpty(message = "{name.notempty}")
+    @Size(min = 1, max = 40, message = "{name.size}")
     private String name;
 
     @NotNull(message = "{price.notnull}")
@@ -25,6 +27,7 @@ public class ProductDto {
     @NotNull(message = "{count.notnull}")
     private Integer count;
 
+    @Size(min = 1, max = 256, message = "{desc.size}")
     private String description;
 
     @NotNull(message = "{color.notnull}")
