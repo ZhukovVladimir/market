@@ -38,7 +38,7 @@ public class UserService {
 
     public void createUser(UserDto userDto, PasswordEncoder passwordEncoder) {
         if (userRepository.findByUsername(userDto.getUsername()) != null) {
-            throw new ConflictException(userDto.getUsername() + " User already exist");
+            throw new ConflictException(userDto.getUsername() + " Пользователь с таким логином уже существует");
         } else {
             User user = modelMapper.map(userDto, User.class);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -46,5 +46,9 @@ public class UserService {
             user = userRepository.save(user);
             cartService.setUpEmptyCart(user);
         }
+    }
+
+    public Boolean isUserExists(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

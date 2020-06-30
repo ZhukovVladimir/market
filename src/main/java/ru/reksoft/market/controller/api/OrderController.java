@@ -45,7 +45,7 @@ public class OrderController {
             "Ignored because swagger ui shows the wrong params, " +
                     "instead they are explained in the implicit params"
     )
-                                         @PageableDefault(sort = "deliveryStatus", size = Integer.MAX_VALUE, direction = Sort.Direction.DESC)
+                                         @PageableDefault(sort = {"deliveryStatus", "timestamp"}, size = Integer.MAX_VALUE, direction = Sort.Direction.ASC)
                                                  Pageable pageable,
                                      @AuthenticationPrincipal User user) {
         return cartService.getAll(user, pageable);

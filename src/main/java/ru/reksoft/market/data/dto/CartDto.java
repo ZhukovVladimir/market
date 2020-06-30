@@ -17,7 +17,7 @@ public class CartDto {
     @NotEmpty(message = "{deliveryAddress.notempty}")
     private String deliveryAddress;
     private String deliveryStatus;
-    private LocalDateTime creationTime;
+    private LocalDateTime timestamp;
     private LocalDateTime paymentTime;
     @NotNull(message = "{bill.notnull}")
     private BigDecimal bill;

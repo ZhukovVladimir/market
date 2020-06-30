@@ -61,7 +61,7 @@
                         <ul class="wrapper">
                             <li class="form-row">
                                 <label for="username">Email: </label>
-                                <input type="email" required name="username"/>
+                                <input id="email" type="email" required name="username"/>
                             </li>
                             <li class="form-row">
                                 <label for="password">Пароль: </label>
@@ -97,5 +97,25 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    let username;
+    let inputUsername = document.getElementById("email");
+    inputUsername.addEventListener('change', function (e) {
+        username = e.target.value;
+        $.ajax({
+            url: "http://localhost:8080/user/exist?username=" + username,
+            success: function (data) {
+                if(data === true) {
+                    alert("К сожалению, пользователь с таким именем уже существует");
+                    e.target.value = "";
+                }
+            }
+        })
+    })
+
+</script>
+
 </body>
 </html>

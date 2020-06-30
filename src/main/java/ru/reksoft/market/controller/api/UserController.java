@@ -36,4 +36,9 @@ public class UserController {
         }
         return userDto;
     }
+
+    @GetMapping("/exist")
+    public Boolean isUserNameExists(String username) {
+        return userService.isUserExists(username);
+    }
 }

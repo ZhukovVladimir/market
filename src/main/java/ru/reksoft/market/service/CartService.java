@@ -17,6 +17,7 @@ import ru.reksoft.market.exception.BadRequestException;
 import ru.reksoft.market.exception.ResourceNotFoundException;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -129,6 +130,7 @@ public class CartService {
 
         cart.setDeliveryAddress(cartDto.getDeliveryAddress());
         cart.setDeliveryStatus(DeliveryStatus.TRANSFER);
+        cart.setPaymentTime(LocalDateTime.now());
         cart = cartRepository.save(cart);
         reduceProductInStore(cart);
         setUpEmptyCart(user);
@@ -154,6 +156,7 @@ public class CartService {
         Cart cart = new Cart();
         cart.setUser(user);
         cart.setDeliveryStatus(DeliveryStatus.PREORDER);
+        cart.setTimestamp(LocalDateTime.now());
         if (!user.getAddress().isEmpty()) {
             cart.setDeliveryAddress(user.getAddress());
         }

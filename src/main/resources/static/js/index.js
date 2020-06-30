@@ -185,7 +185,7 @@ function initByBtn() {
                     url: getCartsURL,
                     success: function (data) {
                         if (!((data.length === 0) || (data[0] === "<"))) {
-                            data.reverse();
+                            //data.reverse();
                             initOnClickBuy(data);
                         }
                     }
@@ -525,7 +525,7 @@ function initCartPage() {
             if (data[0] === "<") {
                 window.location.href = hostName + "/login";
             } else {
-                data.reverse();
+                //data.reverse();
                 for (let i = 0; i < data.length; i++) {
                     renderCart(data[i]);
                 }
@@ -872,12 +872,14 @@ function initClearBtn(searchFiltersDiv) {
         activeAvailable = undefined;
         maxPrice = undefined;
         minPrice = undefined;
+        activeName = undefined;
         sort = "creationTime";
 
         initColor(searchFiltersDiv);
         initMemory(searchFiltersDiv);
         initMinPrice(searchFiltersDiv);
         initMaxPrice(searchFiltersDiv);
+        initName(searchFiltersDiv);
         initCheckBoxAv(searchFiltersDiv);
         initSort(searchFiltersDiv);
         initApply(searchFiltersDiv);
